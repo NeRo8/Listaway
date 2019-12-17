@@ -42,4 +42,11 @@ export default StyleSheet.create({
     fontFamily: fonts.notoRegular,
     fontSize: 18,
   },
+  animation: {
+    height: 100,
+    width: 100,
+    borderWidth: 1,
+    borderColor: colors.LIGHT_BLUE,
+    marginHorizontal: 10,
+  },
 });

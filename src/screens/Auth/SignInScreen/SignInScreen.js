@@ -6,8 +6,6 @@ import {
   StatusBar,
   ScrollView,
   TouchableOpacity,
-  ActivityIndicator,
-  Alert,
 } from 'react-native';
 import DropdownAlert from 'react-native-dropdownalert';
 import {Button} from 'react-native-elements';

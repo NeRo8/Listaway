@@ -19,6 +19,7 @@ import GradientText from '../../components/GradientText';
 
 import {globalStyles, colors} from '../../constants';
 import styles from './styles';
+import PhotoModal from './PhotoModal';
 
 class CreateTour extends Component {
   constructor(props) {
@@ -226,7 +227,7 @@ class CreateTour extends Component {
                   onError={this.videoError} // Callback when video cannot be loaded
                 />
               ) : null}
-              <View style={{height: 200}}>
+              <View>
                 <FlatList
                   data={this.state.songList}
                   numColumns={3}
@@ -259,6 +260,18 @@ class CreateTour extends Component {
                   )}
                 />
               </View>
+            </View>
+            <View style={styles.animationBlock}>
+              <Text style={styles.label}>Animation:</Text>
+              <ScrollView
+                horizontal
+                style={{height: 100}}
+                showsHorizontalScrollIndicator={false}>
+                <View style={styles.animation} />
+                <View style={styles.animation} />
+                <View style={styles.animation} />
+                <View style={styles.animation} />
+              </ScrollView>
             </View>
           </View>
           <View>
