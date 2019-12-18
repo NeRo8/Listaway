@@ -44,11 +44,11 @@ class SignInScreen extends Component {
   }
 
   componentDidMount() {
-    const {token} = this.props;
+    //const {token} = this.props;
 
-    if (token !== null) {
-      this.props.navigation.navigate('Home');
-    }
+    // if (token !== null) {
+    //   this.props.navigation.navigate('Home');
+    // }
 
     GoogleSignin.configure({
       scopes: ['https://www.googleapis.com/auth/drive.readonly'],
@@ -58,13 +58,13 @@ class SignInScreen extends Component {
   }
 
   componentDidUpdate() {
-    const {error, token, loading} = this.props;
+    const {error, loading, user} = this.props;
 
     if (error !== null && loading === false) {
       this.showError(error);
     }
 
-    if (token !== null) {
+    if (user !== null) {
       this.props.navigation.navigate('Home');
     }
   }
@@ -88,7 +88,9 @@ class SignInScreen extends Component {
 
     emailLogin(email, password);
   };
+
   //onPress facebook
+  /**
   handlePressLoginFacebook = () => {
     const {facebookLogin} = this.props;
 
@@ -134,6 +136,7 @@ class SignInScreen extends Component {
       }
     }
   };
+   */
 
   render() {
     const {loading} = this.props;
@@ -224,7 +227,8 @@ const mapStateToProps = state => {
   return {
     loading: state.users.loading,
     error: state.users.error,
-    token: state.users.token,
+    user: state.users.user,
+    //token: state.users.token,
   };
 };
 
@@ -233,12 +237,14 @@ const mapDispatchToProps = dispatch => {
     emailLogin: (e, p) => {
       dispatch(loginWithEmail(e, p));
     },
+    /**
     facebookLogin: token => {
       dispatch(loginWithFacebook(token));
     },
     googleLogin: token => {
       dispatch(loginWithGoogle(token));
     },
+     */
     clearErrorUser: () => {
       dispatch(clearError());
     },

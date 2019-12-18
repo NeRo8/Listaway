@@ -1,25 +1,25 @@
-import {AsyncStorage} from 'react-native';
+//import {AsyncStorage} from 'react-native';
 
 import {
-  SET_TOKEN,
+  SET_USER,
   SET_LOADING,
   SET_ERROR,
-  CLEAR_TOKEN,
+  CLEAR_USER,
 } from '../actions/usersActions';
 
 const initState = {
-  token: null,
+  user: null,
   loading: false,
   error: null,
 };
 
 const usersReducer = (state = initState, action) => {
   switch (action.type) {
-    case SET_TOKEN: {
-      AsyncStorage.setItem('token', action.payload);
+    case SET_USER: {
+      //AsyncStorage.setItem('token', action.payload);
       return {
         ...state,
-        token: action.payload,
+        user: action.payload,
       };
     }
     case SET_LOADING: {
@@ -34,10 +34,10 @@ const usersReducer = (state = initState, action) => {
         error: action.payload,
       };
     }
-    case CLEAR_TOKEN: {
+    case CLEAR_USER: {
       return {
         ...state,
-        token: null,
+        user: null,
       };
     }
     default:

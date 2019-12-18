@@ -21,11 +21,10 @@ class Auth extends Component {
   }
 
   componentDidMount() {
-    const {token} = this.props;
-
-    if (token !== null) {
-      this.props.navigation.navigate('Home');
-    }
+    // const {token} = this.props;
+    //if (token !== null) {
+    //this.props.navigation.navigate('Home');
+    // }
   }
 
   render() {
@@ -116,7 +115,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    token: state.users.token,
+    //token: state.users.token,
   };
 };
 
