@@ -60,23 +60,25 @@ export const loginWithEmail = (e, p) => dispatch => {
 export const createAccount = data => dispatch => {
   dispatch(setLoading(true));
 
-  fetch(`${DEFAULT_URL}/api/v1/registration/`, {
+  const formData = new FormData();
+  formData.append('username', data.username);
+  formData.append('email', data.email);
+  formData.append('password', data.password);
+
+  console.log(formData);
+
+  fetch(`${DEFAULT_URL}/user/user_signup`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
+      'Content-Type': 'multipart/form-data',
     },
-    body: JSON.stringify({
-      username: data.username,
-      email: data.email,
-      password1: data.password1,
-      password2: data.password2,
-    }),
+    body: formData,
   })
     .then(response => response.json())
     .then(responseJson => {
-      if (responseJson.key !== undefined) {
-        dispatch(setToken(responseJson.key));
+      if (responseJson.status === 200) {
+        dispatch(setUser(responseJson.userinfo));
         dispatch(setLoading(false));
       } else {
         dispatch(setError(responseJson));

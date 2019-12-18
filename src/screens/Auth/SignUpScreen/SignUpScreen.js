@@ -44,9 +44,9 @@ class SignUpScreen extends Component {
   };
 
   componentDidUpdate() {
-    const {token, error, clearErrorUser, loading} = this.props;
+    const {user, error, clearErrorUser, loading} = this.props;
 
-    if (token !== null) {
+    if (user !== null) {
       this.props.navigation.navigate('CreateAccount');
     }
 
@@ -60,19 +60,24 @@ class SignUpScreen extends Component {
     const {fullName, email, password, confirmPassword, agree} = this.state;
     const {signUp} = this.props;
 
-    if (agree) {
-      signUp({
-        username: fullName,
-        email: email,
-        password1: password,
-        password2: confirmPassword,
-      });
-    } else {
+    if (!agree) {
       this.dropDownAlertRef.alertWithType(
         'error',
         'Error',
         'First agree terms of use',
       );
+    } else if (password !== confirmPassword) {
+      this.dropDownAlertRef.alertWithType(
+        'error',
+        'Error',
+        'Password do not match',
+      );
+    } else {
+      signUp({
+        username: fullName,
+        email: email,
+        password: password,
+      });
     }
   };
   render() {
@@ -163,7 +168,7 @@ class SignUpScreen extends Component {
 const mapStateToProps = state => {
   return {
     loading: state.users.loading,
-    token: state.users.token,
+    user: state.users.user,
     error: state.users.error,
   };
 };
