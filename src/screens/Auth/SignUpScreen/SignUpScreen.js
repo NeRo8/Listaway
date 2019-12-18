@@ -34,6 +34,8 @@ class SignUpScreen extends Component {
       password: '',
       confirmPassword: '',
       agree: false,
+      device_type: '',
+      action_time: '',
     };
   }
 
@@ -184,4 +186,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignUpScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SignUpScreen);

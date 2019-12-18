@@ -1,3 +1,5 @@
+import {Platform} from 'react-native';
+
 import {DEFAULT_URL} from '../config/server';
 
 export const SET_USER = 'SET_USER';
@@ -64,6 +66,8 @@ export const createAccount = data => dispatch => {
   formData.append('username', data.username);
   formData.append('email', data.email);
   formData.append('password', data.password);
+  formData.append('device_type', Platform.OS === 'ios' ? 0 : 1);
+  formData.append('action_time', Date().toLocaleString());
 
   console.log(formData);
 
