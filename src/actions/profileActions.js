@@ -59,67 +59,41 @@ export const getProfile = token => dispatch => {
     });
 };
 
-export const updateProfile = (
-  newProfile,
-  token,
-  create = false,
-) => dispatch => {
+export const updateProfile = (newProfile, userid) => dispatch => {
   const profile = new FormData();
-  profile.append('full_name', newProfile.full_name);
+  profile.append('userid', userid);
+  profile.append('fullname', newProfile.fullname);
   profile.append('direct_tel', newProfile.direct_tel);
   profile.append('title', newProfile.title);
   profile.append('website', newProfile.website);
   profile.append('job_title', newProfile.job_title);
   profile.append('office_tel', newProfile.office_tel);
 
-  fetch(`${DEFAULT_URL}/api/v1/profile/`, {
-    method: 'PUT',
+  if (newProfile.photo !== null) {
+    profile.append('photo', {
+      uri: newProfile.photo.uri,
+      type:
+        newProfile.photo.type === null ? 'image/jpeg' : newProfile.photo.type,
+      name: newProfile.photo.fileName,
+      data: newProfile.photo.data,
+    });
+  }
+
+  fetch(`${DEFAULT_URL}/user/user_update_profile`, {
+    method: 'POST',
     headers: {
-      Authorization: `Token ${token}`,
+      'Content-Type': 'multipart/form-data',
     },
     body: profile,
   })
     .then(response => response.json())
     .then(responseJson => {
-      dispatch(setProfile(responseJson));
-
-      if (create !== false) {
+      if (responseJson.status === 200) {
+        dispatch(setProfile(responseJson));
         dispatch(setSuccess(true));
         dispatch(setLoading(false));
-      }
-      dispatch(setLoading(false));
-    })
-    .catch(error => {
-      dispatch(setLoading(false));
-      dispatch(setError(error));
-    });
-};
-
-export const updateAvatar = (avatar, token) => dispatch => {
-  dispatch(setLoading(true));
-
-  const profile = new FormData();
-  profile.append('avatar', {
-    uri: avatar.uri,
-    type: avatar.type === null ? 'image/jpeg' : avatar.type,
-    name: avatar.fileName,
-    data: avatar.data,
-  });
-
-  fetch(`${DEFAULT_URL}/api/v1/profile/`, {
-    method: 'PUT',
-    headers: {
-      Authorization: `Token ${token}`,
-    },
-    body: profile,
-  })
-    .then(response => response.json())
-    .then(responseJson => {
-      if (Array.isArray(responseJson.avatar)) {
-        dispatch(setLoading(false));
-        dispatch(setError(responseJson.avatar));
       } else {
-        dispatch(setProfile(responseJson));
+        dispatch(setError(responseJson));
         dispatch(setLoading(false));
       }
     })

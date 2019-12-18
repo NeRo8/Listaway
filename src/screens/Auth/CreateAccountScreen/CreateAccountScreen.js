@@ -35,15 +35,9 @@ import styles from './styles';
 class CreateAccountScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
-  }
-
-  async componentDidMount() {
-    const {getProfileDetail} = this.props;
-
-    const token = await AsyncStorage.getItem('token', null);
-
-    getProfileDetail(token);
+    this.state = {
+      avatar: [],
+    };
   }
 
   componentDidUpdate() {
@@ -60,22 +54,20 @@ class CreateAccountScreen extends Component {
   }
 
   handlePressSave = async () => {
-    const {onUpdateProfile} = this.props;
-
-    const token = await AsyncStorage.getItem('token', null);
-    onUpdateProfile(this.props.profile, token);
+    const {onUpdateProfile, userid} = this.props;
+    if (userid !== null) {
+      onUpdateProfile(this.props.profile, userid);
+    }
   };
 
   handlePressChangeImage = async () => {
-    const {onUpdateAvatar} = this.props;
-
-    const token = await AsyncStorage.getItem('token', null);
+    const {onChangeProfile} = this.props;
 
     const options = {
       title: 'Select Avatar',
       storageOptions: {
         skipBackup: true,
-        //path: 'images',
+        path: 'images',
       },
     };
 
@@ -87,7 +79,11 @@ class CreateAccountScreen extends Component {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        onUpdateAvatar(response, token);
+        onChangeProfile('photo', response);
+        const source = {uri: response.uri};
+        this.setState({
+          avatar: source,
+        });
       }
     });
   };
@@ -113,9 +109,7 @@ class CreateAccountScreen extends Component {
                 <View>
                   <View style={styles.imageContainer}>
                     <Image
-                      source={{
-                        uri: `${DEFAULT_URL}${profile.avatar}`,
-                      }}
+                      source={this.state.avatar}
                       style={{flex: 1, width: null, height: null}}
                       resizeMode="cover"
                     />
@@ -140,8 +134,8 @@ class CreateAccountScreen extends Component {
                 </View>
                 <View style={globalStyles.block}>
                   <InputDefault
-                    name="full_name"
-                    value={profile.full_name}
+                    name="fullname"
+                    value={profile.fullname}
                     label="Full name"
                     onChangeText={onChangeProfile}
                   />
@@ -194,6 +188,7 @@ const mapStateToProps = state => {
     error: state.profile.error,
     profile: state.profile.profile,
     loading: state.profile.loading,
+    userid: state.users.user !== null ? userid : null,
     success: state.profile.success,
   };
 };
@@ -203,14 +198,8 @@ const mapDispatchToProps = dispatch => {
     onChangeProfile: (name, value) => {
       dispatch(onChangeProfileInfo(name, value));
     },
-    getProfileDetail: token => {
-      dispatch(getProfile(token));
-    },
-    onUpdateProfile: (profile, token, create = true) => {
-      dispatch(updateProfile(profile, token, create));
-    },
-    onUpdateAvatar: (profile, token) => {
-      dispatch(updateAvatar(profile, token));
+    onUpdateProfile: (profile, userid) => {
+      dispatch(updateProfile(profile, userid));
     },
     clearErrorProfile: () => {
       dispatch(clearError());
