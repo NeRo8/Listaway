@@ -38,7 +38,8 @@ const AppDrawerNavigation = createDrawerNavigator(
       },
     },
     Profile: {
-      screen: ProfileScreen,
+      screen: HomeScreen,
+      //screen: ProfileScreen,
       navigationOptions: {
         title: 'Profile',
       },

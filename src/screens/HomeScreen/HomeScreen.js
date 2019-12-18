@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
-import {View, Text, BackHandler, SafeAreaView, StatusBar} from 'react-native';
+import {
+  View,
+  Text,
+  BackHandler,
+  SafeAreaView,
+  StatusBar,
+  AsyncStorage,
+} from 'react-native';
 import {Icon} from 'react-native-elements';
 
 class HomeScreen extends Component {
@@ -8,7 +15,7 @@ class HomeScreen extends Component {
     this.state = {};
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
   }
 

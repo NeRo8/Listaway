@@ -1,5 +1,11 @@
 import React, {Component} from 'react';
-import {SafeAreaView, View, Text, TouchableOpacity} from 'react-native';
+import {
+  SafeAreaView,
+  View,
+  Text,
+  TouchableOpacity,
+  AsyncStorage,
+} from 'react-native';
 import {DrawerItems} from 'react-navigation-drawer';
 
 import styles from './styles';

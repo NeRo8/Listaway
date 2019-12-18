@@ -6,6 +6,7 @@ import {
   StyleSheet,
   SafeAreaView,
   StatusBar,
+  AsyncStorage,
 } from 'react-native';
 import {Button} from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
@@ -20,11 +21,12 @@ class Auth extends Component {
     this.state = {};
   }
 
-  componentDidMount() {
-    // const {token} = this.props;
-    //if (token !== null) {
-    //this.props.navigation.navigate('Home');
-    // }
+  async componentDidMount() {
+    const {user} = this.props;
+
+    if (user !== null) {
+      this.props.navigation.navigate('Home');
+    }
   }
 
   render() {
@@ -115,8 +117,11 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    //token: state.users.token,
+    user: state.users.user,
   };
 };
 
-export default connect(mapStateToProps, null)(Auth);
+export default connect(
+  mapStateToProps,
+  null,
+)(Auth);

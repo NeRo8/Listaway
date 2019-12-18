@@ -83,6 +83,7 @@ export const createAccount = data => dispatch => {
     .then(responseJson => {
       if (responseJson.status === 200) {
         dispatch(setUser(responseJson.userinfo));
+
         dispatch(setLoading(false));
       } else {
         dispatch(setError(responseJson));
