@@ -188,7 +188,7 @@ const mapStateToProps = state => {
     error: state.profile.error,
     profile: state.profile.profile,
     loading: state.profile.loading,
-    userid: state.users.user !== null ? userid : null,
+    userid: state.users.user !== null ? state.users.user.userid : null,
     success: state.profile.success,
   };
 };
