@@ -52,12 +52,10 @@ class ProfileScreen extends Component {
     };
   }
 
-  async componentDidMount() {
-    const {getProfileDetail} = this.props;
+  componentDidMount() {
+    const {getProfileDetail, userid} = this.props;
 
-    const token = await AsyncStorage.getItem('token', null);
-
-    getProfileDetail(token);
+    getProfileDetail(userid);
   }
 
   componentDidUpdate() {
@@ -110,6 +108,7 @@ class ProfileScreen extends Component {
     });
   };
 
+  /**
   handlePressChangeImage = async () => {
     const {onUpdateAvatar} = this.props;
 
@@ -135,6 +134,7 @@ class ProfileScreen extends Component {
       }
     });
   };
+   */
 
   render() {
     const {
@@ -338,6 +338,7 @@ const mapStateToProps = state => {
     error: state.profile.error,
     profile: state.profile.profile,
     loading: state.profile.loading,
+    userid: state.users.user.userid,
   };
 };
 
@@ -346,14 +347,11 @@ const mapDispatchToProps = dispatch => {
     onChangeProfile: (name, value) => {
       dispatch(onChangeProfileInfo(name, value));
     },
-    getProfileDetail: token => {
-      dispatch(getProfile(token));
+    getProfileDetail: userid => {
+      dispatch(getProfile(userid));
     },
     onUpdateProfile: (profile, token) => {
       dispatch(updateProfile(profile, token));
-    },
-    onUpdateAvatar: (profile, token) => {
-      dispatch(updateAvatar(profile, token));
     },
     clearErrorProfile: () => {
       dispatch(clearError());

@@ -37,7 +37,7 @@ export const onChangeProfileInfo = (name, value) => ({
   value,
 });
 
-export const getProfile = token => dispatch => {
+export const getProfile = userid => dispatch => {
   dispatch(setLoading(true));
 
   fetch(`${DEFAULT_URL}/api/v1/profile/`, {
