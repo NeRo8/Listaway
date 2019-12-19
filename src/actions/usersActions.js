@@ -190,32 +190,36 @@ export const updateUser = (newProfile, photo = null) => dispatch => {
     });
 };
 
-/**
-
 export const loginWithFacebook = token => dispatch => {
   dispatch(setLoading(true));
 
-  fetch(`${DEFAULT_URL}/api/v1/facebook/`, {
+  var formData = new FormData();
+
+  formData.append('facebookid', '820106268445537');
+  formData.append('token', token);
+  formData.append('action_time', '2019:12:19 04:13:50');
+
+  fetch(`${DEFAULT_URL}/user/user_facebook_login/`, {
     method: 'POST',
     headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
+      'Content-Type': 'multipart/form-data',
     },
-    body: JSON.stringify({
-      access_token: token,
-    }),
+    body: formData,
   })
     .then(response => response.json())
     .then(responseJson => {
-      if (responseJson.key !== undefined) {
-        dispatch(setToken(responseJson.key));
+      if (responseJson.status === 200) {
+        dispatch(setUser(responseJson.userinfo));
         dispatch(setLoading(false));
       } else {
         dispatch(setError(responseJson));
         dispatch(setLoading(false));
       }
     })
-    .catch(error => dispatch(setError(error)));
+    .catch(error => {
+      dispatch(setLoading(false));
+      dispatch(setError(error));
+    });
 };
 
 export const loginWithGoogle = token => dispatch => {
@@ -243,5 +247,3 @@ export const loginWithGoogle = token => dispatch => {
     })
     .catch(error => dispatch(setError(error)));
 };
-
- */

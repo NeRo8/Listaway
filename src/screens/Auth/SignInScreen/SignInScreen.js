@@ -75,7 +75,7 @@ class SignInScreen extends Component {
   };
 
   //onPress facebook
-  /**
+
   handlePressLoginFacebook = () => {
     const {facebookLogin} = this.props;
 
@@ -95,6 +95,7 @@ class SignInScreen extends Component {
       },
     );
   };
+  /**
   //onPress google
   handlePressLoginGoogle = async () => {
     const {googleLogin} = this.props;
@@ -188,7 +189,7 @@ class SignInScreen extends Component {
                   buttonStyle={{
                     backgroundColor: colors.FACEBOOK,
                   }}
-                  onPress={() => {}} //this.handlePressLoginFacebook()}
+                  onPress={() => this.handlePressLoginFacebook()}
                 />
                 <GoogleSigninButton
                   style={{flex: 1}}

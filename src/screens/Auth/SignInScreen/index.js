@@ -2,7 +2,12 @@ import SignInScreen from './SignInScreen';
 
 import {connect} from 'react-redux';
 
-import {loginWithEmail, clearError} from '../../../actions/usersActions';
+import {
+  loginWithEmail,
+  clearError,
+  loginWithFacebook,
+  loginWithGoogle,
+} from '../../../actions/usersActions';
 
 const mapStateToProps = state => {
   return {
@@ -17,14 +22,12 @@ const mapDispatchToProps = dispatch => {
     emailLogin: (e, p) => {
       dispatch(loginWithEmail(e, p));
     },
-    /**
-      facebookLogin: token => {
-        dispatch(loginWithFacebook(token));
-      },
-      googleLogin: token => {
-        dispatch(loginWithGoogle(token));
-      },
-       */
+    facebookLogin: token => {
+      dispatch(loginWithFacebook(token));
+    },
+    googleLogin: token => {
+      dispatch(loginWithGoogle(token));
+    },
     clearErrorUser: () => {
       dispatch(clearError());
     },
