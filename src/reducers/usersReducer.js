@@ -1,5 +1,6 @@
 import {
   SET_USER,
+  SET_USER_ID,
   SET_LOADING,
   SET_ERROR,
   SET_SUCCESS,
@@ -8,7 +9,17 @@ import {
 } from '../actions/usersActions';
 
 const initState = {
-  user: null,
+  user: {
+    userid: null,
+    fullname: '',
+    direct_tel: '',
+    title: '',
+    website: '',
+    job_title: '',
+    office_tel: '',
+    photo: null,
+  },
+  userAuth: false,
   loading: false,
   error: null,
   success: false,
@@ -20,6 +31,14 @@ const usersReducer = (state = initState, action) => {
       return {
         ...state,
         user: action.payload,
+        userAuth: true,
+      };
+    }
+    case SET_USER_ID: {
+      return {
+        ...state,
+        userid: action.payload,
+        userAuth: true,
       };
     }
     case CHANGE_USER_FIELD: {
@@ -52,7 +71,16 @@ const usersReducer = (state = initState, action) => {
     case CLEAR_USER: {
       return {
         ...state,
-        user: null,
+        user: {
+          fullname: '',
+          direct_tel: '',
+          title: '',
+          website: '',
+          job_title: '',
+          office_tel: '',
+          photo: null,
+        },
+        userAuth: false,
       };
     }
     default:

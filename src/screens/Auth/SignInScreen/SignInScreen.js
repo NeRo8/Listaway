@@ -49,8 +49,7 @@ class SignInScreen extends Component {
     if (error !== null && loading === false) {
       this.showError(error);
     }
-
-    if (user !== null) {
+    if (user !== false) {
       this.props.navigation.navigate('Home');
     }
   }
@@ -189,12 +188,12 @@ class SignInScreen extends Component {
                   buttonStyle={{
                     backgroundColor: colors.FACEBOOK,
                   }}
-                  onPress={() => this.handlePressLoginFacebook()}
+                  onPress={() => {}} //this.handlePressLoginFacebook()}
                 />
                 <GoogleSigninButton
                   style={{flex: 1}}
                   color={GoogleSigninButton.Color.Light}
-                  onPress={this.handlePressLoginGoogle}
+                  onPress={() => {}} //this.handlePressLoginGoogle}
                 />
               </View>
             </View>

@@ -6,11 +6,8 @@ import {
   Platform,
   StatusBar,
   ScrollView,
-  ActivityIndicator,
-  Alert,
 } from 'react-native';
 import {CheckBox} from 'react-native-elements';
-import {connect} from 'react-redux';
 import DropdownAlert from 'react-native-dropdownalert';
 
 import HeaderDefault from '../../../components/HeaderDefault';
@@ -22,7 +19,6 @@ import {globalStyles, fonts, colors} from '../../../constants';
 
 import styles from './styles';
 
-import {createAccount, clearError} from '../../../actions/usersActions';
 import LoadingView from '../../../components/Loading';
 
 class SignUpScreen extends Component {
@@ -48,7 +44,7 @@ class SignUpScreen extends Component {
   componentDidUpdate() {
     const {user, error, clearErrorUser, loading} = this.props;
 
-    if (user !== null) {
+    if (user !== false) {
       this.props.navigation.navigate('CreateAccount');
     }
 
@@ -167,26 +163,4 @@ class SignUpScreen extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    loading: state.users.loading,
-    user: state.users.user,
-    error: state.users.error,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    signUp: data => {
-      dispatch(createAccount(data));
-    },
-    clearErrorUser: () => {
-      dispatch(clearError());
-    },
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SignUpScreen);
+export default SignUpScreen;

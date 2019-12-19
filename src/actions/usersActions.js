@@ -8,10 +8,16 @@ export const SET_ERROR = 'SET_ERROR';
 export const SET_SUCCESS = 'SET_SUCCESS';
 export const CHANGE_USER_FIELD = 'CHANGE_USER_FIELD';
 export const CLEAR_USER = 'CLEAR_USER';
+export const SET_USER_ID = 'SET_USER_ID';
 
 const setUser = user => ({
   type: SET_USER,
   payload: user,
+});
+
+const setUserId = id => ({
+  type: SET_USER_ID,
+  payload: id,
 });
 
 const setLoading = loading => ({
@@ -95,8 +101,8 @@ export const createAccount = data => dispatch => {
     .then(response => response.json())
     .then(responseJson => {
       if (responseJson.status === 200) {
-        dispatch(setUser(responseJson.userinfo));
-
+        //dispatch(setUser(responseJson.userinfo));
+        dispatch(setUserId(responseJson.userinfo.userid));
         dispatch(setLoading(false));
       } else {
         dispatch(setError(responseJson));

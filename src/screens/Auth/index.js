@@ -24,7 +24,7 @@ class Auth extends Component {
   async componentDidMount() {
     const {user} = this.props;
 
-    if (user !== null) {
+    if (user !== false) {
       this.props.navigation.navigate('Home');
     }
   }
@@ -117,11 +117,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    user: state.users.user,
+    user: state.users.userAuth,
   };
 };
 
-export default connect(
-  mapStateToProps,
-  null,
-)(Auth);
+export default connect(mapStateToProps, null)(Auth);
