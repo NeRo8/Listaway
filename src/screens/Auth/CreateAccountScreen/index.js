@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 
 import {
   onChangeUserInfo,
-  updateUser,
+  createUserProfile,
   clearError,
 } from '../../../actions/usersActions';
 
@@ -12,7 +12,8 @@ const mapStateToProps = state => {
   return {
     error: state.users.error,
     loading: state.users.loading,
-    userid: state.users.user !== null ? state.users.user.userid : null,
+    profile: state.users.user,
+    userid: state.users.user.userid !== null ? state.users.userid : null,
     success: state.users.success,
   };
 };
@@ -23,7 +24,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(onChangeUserInfo(name, value));
     },
     onUpdateProfile: (profile, userid) => {
-      dispatch(updateUser(profile, userid));
+      dispatch(createUserProfile(profile, userid));
     },
     clearErrorProfile: () => {
       dispatch(clearError());

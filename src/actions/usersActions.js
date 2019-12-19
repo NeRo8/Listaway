@@ -112,7 +112,7 @@ export const createAccount = data => dispatch => {
     .catch(error => dispatch(setError(error)));
 };
 
-export const updateUser = (newProfile, userid) => dispatch => {
+export const createUserProfile = (newProfile, userid) => dispatch => {
   const profile = new FormData();
   profile.append('userid', userid);
   profile.append('fullname', newProfile.fullname);
@@ -122,13 +122,47 @@ export const updateUser = (newProfile, userid) => dispatch => {
   profile.append('job_title', newProfile.job_title);
   profile.append('office_tel', newProfile.office_tel);
 
-  if (newProfile.photo !== null) {
+  fetch(`${DEFAULT_URL}/user/user_update_profile`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    body: profile,
+  })
+    .then(response => response.json())
+    .then(responseJson => {
+      if (responseJson.status === 200) {
+        dispatch(setUser(responseJson.userinfo));
+        dispatch(setSuccess(true));
+        dispatch(setLoading(false));
+      } else {
+        dispatch(setError(responseJson));
+        dispatch(setLoading(false));
+      }
+    })
+    .catch(error => {
+      dispatch(setLoading(false));
+      dispatch(setError(error));
+    });
+};
+
+export const updateUser = (newProfile, photo = null) => dispatch => {
+  const profile = new FormData();
+  profile.append('userid', newProfile.userid);
+  profile.append('fullname', newProfile.fullname);
+  profile.append('direct_tel', newProfile.direct_tel);
+  profile.append('title', newProfile.title);
+  profile.append('website', newProfile.website);
+  profile.append('job_title', newProfile.job_title);
+  profile.append('office_tel', newProfile.office_tel);
+
+  if (photo !== null) {
+    console.log('Photo', typeof photo.uri);
     profile.append('photo', {
-      uri: newProfile.photo.uri,
-      type:
-        newProfile.photo.type === null ? 'image/jpeg' : newProfile.photo.type,
-      name: newProfile.photo.fileName,
-      data: newProfile.photo.data,
+      uri: photo.uri,
+      type: photo.type === null ? 'image/jpeg' : photo.type,
+      name: photo.fileName,
+      data: photo.data,
     });
   }
 
@@ -142,7 +176,7 @@ export const updateUser = (newProfile, userid) => dispatch => {
     .then(response => response.json())
     .then(responseJson => {
       if (responseJson.status === 200) {
-        dispatch(setUser(responseJson));
+        dispatch(setUser(responseJson.userinfo));
         dispatch(setSuccess(true));
         dispatch(setLoading(false));
       } else {

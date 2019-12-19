@@ -17,7 +17,6 @@ const initState = {
     website: '',
     job_title: '',
     office_tel: '',
-    photo: null,
   },
   userAuth: false,
   loading: false,
@@ -81,6 +80,7 @@ const usersReducer = (state = initState, action) => {
           photo: null,
         },
         userAuth: false,
+        success: false,
       };
     }
     default:

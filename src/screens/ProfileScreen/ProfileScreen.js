@@ -1,15 +1,6 @@
 import React, {Component} from 'react';
-import {
-  View,
-  SafeAreaView,
-  StatusBar,
-  ScrollView,
-  Image,
-  ActivityIndicator,
-  AsyncStorage,
-} from 'react-native';
+import {View, SafeAreaView, StatusBar, ScrollView, Image} from 'react-native';
 import {Icon, Button} from 'react-native-elements';
-import {connect} from 'react-redux';
 import DropdownAlert from 'react-native-dropdownalert';
 import ImagePicker from 'react-native-image-picker';
 
@@ -27,7 +18,7 @@ class ProfileScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      avatar: [],
+      avatar: null,
       full_name: '',
       family_name: '',
       title: '',
@@ -40,7 +31,6 @@ class ProfileScreen extends Component {
       modalDeleteVisible: false,
       password: '',
       confirm_password: '',
-      avatarSource: null,
     };
   }
 
@@ -66,13 +56,13 @@ class ProfileScreen extends Component {
   };
 
   handlePressSave = async () => {
-    const {onUpdateProfile, users} = this.props;
+    const {onUpdateProfile, user} = this.props;
 
     this.setState({
       isEditMode: false,
     });
 
-    onUpdateProfile(this.props.profile, users.userid);
+    onUpdateProfile(this.props.user, this.state.avatar);
   };
 
   handlePressEditPassword = () => {
@@ -92,9 +82,8 @@ class ProfileScreen extends Component {
       modalDeleteVisible: true,
     });
   };
-  handlePressChangeImage = async () => {
-    const {onChangeProfile} = this.props;
 
+  handlePressChangeImage = async () => {
     const options = {
       title: 'Select Avatar',
       storageOptions: {
@@ -111,41 +100,13 @@ class ProfileScreen extends Component {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        onChangeProfile('photo', response);
-        const source = {uri: response.uri};
+        //const source = {uri: response.uri};
         this.setState({
-          avatar: source,
+          avatar: response,
         });
       }
     });
   };
-  /**
-  handlePressChangeImage = async () => {
-    const {onUpdateAvatar} = this.props;
-
-    const token = await AsyncStorage.getItem('token', null);
-
-    const options = {
-      title: 'Select Avatar',
-      storageOptions: {
-        skipBackup: true,
-        //path: 'images',
-      },
-    };
-
-    ImagePicker.showImagePicker(options, response => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        onUpdateAvatar(response, token);
-      }
-    });
-  };
-   */
 
   render() {
     const {
@@ -156,7 +117,7 @@ class ProfileScreen extends Component {
       modalDeleteVisible,
     } = this.state;
 
-    const {loading, onChangeProfile, users} = this.props;
+    const {loading, onChangeProfile, user} = this.props;
 
     if (loading) {
       return <LoadingView loadingText="Saving…" />;
@@ -188,9 +149,9 @@ class ProfileScreen extends Component {
                   <View style={styles.imageContainer}>
                     <Image
                       source={
-                        this.state.avatar.length !== 0
+                        this.state.avatar !== null
                           ? {uri: this.state.avatar.uri}
-                          : {uri: `${users.photourl}`}
+                          : {uri: `${user.photourl}`}
                       }
                       style={{flex: 1, width: null, height: null}}
                       resizeMode="cover"
@@ -222,47 +183,43 @@ class ProfileScreen extends Component {
                 <View style={globalStyles.block}>
                   <InputDefault
                     editable={isEditMode}
-                    name="full_name"
-                    value={
-                      isEditMode === true
-                        ? this.state.full_name
-                        : users.fullname
-                    }
+                    name="fullname"
+                    value={user.fullname}
                     label="Full name"
                     onChangeText={onChangeProfile}
                   />
                   <InputDefault
                     editable={isEditMode}
                     name="direct_tel"
-                    value={users.direct_tel}
+                    value={user.direct_tel}
                     label="Direct Tel"
                     onChangeText={onChangeProfile}
                   />
                   <InputDefault
                     editable={isEditMode}
                     name="title"
-                    value={users.title}
+                    value={user.title}
                     label="Title"
                     onChangeText={onChangeProfile}
                   />
                   <InputDefault
                     editable={isEditMode}
                     name="website"
-                    value={users.website}
+                    value={user.website}
                     label="Website"
                     onChangeText={onChangeProfile}
                   />
                   <InputDefault
                     editable={isEditMode}
                     name="job_title"
-                    value={users.job_title}
+                    value={user.job_title}
                     label="Job Title"
                     onChangeText={onChangeProfile}
                   />
                   <InputDefault
                     editable={isEditMode}
                     name="office_tel"
-                    value={users.office_tel}
+                    value={user.office_tel}
                     label="Office Tel"
                     onChangeText={onChangeProfile}
                   />

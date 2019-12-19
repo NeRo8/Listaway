@@ -10,7 +10,7 @@ import {
 
 const mapStateToProps = state => {
   return {
-    users: state.users.user,
+    user: state.users.user,
   };
 };
 
