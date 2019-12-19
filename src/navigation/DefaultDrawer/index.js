@@ -12,4 +12,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(DefaultDrawer);
+export default connect(
+  null,
+  mapDispatchToProps,
+)(DefaultDrawer);

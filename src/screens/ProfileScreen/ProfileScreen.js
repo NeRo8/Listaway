@@ -22,14 +22,6 @@ import {globalStyles, fonts, colors} from '../../constants';
 
 import {DEFAULT_URL} from '../../config/server';
 
-import {
-  getProfile,
-  onChangeProfileInfo,
-  updateProfile,
-  updateAvatar,
-  clearError,
-} from '../../actions/profileActions';
-
 import styles from './styles';
 import LoadingView from '../../components/Loading';
 
@@ -37,6 +29,8 @@ class ProfileScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      avatar: [],
+      full_name: '',
       family_name: '',
       title: '',
       directTel: '',
@@ -50,12 +44,6 @@ class ProfileScreen extends Component {
       confirm_password: '',
       avatarSource: null,
     };
-  }
-
-  componentDidMount() {
-    const {getProfileDetail, userid} = this.props;
-
-    getProfileDetail(userid);
   }
 
   componentDidUpdate() {
@@ -80,14 +68,13 @@ class ProfileScreen extends Component {
   };
 
   handlePressSave = async () => {
-    const {onUpdateProfile} = this.props;
+    const {onUpdateProfile, users} = this.props;
 
     this.setState({
       isEditMode: false,
     });
 
-    const token = await AsyncStorage.getItem('token', null);
-    onUpdateProfile(this.props.profile, token);
+    onUpdateProfile(this.props.profile, users.userid);
   };
 
   handlePressEditPassword = () => {
@@ -107,7 +94,33 @@ class ProfileScreen extends Component {
       modalDeleteVisible: true,
     });
   };
+  handlePressChangeImage = async () => {
+    const {onChangeProfile} = this.props;
 
+    const options = {
+      title: 'Select Avatar',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+
+    ImagePicker.showImagePicker(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        onChangeProfile('photo', response);
+        const source = {uri: response.uri};
+        this.setState({
+          avatar: source,
+        });
+      }
+    });
+  };
   /**
   handlePressChangeImage = async () => {
     const {onUpdateAvatar} = this.props;
@@ -145,7 +158,7 @@ class ProfileScreen extends Component {
       modalDeleteVisible,
     } = this.state;
 
-    const {profile, loading, onChangeProfile} = this.props;
+    const {loading, onChangeProfile, users} = this.props;
 
     if (loading) {
       return <LoadingView loadingText="Saving…" />;
@@ -176,9 +189,11 @@ class ProfileScreen extends Component {
                 <View>
                   <View style={styles.imageContainer}>
                     <Image
-                      source={{
-                        uri: `${DEFAULT_URL}${profile.avatar}`,
-                      }}
+                      source={
+                        this.state.avatar.length !== 0
+                          ? {uri: this.state.avatar.uri}
+                          : {uri: `${users.photourl}`}
+                      }
                       style={{flex: 1, width: null, height: null}}
                       resizeMode="cover"
                     />
@@ -210,42 +225,46 @@ class ProfileScreen extends Component {
                   <InputDefault
                     editable={isEditMode}
                     name="full_name"
-                    value={profile.full_name}
+                    value={
+                      isEditMode === true
+                        ? this.state.full_name
+                        : users.fullname
+                    }
                     label="Full name"
                     onChangeText={onChangeProfile}
                   />
                   <InputDefault
                     editable={isEditMode}
                     name="direct_tel"
-                    value={profile.direct_tel}
+                    value={users.direct_tel}
                     label="Direct Tel"
                     onChangeText={onChangeProfile}
                   />
                   <InputDefault
                     editable={isEditMode}
                     name="title"
-                    value={profile.title}
+                    value={users.title}
                     label="Title"
                     onChangeText={onChangeProfile}
                   />
                   <InputDefault
                     editable={isEditMode}
                     name="website"
-                    value={profile.website}
+                    value={users.website}
                     label="Website"
                     onChangeText={onChangeProfile}
                   />
                   <InputDefault
                     editable={isEditMode}
                     name="job_title"
-                    value={profile.job_title}
+                    value={users.job_title}
                     label="Job Title"
                     onChangeText={onChangeProfile}
                   />
                   <InputDefault
                     editable={isEditMode}
                     name="office_tel"
-                    value={profile.office_tel}
+                    value={users.office_tel}
                     label="Office Tel"
                     onChangeText={onChangeProfile}
                   />
@@ -333,30 +352,4 @@ class ProfileScreen extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    error: state.profile.error,
-    profile: state.profile.profile,
-    loading: state.profile.loading,
-    userid: state.users.user.userid,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    onChangeProfile: (name, value) => {
-      dispatch(onChangeProfileInfo(name, value));
-    },
-    getProfileDetail: userid => {
-      dispatch(getProfile(userid));
-    },
-    onUpdateProfile: (profile, token) => {
-      dispatch(updateProfile(profile, token));
-    },
-    clearErrorProfile: () => {
-      dispatch(clearError());
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);
+export default ProfileScreen;

@@ -44,6 +44,8 @@ export const loginWithEmail = (e, p) => dispatch => {
     body: JSON.stringify({
       email: e,
       password: p,
+      device_type: Platform.OS === 'ios' ? 0 : 1,
+      action_time: Date().toLocaleString(),
     }),
   })
     .then(response => response.json())
