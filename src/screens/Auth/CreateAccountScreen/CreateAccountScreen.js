@@ -1,15 +1,6 @@
 import React, {Component} from 'react';
-import {
-  View,
-  SafeAreaView,
-  StatusBar,
-  ScrollView,
-  Image,
-  AsyncStorage,
-  ActivityIndicator,
-} from 'react-native';
-import {Icon, Button} from 'react-native-elements';
-import {connect} from 'react-redux';
+import {View, SafeAreaView, StatusBar, ScrollView, Image} from 'react-native';
+import {Icon} from 'react-native-elements';
 import DropdownAlert from 'react-native-dropdownalert';
 import ImagePicker from 'react-native-image-picker';
 
@@ -19,16 +10,6 @@ import {LinearButton} from '../../../components/Buttons';
 import LoadingView from '../../../components/Loading';
 
 import {globalStyles} from '../../../constants';
-
-import {DEFAULT_URL} from '../../../config/server';
-
-import {
-  getProfile,
-  onChangeProfileInfo,
-  updateProfile,
-  updateAvatar,
-  clearError,
-} from '../../../actions/profileActions';
 
 import styles from './styles';
 
@@ -183,31 +164,4 @@ class CreateAccountScreen extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    error: state.profile.error,
-    profile: state.profile.profile,
-    loading: state.profile.loading,
-    userid: state.users.user !== null ? state.users.user.userid : null,
-    success: state.profile.success,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    onChangeProfile: (name, value) => {
-      dispatch(onChangeProfileInfo(name, value));
-    },
-    onUpdateProfile: (profile, userid) => {
-      dispatch(updateProfile(profile, userid));
-    },
-    clearErrorProfile: () => {
-      dispatch(clearError());
-    },
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(CreateAccountScreen);
+export default CreateAccountScreen;

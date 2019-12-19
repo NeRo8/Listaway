@@ -3,12 +3,10 @@ import {connect} from 'react-redux';
 import ProfileScreen from './ProfileScreen';
 
 import {
-  // getProfile,
-  onChangeProfileInfo,
-  updateProfile,
-  //updateAvatar,
+  onChangeUserInfo,
+  updateUser,
   clearError,
-} from '../../actions/profileActions';
+} from '../../actions/usersActions';
 
 const mapStateToProps = state => {
   return {
@@ -19,13 +17,10 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     onChangeProfile: (name, value) => {
-      dispatch(onChangeProfileInfo(name, value));
+      dispatch(onChangeUserInfo(name, value));
     },
-    // getProfileDetail: userid => {
-    //   dispatch(getProfile(userid));
-    // },
-    onUpdateProfile: (profile, token) => {
-      dispatch(updateProfile(profile, token));
+    onUpdateProfile: (profile, userid) => {
+      dispatch(updateUser(profile, userid));
     },
     clearErrorProfile: () => {
       dispatch(clearError());
@@ -33,7 +28,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ProfileScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);

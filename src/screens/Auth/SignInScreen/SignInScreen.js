@@ -26,14 +26,6 @@ import {
 import {globalStyles, colors, fonts} from '../../../constants';
 import styles from './styles';
 
-import {connect} from 'react-redux';
-import {
-  loginWithEmail,
-  loginWithFacebook,
-  loginWithGoogle,
-  clearError,
-} from '../../../actions/usersActions';
-
 class SignInScreen extends Component {
   constructor(props) {
     super(props);
@@ -44,12 +36,6 @@ class SignInScreen extends Component {
   }
 
   componentDidMount() {
-    //const {token} = this.props;
-
-    // if (token !== null) {
-    //   this.props.navigation.navigate('Home');
-    // }
-
     GoogleSignin.configure({
       scopes: ['https://www.googleapis.com/auth/drive.readonly'],
       webClientId:
@@ -223,32 +209,4 @@ class SignInScreen extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    loading: state.users.loading,
-    error: state.users.error,
-    user: state.users.user,
-    //token: state.users.token,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    emailLogin: (e, p) => {
-      dispatch(loginWithEmail(e, p));
-    },
-    /**
-    facebookLogin: token => {
-      dispatch(loginWithFacebook(token));
-    },
-    googleLogin: token => {
-      dispatch(loginWithGoogle(token));
-    },
-     */
-    clearErrorUser: () => {
-      dispatch(clearError());
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(SignInScreen);
+export default SignInScreen;

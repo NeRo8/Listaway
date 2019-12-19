@@ -20,8 +20,6 @@ import ModalDelete from './ModalDelete';
 
 import {globalStyles, fonts, colors} from '../../constants';
 
-import {DEFAULT_URL} from '../../config/server';
-
 import styles from './styles';
 import LoadingView from '../../components/Loading';
 
