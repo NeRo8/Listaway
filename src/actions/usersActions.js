@@ -157,19 +157,21 @@ export const updateUser = (newProfile, photo = null) => dispatch => {
   profile.append('office_tel', newProfile.office_tel);
 
   if (photo !== null) {
-    console.log('Photo', typeof photo.uri);
     profile.append('photo', {
-      uri: photo.uri,
-      type: photo.type === null ? 'image/jpeg' : photo.type,
       name: photo.fileName,
-      data: photo.data,
+      type: photo.type === null ? 'image/jpeg' : photo.type,
+      uri:
+        Platform.OS === 'android'
+          ? photo.uri
+          : photo.uri.replace('file://', ''),
     });
   }
 
   fetch(`${DEFAULT_URL}/user/user_update_profile`, {
     method: 'POST',
     headers: {
-      'Content-Type': 'multipart/form-data',
+      'Content-Type':
+        'multipart/form-data;boundary=--------------------------777914024449089496744136',
     },
     body: profile,
   })
