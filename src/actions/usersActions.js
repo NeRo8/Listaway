@@ -1,6 +1,7 @@
 import {Platform} from 'react-native';
 
 import {DEFAULT_URL} from '../config/server';
+import moment from 'moment';
 
 export const SET_USER = 'SET_USER';
 export const SET_LOADING = 'SET_STATUS';
@@ -197,11 +198,13 @@ export const loginWithFacebook = token => dispatch => {
 
   var formData = new FormData();
 
-  formData.append('facebookid', '820106268445537');
+  //formData.append('facebookid', '820106268445537');
+  formData.append('facebookid', token);
   formData.append('token', token);
-  formData.append('action_time', '2019:12:19 04:13:50');
+  formData.append('action_time', moment().format('YYYY:MM:DD HH:mm:ss'));
+  //formData.append('action_time', '2019:12:19 04:13:50');
 
-  fetch(`${DEFAULT_URL}/user/user_facebook_login/`, {
+  fetch(`http://3.136.62.106/Listeasy/backend/index.php/user/user_facebook_login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'multipart/form-data',
@@ -227,20 +230,22 @@ export const loginWithFacebook = token => dispatch => {
 export const loginWithGoogle = token => dispatch => {
   dispatch(setLoading(true));
 
-  fetch(`${DEFAULT_URL}/api/v1/google/`, {
+  fetch(`http://3.136.62.106/Listeasy/backend/index.php/user/user_google_login`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      access_token: token,
+      token: token,
+      googleid: token,
+      action_time: moment().format('YYYY:MM:DD HH:mm:ss'),
     }),
   })
     .then(response => response.json())
     .then(responseJson => {
-      if (responseJson.key !== undefined) {
-        dispatch(setToken(responseJson.key));
+      if (responseJson.status === 200) {
+        dispatch(setUser(responseJson.userinfo));
         dispatch(setLoading(false));
       } else {
         dispatch(setError(responseJson));

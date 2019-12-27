@@ -95,7 +95,7 @@ class SignInScreen extends Component {
       },
     );
   };
-  /**
+  
   //onPress google
   handlePressLoginGoogle = async () => {
     const {googleLogin} = this.props;
@@ -122,7 +122,7 @@ class SignInScreen extends Component {
       }
     }
   };
-   */
+   
 
   render() {
     const {loading} = this.props;
@@ -194,7 +194,7 @@ class SignInScreen extends Component {
                 <GoogleSigninButton
                   style={{flex: 1}}
                   color={GoogleSigninButton.Color.Light}
-                  onPress={() => {}} //this.handlePressLoginGoogle}
+                  onPress={() => this.handlePressLoginGoogle()}
                 />
               </View>
             </View>
