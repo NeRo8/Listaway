@@ -116,11 +116,21 @@ class CreateTour extends Component {
     }
   };
 
+  handlePressOrder = async () => {
+    console.log('User: ', this.props.user.userid);
+    console.log('!', this.props);
+    const {onCreateTour, user} = this.props;
+    if (user !== null) {
+      onCreateTour(this.props.tour, user);
+    }
+  };
+
   render() {
     return (
       <ScrollView
         contentContainerStyle={globalStyles.containerFull}
-        nestedScrollEnabled>
+        nestedScrollEnabled
+        keyboardShouldPersistTaps="always">
         <StatusBar
           translucent={true}
           backgroundColor="transparent"
@@ -168,8 +178,10 @@ class CreateTour extends Component {
                     backgroundColor: 'rgba(0,0,0,0)',
                     borderTopWidth: 0,
                     borderBottomWidth: 0,
+                    alignItems: 'center',
                   },
                   textInput: {
+                    marginTop: 0,
                     marginLeft: 0,
                     marginRight: 0,
                     height: 38,
@@ -286,6 +298,7 @@ class CreateTour extends Component {
               titleStyle={styles.btnTitleWhite}
               buttonStyle={styles.btnStyleWhite}
               containerStyle={styles.btnContainerStyle}
+              onPress={this.handlePressOrder}
             />
           </View>
         </View>

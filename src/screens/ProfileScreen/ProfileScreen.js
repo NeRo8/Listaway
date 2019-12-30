@@ -56,6 +56,7 @@ class ProfileScreen extends Component {
   };
 
   handlePressSave = async () => {
+    console.log('Qwer:', this.props);
     const {onUpdateProfile, user} = this.props;
 
     this.setState({
