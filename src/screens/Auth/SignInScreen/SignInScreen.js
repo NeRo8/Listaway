@@ -95,7 +95,7 @@ class SignInScreen extends Component {
       },
     );
   };
-  
+
   //onPress google
   handlePressLoginGoogle = async () => {
     const {googleLogin} = this.props;
@@ -122,7 +122,6 @@ class SignInScreen extends Component {
       }
     }
   };
-   
 
   render() {
     const {loading} = this.props;

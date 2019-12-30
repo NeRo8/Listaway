@@ -1,7 +1,9 @@
 import {Platform} from 'react-native';
 
 import {DEFAULT_URL} from '../config/server';
+
 import moment from 'moment';
+import axios from 'react-native-axios';
 
 export const SET_USER = 'SET_USER';
 export const SET_LOADING = 'SET_STATUS';
@@ -168,18 +170,17 @@ export const updateUser = (newProfile, photo = null) => dispatch => {
     });
   }
 
-  fetch(`${DEFAULT_URL}/user/user_update_profile`, {
-    method: 'POST',
-    headers: {
-      'Content-Type':
-        'multipart/form-data;boundary=--------------------------777914024449089496744136',
-    },
-    body: profile,
+  axios({
+    method: 'post',
+    url:
+      'http://3.136.62.106/Listeasy/backend/index.php/user/user_update_profile',
+    data: profile,
+    headers: {'Content-Type': 'multipart/form-data'},
   })
-    .then(response => response.json())
     .then(responseJson => {
-      if (responseJson.status === 200) {
-        dispatch(setUser(responseJson.userinfo));
+      console.log(responseJson);
+      if (responseJson.data.status === 200) {
+        dispatch(setUser(responseJson.data.userinfo));
         dispatch(setSuccess(true));
         dispatch(setLoading(false));
       } else {
@@ -191,6 +192,30 @@ export const updateUser = (newProfile, photo = null) => dispatch => {
       dispatch(setLoading(false));
       dispatch(setError(error));
     });
+
+  // fetch(`${DEFAULT_URL}/user/user_update_profile`, {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type':
+  //       'multipart/form-data;boundary=--------------------------777914024449089496744136',
+  //   },
+  //   body: profile,
+  // })
+  //   .then(response => response.json())
+  //   .then(responseJson => {
+  //     if (responseJson.status === 200) {
+  //       dispatch(setUser(responseJson.userinfo));
+  //       dispatch(setSuccess(true));
+  //       dispatch(setLoading(false));
+  //     } else {
+  //       dispatch(setError(responseJson));
+  //       dispatch(setLoading(false));
+  //     }
+  //   })
+  //   .catch(error => {
+  //     dispatch(setLoading(false));
+  //     dispatch(setError(error));
+  //   });
 };
 
 export const loginWithFacebook = token => dispatch => {
@@ -204,13 +229,16 @@ export const loginWithFacebook = token => dispatch => {
   formData.append('action_time', moment().format('YYYY:MM:DD HH:mm:ss'));
   //formData.append('action_time', '2019:12:19 04:13:50');
 
-  fetch(`http://3.136.62.106/Listeasy/backend/index.php/user/user_facebook_login`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'multipart/form-data',
+  fetch(
+    `http://3.136.62.106/Listeasy/backend/index.php/user/user_facebook_login`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      body: formData,
     },
-    body: formData,
-  })
+  )
     .then(response => response.json())
     .then(responseJson => {
       if (responseJson.status === 200) {
@@ -230,18 +258,21 @@ export const loginWithFacebook = token => dispatch => {
 export const loginWithGoogle = token => dispatch => {
   dispatch(setLoading(true));
 
-  fetch(`http://3.136.62.106/Listeasy/backend/index.php/user/user_google_login`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
+  fetch(
+    `http://3.136.62.106/Listeasy/backend/index.php/user/user_google_login`,
+    {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        token: token,
+        googleid: token,
+        action_time: moment().format('YYYY:MM:DD HH:mm:ss'),
+      }),
     },
-    body: JSON.stringify({
-      token: token,
-      googleid: token,
-      action_time: moment().format('YYYY:MM:DD HH:mm:ss'),
-    }),
-  })
+  )
     .then(response => response.json())
     .then(responseJson => {
       if (responseJson.status === 200) {
