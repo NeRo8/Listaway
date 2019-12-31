@@ -116,12 +116,14 @@ class CreateTour extends Component {
     }
   };
 
+  handlePressPreview = async () => {
+    console.log('State:', this.props);
+  };
   handlePressOrder = async () => {
-    console.log('User: ', this.props.user.userid);
-    console.log('!', this.props);
     const {onCreateTour, user} = this.props;
+    const {location, photoList, songList} = this.state;
     if (user !== null) {
-      onCreateTour(this.props.tour, user);
+      onCreateTour(this.props.tour, user, location, photoList, songList);
     }
   };
 
@@ -165,9 +167,15 @@ class CreateTour extends Component {
                   language: 'en', // language of the results
                   types: '(cities)', // default: 'geocode'
                 }}
+                listViewDisplayed={this.state.listViewDisplayed}
                 renderDescription={row => row.description}
                 nearbyPlacesAPI="GooglePlacesSearch" // Which API to use:
-                onPress={(data, details = null) => {}}
+                onPress={(data, details = null) => {
+                  this.setState({
+                    location: data.description,
+                    listViewDisplayed: false,
+                  });
+                }}
                 placeholder="Enter Location"
                 minLength={2}
                 autoFocus={false}
@@ -292,6 +300,7 @@ class CreateTour extends Component {
               titleStyle={styles.btnTitleWhite}
               buttonStyle={styles.btnStyleWhite}
               containerStyle={styles.btnContainerStyle}
+              onPress={this.handlePressPreview}
             />
             <Button
               title="Order Tour"

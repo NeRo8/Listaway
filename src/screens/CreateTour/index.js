@@ -2,7 +2,12 @@ import CreateTour from './CreateTour';
 
 import {connect} from 'react-redux';
 
-import {createTour, clearError} from '../../actions/toursActions';
+import {
+  createTour,
+  clearError,
+  addPhotoTour,
+  addSongTour,
+} from '../../actions/toursActions';
 
 const mapStateToProps = state => {
   return {
@@ -14,8 +19,10 @@ const mapStateToProps = state => {
 
 const mapDisptchToProps = dispatch => {
   return {
-    onCreateTour: (tour, userid) => {
-      dispatch(createTour(tour, userid));
+    onCreateTour: (tour, userid, location, photoList, songList) => {
+      dispatch(createTour(tour, userid, location));
+      dispatch(addPhotoTour(tour, photoList));
+      dispatch(addSongTour(tour, songList));
     },
     clearErrorProfile: () => {
       dispatch(clearError());

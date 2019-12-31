@@ -14,11 +14,7 @@ const toursReducer = (state = initState, action) => {
     case SET_TOUR: {
       return {
         ...state,
-        tour: {
-          posterid: '',
-          tourlocation: '',
-          posttime: '',
-        },
+        tour: action.payload,
       };
     }
   }
