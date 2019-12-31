@@ -12,7 +12,7 @@ import {
 const mapStateToProps = state => {
   return {
     // error: state.tours.error,
-    // tour: state.tours.tour,
+    tour: state.tours.tour,
     user: state.users.user,
   };
 };
@@ -22,7 +22,7 @@ const mapDisptchToProps = dispatch => {
     onCreateTour: (tour, userid, location, photoList, songList) => {
       dispatch(createTour(tour, userid, location));
       dispatch(addPhotoTour(tour, photoList));
-      dispatch(addSongTour(tour, songList));
+      // dispatch(addSongTour(tour, songList));
     },
     clearErrorProfile: () => {
       dispatch(clearError());

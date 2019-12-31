@@ -17,5 +17,9 @@ const toursReducer = (state = initState, action) => {
         tour: action.payload,
       };
     }
+    default:
+      return state;
   }
 };
+
+export default toursReducer;

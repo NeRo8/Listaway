@@ -51,7 +51,7 @@ class CreateTour extends Component {
     ImagePicker.launchImageLibrary(options, response => {
       const {photoList} = this.state;
 
-      const newPhotoList = photoList.concat({uri: response.uri});
+      const newPhotoList = photoList.concat({image: response});
       this.setState({
         photoList: newPhotoList,
       });
@@ -79,7 +79,7 @@ class CreateTour extends Component {
       } else {
         const {photoList} = this.state;
 
-        const newPhotoList = photoList.concat({uri: response.uri});
+        const newPhotoList = photoList.concat({image: response});
         this.setState({
           photoList: newPhotoList,
         });
@@ -117,13 +117,13 @@ class CreateTour extends Component {
   };
 
   handlePressPreview = async () => {
-    console.log('State:', this.props);
+    console.log('State:', this.props.tour);
   };
   handlePressOrder = async () => {
-    const {onCreateTour, user} = this.props;
+    const {onCreateTour, user, tour} = this.props;
     const {location, photoList, songList} = this.state;
     if (user !== null) {
-      onCreateTour(this.props.tour, user, location, photoList, songList);
+      onCreateTour(tour.tourID, user, location, photoList, songList);
     }
   };
 
@@ -220,7 +220,7 @@ class CreateTour extends Component {
                         paddingHorizontal: 5,
                       }}>
                       <Image
-                        source={item}
+                        source={{uri: item.image.uri}}
                         style={{
                           width: (Dimensions.get('window').width - 60) / 2,
                           height: 100,

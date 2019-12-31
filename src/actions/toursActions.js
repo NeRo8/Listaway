@@ -46,7 +46,6 @@ export const createTour = (
     headers: {'Content-Type': 'multipart/form-data'},
   })
     .then(responseJson => {
-      console.log(responseJson);
       if (responseJson.data.status === 200) {
         dispatch(setTour(responseJson.data.tourinfo));
       } else {
@@ -59,33 +58,37 @@ export const createTour = (
 };
 
 export const addPhotoTour = (tour, photoList) => dispatch => {
+  console.log(photoList);
+  console.log('tourIDDDDD', tour);
   const photos = new FormData();
 
-  tour.append('tourID', tour.tourID);
-  if (photoList !== null) {
+  photos.append('tourID', tour);
+  if (photoList[0].image !== null) {
     photos.append('photo', {
-      name: photoList.fileName,
-      type: photoList.type === null ? 'image/jpeg' : photoList.type,
+      name: photoList[0].image.fileName,
+      type:
+        photoList[0].image.type === null
+          ? 'image/jpeg'
+          : photoList[0].image.type,
       uri:
         Platform.OS === 'android'
-          ? photoList.uri
-          : photoList.uri.replace('file://', ''),
+          ? photoList[0].image.uri
+          : photoList[0].image.uri.replace('file://', ''),
     });
   }
-  console.log(photoList);
-  console.log('tourIDDDDD', tour.tourID);
 
   axios({
     method: 'post',
     url: `${BASE_URL}/add_photo_for_tour/`,
     data: photos,
     headers: {'Content-Type': 'multipart/form-data'},
-  });
+  }).then(responseJson => console.log(responseJson));
 };
+
 export const addSongTour = (tour, songList) => dispatch => {
   const song = new FormData();
 
-  tour.append('tourID', tour.tourID);
+  song.append('tourID', tour.tourID);
   if (songList !== null) {
     song.append('audio', {
       name: songList.fileName,
