@@ -94,7 +94,7 @@ class CreateTour extends Component {
       });
 
       this.setState(prevState => ({
-        songList: [...prevState.songList, res.uri],
+        songList: [...prevState.songList, res],
       }));
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
@@ -111,48 +111,25 @@ class CreateTour extends Component {
       });
     } else {
       this.setState({
-        playNow: {uri: uriIncome, id: index},
+        playNow: {uri: uriIncome.uri, id: index},
       });
     }
   };
 
   handlePressPreview = async () => {
+    /**
     const {photoList, songList, location} = this.state;
     const {userid, onCreateTour} = this.props;
 
-    //Тут реалізовано при кліку, щоб передало параметри
     onCreateTour(userid, location, photoList, songList);
-
-    //console.log(songList);
-    /**
-    const incomePhoto = {
-      name: photoList[0].image.fileName,
-      type:
-        photoList[0].image.type === null
-          ? 'image/jpeg'
-          : photoList[0].image.type,
-      uri:
-        Platform.OS === 'android'
-          ? photoList[0].image.uri
-          : photoList[0].image.uri.replace('file://', ''),
-    };
-
-    const dataIncome = new FormData();
-    dataIncome.append('tourID', '81');
-    dataIncome.append('photo', incomePhoto);
-
-    API.post('/user/add_photo_for_tour', dataIncome, {
-      headers: {'Content-Type': 'multipart/form-data'},
-    }).then(response => console.log(response));
-    */
+     */
   };
 
   handlePressOrder = async () => {
-    const {onCreateTour, user, tour} = this.props;
-    const {location, photoList, songList} = this.state;
-    if (user !== null) {
-      onCreateTour(tour.tourID, user, location, photoList, songList);
-    }
+    const {photoList, songList, location} = this.state;
+    const {userid, onCreateTour} = this.props;
+
+    onCreateTour(userid, location, photoList, songList);
   };
 
   render() {
@@ -316,7 +293,7 @@ class CreateTour extends Component {
               onPress={this.handlePressPreview}
             />
             <Button
-              title="Order Tour"
+              title="Create Tour"
               titleStyle={styles.btnTitleWhite}
               buttonStyle={styles.btnStyleWhite}
               containerStyle={styles.btnContainerStyle}

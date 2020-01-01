@@ -41,7 +41,9 @@ export const createTour = (userId, location, photoL, audioL) => dispatch => {
       dispatch(addPhotoToTour(toure.tourID, photoL));
       return toure;
     })
-    .then(toure => console.log('Tour', toure))
+    .then(toure => {
+      dispatch(addSoundToTour(toure.tourID, audioL));
+    })
     .catch(error => {
       dispatch(setError(error));
     });
@@ -71,25 +73,25 @@ const addPhotoToTour = (tourID, photoList) => dispatch => {
   });
 };
 
-const addSoundToTour = (tourID, soundList) => {
-  const photoL = photoList.map(photo => {
+const addSoundToTour = (tourID, soundList) => dispatch => {
+  const soundL = soundList.map(sound => {
     return {
-      name: photo.image.fileName,
-      type: photo.image.type === null ? 'image/jpeg' : photo.image.type,
+      name: 'audio',
+      type: sound.type,
       uri:
         Platform.OS === 'android'
-          ? photo.image.uri
-          : photo.image.uri.replace('file://', ''),
+          ? sound.uri
+          : sound.uri.replace('file://', ''),
     };
   });
 
-  photoL.forEach(photo => {
+  soundL.forEach(sound => {
     const dataIncome = new FormData();
     dataIncome.append('tourID', tourID);
-    dataIncome.append('photo', photo);
+    dataIncome.append('audio', sound);
 
-    API.post('/user/add_photo_for_tour', dataIncome, {
+    API.post('/user/add_audio_for_tour', dataIncome, {
       headers: {'Content-Type': 'multipart/form-data'},
-    });
+    }).then(response => console.log(response.data));
   });
 };
