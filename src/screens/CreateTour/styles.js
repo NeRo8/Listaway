@@ -49,4 +49,20 @@ export default StyleSheet.create({
     borderColor: colors.LIGHT_BLUE,
     marginHorizontal: 10,
   },
+  imageContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 5,
+  },
+  iconContainer: {
+    width: 100,
+    height: 100,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: colors.LIGHT_BLUE,
+    margin: 5,
+  },
 });

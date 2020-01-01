@@ -30,7 +30,7 @@ class CreateTour extends Component {
       showRightMenu: false,
       playNow: null,
       pausePlay: false,
-      x: null,
+      location: null,
     };
   }
 
@@ -117,8 +117,36 @@ class CreateTour extends Component {
   };
 
   handlePressPreview = async () => {
-    console.log('State:', this.props.tour);
+    const {photoList, songList, location} = this.state;
+    const {userid, onCreateTour} = this.props;
+
+    //Тут реалізовано при кліку, щоб передало параметри
+    onCreateTour(userid, location, photoList, songList);
+
+    //console.log(songList);
+    /**
+    const incomePhoto = {
+      name: photoList[0].image.fileName,
+      type:
+        photoList[0].image.type === null
+          ? 'image/jpeg'
+          : photoList[0].image.type,
+      uri:
+        Platform.OS === 'android'
+          ? photoList[0].image.uri
+          : photoList[0].image.uri.replace('file://', ''),
+    };
+
+    const dataIncome = new FormData();
+    dataIncome.append('tourID', '81');
+    dataIncome.append('photo', incomePhoto);
+
+    API.post('/user/add_photo_for_tour', dataIncome, {
+      headers: {'Content-Type': 'multipart/form-data'},
+    }).then(response => console.log(response));
+    */
   };
+
   handlePressOrder = async () => {
     const {onCreateTour, user, tour} = this.props;
     const {location, photoList, songList} = this.state;
@@ -212,13 +240,7 @@ class CreateTour extends Component {
                   data={this.state.photoList}
                   numColumns={2}
                   renderItem={({item}) => (
-                    <View
-                      style={{
-                        flex: 1,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        paddingHorizontal: 5,
-                      }}>
+                    <View style={styles.imageContainer}>
                       <Image
                         source={{uri: item.image.uri}}
                         style={{
@@ -263,16 +285,7 @@ class CreateTour extends Component {
                       type="font-awesome"
                       color={colors.LIGHT_BLUE}
                       size={40}
-                      containerStyle={{
-                        width: 100,
-                        height: 100,
-                        borderRadius: 20,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderWidth: 1,
-                        borderColor: colors.LIGHT_BLUE,
-                        margin: 5,
-                      }}
+                      containerStyle={styles.iconContainer}
                       onPress={() => {
                         this.handlePressSong(item, index);
                       }}
