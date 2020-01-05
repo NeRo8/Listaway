@@ -108,7 +108,7 @@ export const createAccount = data => dispatch => {
         dispatch(setUserId(responseJson.userinfo.userid));
         dispatch(setLoading(false));
       } else {
-        dispatch(setError(responseJson));
+        // dispatch(setError(responseJson));
         dispatch(setLoading(false));
       }
     })
@@ -150,6 +150,7 @@ export const createUserProfile = (newProfile, userid) => dispatch => {
 };
 
 export const updateUser = (newProfile, photo = null) => dispatch => {
+  dispatch(setLoading(true));
   const profile = new FormData();
   profile.append('userid', newProfile.userid);
   profile.append('fullname', newProfile.fullname);

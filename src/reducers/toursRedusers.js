@@ -21,7 +21,6 @@ const toursReducer = (state = initState, action) => {
       
     }
     case SET_LOADING: {
-      console.log("SET_LOADING ok")
       return {
         ...state,
         loading: action.payload,

@@ -11,6 +11,8 @@ import {
 const mapStateToProps = state => {
   return {
     user: state.users.user,
+    loading: state.tours.loading,
+
   };
 };
 

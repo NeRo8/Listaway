@@ -38,7 +38,7 @@ class ProfileScreen extends Component {
     const {error, loading, clearErrorProfile} = this.props;
 
     if (error !== null && loading === false) {
-      this.dropDownAlertRef.alertWithType('error', 'Error', error);
+      // this.dropDownAlertRef.alertWithType('error', 'Error', error);
       clearErrorProfile();
     }
   }
@@ -121,7 +121,8 @@ class ProfileScreen extends Component {
 
     if (loading) {
       return <LoadingView loadingText="Saving…" />;
-    } else
+    } 
+    else
       return (
         <SafeAreaView style={globalStyles.containerFull}>
           <View style={{alignItems: 'flex-start', marginLeft: 15}}>
