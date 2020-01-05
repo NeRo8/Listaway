@@ -1,9 +1,10 @@
-import {Platform} from 'react-native';
+import { Platform } from 'react-native';
 import moment from 'moment';
 import API from '../api';
 
 export const SET_TOUR = 'SET_TOUR';
 export const SET_ERROR = 'SET_ERROR';
+export const SET_LOADING = 'SET_STATUS';
 
 const setTour = tour => ({
   type: SET_TOUR,
@@ -15,11 +16,17 @@ const setError = error => ({
   payload: error,
 });
 
+const setLoading = loading => ({
+  type: SET_LOADING,
+  payload: loading,
+});
+
 export const clearError = () => dispatch => {
   dispatch(setError(null));
 };
 
 export const createTour = (userId, location, photoL, audioL) => dispatch => {
+  dispatch(setLoading(true));
   const newTour = new FormData();
 
   newTour.append('posterid', userId);
@@ -27,7 +34,7 @@ export const createTour = (userId, location, photoL, audioL) => dispatch => {
   newTour.append('posttime', moment().format('YYYY:MM:DD HH:mm:ss'));
 
   API.post('/user/create_tour', newTour, {
-    headers: {'Content-Type': 'multipart/form-data'},
+    headers: { 'Content-Type': 'multipart/form-data' },
   })
     .then(response => {
       if (response.data.status === 200) {
@@ -44,7 +51,11 @@ export const createTour = (userId, location, photoL, audioL) => dispatch => {
     .then(toure => {
       dispatch(addSoundToTour(toure.tourID, audioL));
     })
+    .then(() => {
+      dispatch(setLoading(false))
+    })
     .catch(error => {
+      dispatch(setLoading(false))
       dispatch(setError(error));
     });
 };
@@ -68,9 +79,11 @@ const addPhotoToTour = (tourID, photoList) => dispatch => {
     dataIncome.append('photo', photo);
 
     API.post('/user/add_photo_for_tour', dataIncome, {
-      headers: {'Content-Type': 'multipart/form-data'},
+      headers: { 'Content-Type': 'multipart/form-data' },
     });
   });
+  dispatch(setLoading(false))
+
 };
 
 const addSoundToTour = (tourID, soundList) => dispatch => {
@@ -91,7 +104,7 @@ const addSoundToTour = (tourID, soundList) => dispatch => {
     dataIncome.append('audio', sound);
 
     API.post('/user/add_audio_for_tour', dataIncome, {
-      headers: {'Content-Type': 'multipart/form-data'},
+      headers: { 'Content-Type': 'multipart/form-data' },
     }).then(response => console.log(response.data));
   });
 };

@@ -14,6 +14,7 @@ import ImagePicker from 'react-native-image-picker';
 import DocumentPicker from 'react-native-document-picker';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import Video from 'react-native-video';
+import LoadingView from '../../components/Loading';
 
 import GradientText from '../../components/GradientText';
 
@@ -87,6 +88,10 @@ class CreateTour extends Component {
     });
   };
 
+  componentDidUpdate() {
+    const {error, loading, user} = this.props;
+    console.log(loading)
+  }
   handlePressAddSong = async () => {
     try {
       const res = await DocumentPicker.pick({
@@ -133,6 +138,12 @@ class CreateTour extends Component {
   };
 
   render() {
+    const {loading} = this.props;
+
+    if (loading) {
+      return <LoadingView loadingText="Logging in..." />;
+    }
+
     return (
       <ScrollView
         contentContainerStyle={globalStyles.containerFull}

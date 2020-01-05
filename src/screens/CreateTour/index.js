@@ -9,6 +9,7 @@ const mapStateToProps = state => {
     error: state.tours.error,
     tour: state.tours.tour,
     userid: state.users.user.userid,
+    loading: state.tours.loading,
   };
 };
 
