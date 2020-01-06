@@ -154,7 +154,7 @@ class CreateAccountScreen extends Component {
             </View>
           </ScrollView>
           <DropdownAlert ref={ref => (this.dropDownAlertRef = ref)} />
-          {loading?(<LoadingView loadingText="Creating Tour..." hide={true} />): null}
+          {loading?(<LoadingView loadingText="Creating new account..." hide={true} />): null}
         </SafeAreaView>
       );
   }

@@ -198,7 +198,7 @@ class SignInScreen extends Component {
           ref={ref => (this.dropDownAlertRef = ref)}
           defaultContainer={{paddingTop: 40}}
         />
-        {loading?(<LoadingView loadingText="Creating Tour..." hide={true} />): null}
+        {loading?(<LoadingView loadingText="Sign in..." hide={true} />): null}
       </SafeAreaView>
     );
   }

@@ -154,7 +154,7 @@ class SignUpScreen extends Component {
           </KeyboardAvoidingView>
         </SafeAreaView>
         <DropdownAlert ref={ref => (this.dropDownAlertRef = ref)} />
-        {loading?(<LoadingView loadingText="Creating Tour..." hide={true} />): null}
+        {loading?(<LoadingView loadingText="Sign up..." hide={true} />): null}
       </ScrollView>
     );
   }

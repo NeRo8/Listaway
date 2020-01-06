@@ -298,7 +298,7 @@ class ProfileScreen extends Component {
             onPressNo={() => this.setState({modalDeleteVisible: false})}
           />
           <DropdownAlert ref={ref => (this.dropDownAlertRef = ref)} />
-          {loading?(<LoadingView loadingText="Creating Tour..." hide={true} />): null}
+          {loading?(<LoadingView loadingText="Updating your profile..." hide={true} />): null}
         </SafeAreaView>
       );
   }
