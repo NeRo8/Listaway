@@ -118,11 +118,6 @@ class ProfileScreen extends Component {
     } = this.state;
 
     const {loading, onChangeProfile, user} = this.props;
-
-    if (loading) {
-      return <LoadingView loadingText="Saving…" />;
-    } 
-    else
       return (
         <SafeAreaView style={globalStyles.containerFull}>
           <View style={{alignItems: 'flex-start', marginLeft: 15}}>
@@ -303,6 +298,7 @@ class ProfileScreen extends Component {
             onPressNo={() => this.setState({modalDeleteVisible: false})}
           />
           <DropdownAlert ref={ref => (this.dropDownAlertRef = ref)} />
+          {loading?(<LoadingView loadingText="Creating Tour..." hide={true} />): null}
         </SafeAreaView>
       );
   }

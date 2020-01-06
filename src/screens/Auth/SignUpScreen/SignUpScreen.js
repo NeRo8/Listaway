@@ -81,10 +81,6 @@ class SignUpScreen extends Component {
   render() {
     const {fullName, email, password, confirmPassword} = this.state;
     const {loading} = this.props;
-
-    if (loading) {
-      return <LoadingView loadingText="Registering…" />;
-    }
     return (
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
@@ -158,6 +154,7 @@ class SignUpScreen extends Component {
           </KeyboardAvoidingView>
         </SafeAreaView>
         <DropdownAlert ref={ref => (this.dropDownAlertRef = ref)} />
+        {loading?(<LoadingView loadingText="Creating Tour..." hide={true} />): null}
       </ScrollView>
     );
   }

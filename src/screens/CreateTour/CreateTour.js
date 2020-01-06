@@ -139,11 +139,6 @@ class CreateTour extends Component {
 
   render() {
     const {loading} = this.props;
-  //   if (true) {
-  //     return (
-  // <LoadingView loadingText="Creating Tour..." /> )
-  //   } 
-  //   else
     return (
       <ScrollView
         contentContainerStyle={globalStyles.containerFull}

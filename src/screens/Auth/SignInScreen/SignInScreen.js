@@ -125,11 +125,6 @@ class SignInScreen extends Component {
 
   render() {
     const {loading} = this.props;
-
-    if (loading) {
-      return <LoadingView loadingText="Logging in..." />;
-    }
-
     return (
       <SafeAreaView style={styles.containerFull}>
         <StatusBar
@@ -203,6 +198,7 @@ class SignInScreen extends Component {
           ref={ref => (this.dropDownAlertRef = ref)}
           defaultContainer={{paddingTop: 40}}
         />
+        {loading?(<LoadingView loadingText="Creating Tour..." hide={true} />): null}
       </SafeAreaView>
     );
   }

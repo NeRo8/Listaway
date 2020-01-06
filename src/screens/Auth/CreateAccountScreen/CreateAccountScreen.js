@@ -71,10 +71,6 @@ class CreateAccountScreen extends Component {
 
   render() {
     const {profile, onChangeProfile, loading} = this.props;
-
-    if (loading) {
-      return <LoadingView loadingText="Creating…" />;
-    } else
       return (
         <SafeAreaView style={globalStyles.containerFull}>
           <StatusBar
@@ -157,8 +153,8 @@ class CreateAccountScreen extends Component {
               </View>
             </View>
           </ScrollView>
-
           <DropdownAlert ref={ref => (this.dropDownAlertRef = ref)} />
+          {loading?(<LoadingView loadingText="Creating Tour..." hide={true} />): null}
         </SafeAreaView>
       );
   }
