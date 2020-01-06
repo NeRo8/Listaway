@@ -139,11 +139,11 @@ class CreateTour extends Component {
 
   render() {
     const {loading} = this.props;
-
-    if (loading) {
-       <LoadingView loadingText="Creating Tour..." />;
-    }
-
+  //   if (true) {
+  //     return (
+  // <LoadingView loadingText="Creating Tour..." /> )
+  //   } 
+  //   else
     return (
       <ScrollView
         contentContainerStyle={globalStyles.containerFull}
@@ -154,7 +154,7 @@ class CreateTour extends Component {
           backgroundColor="transparent"
           barStyle="light-content"
         />
-        <View style={styles.header}>
+        <View style={styles.header}> 
           <Icon
             name="menu"
             type="material-community"
@@ -355,6 +355,7 @@ class CreateTour extends Component {
             </View>
           ) : null}
         </View>
+        {loading?(<LoadingView loadingText="Creating Tour..." hide={true} />): null}
       </ScrollView>
     );
   }

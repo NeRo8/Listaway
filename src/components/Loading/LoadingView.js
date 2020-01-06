@@ -12,17 +12,13 @@ class LoadingView extends Component {
   }
   render() {
     return (
-      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="white"
-          translucent={false}
-        />
+      <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
+       
         <View
           style={{
-            backgroundColor: 'rgba(235,235,235,0.6)',
+            backgroundColor: '#f0f0f0',
             padding: 30,
-            borderRadius: 20,
+            borderRadius: 20
           }}>
           <ActivityIndicator size="large" color={colors.LIGHT_GREEN} />
           <Text style={{color: 'silver', fontWeight: '700', marginTop: 10}}>
