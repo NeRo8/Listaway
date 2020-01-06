@@ -141,7 +141,7 @@ class CreateTour extends Component {
     const {loading} = this.props;
 
     if (loading) {
-      return <LoadingView loadingText="Logging in..." />;
+       <LoadingView loadingText="Creating Tour..." />;
     }
 
     return (
