@@ -1,6 +1,7 @@
 import { Platform } from 'react-native';
 import moment from 'moment';
 import API from '../api';
+import axios from 'react-native-axios';
 
 export const SET_TOUR = 'SET_TOUR';
 export const SET_ERROR = 'SET_ERROR';
@@ -78,8 +79,15 @@ const addPhotoToTour = (tourID, photoList) => dispatch => {
     dataIncome.append('tourID', tourID);
     dataIncome.append('photo', photo);
 
-    API.post('/user/add_photo_for_tour', dataIncome, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+    axios({
+      method: 'post',
+      url:
+        'http://3.136.62.106/Listeasy/backend/index.php/user/add_photo_for_tour',
+      data: dataIncome,
+      headers: {'Content-Type': 'multipart/form-data'},
+    }).then(response => console.log(response.data))    
+      .catch(error => {
+        console.log("Error " + error)
     });
   });
   dispatch(setLoading(false))
@@ -103,8 +111,15 @@ const addSoundToTour = (tourID, soundList) => dispatch => {
     dataIncome.append('tourID', tourID);
     dataIncome.append('audio', sound);
 
-    API.post('/user/add_audio_for_tour', dataIncome, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    }).then(response => console.log(response.data));
+    axios({
+      method: 'post',
+      url:
+        'http://3.136.62.106/Listeasy/backend/index.php/user/add_audio_for_tour',
+      data: dataIncome,
+      headers: {'Content-Type': 'multipart/form-data'},
+    }).then(response => console.log(response.data))    
+      .catch(error => {
+        console.log("Error " + error)
+    });
   });
 };
