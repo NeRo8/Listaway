@@ -62,14 +62,15 @@ export const createTour = (userId, location, photoL, audioL) => dispatch => {
 };
 
 const addPhotoToTour = (tourID, photoList) => dispatch => {
+  console.log(tourID)
   const photoL = photoList.map(photo => {
     return {
-      name: photo.image.fileName,
-      type: photo.image.type === null ? 'image/jpeg' : photo.image.type,
+      name: photo.fileName,
+      type: photo.type === null ? 'image/jpeg' : photo.type,
       uri:
         Platform.OS === 'android'
-          ? photo.image.uri
-          : photo.image.uri.replace('file://', ''),
+          ? photo.uri
+          : photo.uri.replace('file://', ''),
     };
   });
 

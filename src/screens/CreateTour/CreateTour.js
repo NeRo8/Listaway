@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Platform,
@@ -9,16 +9,17 @@ import {
   FlatList,
   Dimensions,
 } from 'react-native';
-import {Icon, Input, Button} from 'react-native-elements';
+import { Icon, Input, Button } from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
 import DocumentPicker from 'react-native-document-picker';
-import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Video from 'react-native-video';
 import LoadingView from '../../components/Loading';
+import ImageMultiplePicker from 'react-native-image-crop-picker';
 
 import GradientText from '../../components/GradientText';
 
-import {globalStyles, colors} from '../../constants';
+import { globalStyles, colors } from '../../constants';
 import styles from './styles';
 import PhotoModal from './PhotoModal';
 
@@ -49,14 +50,35 @@ class CreateTour extends Component {
       },
     };
     // Open Image Library:
-    ImagePicker.launchImageLibrary(options, response => {
-      const {photoList} = this.state;
 
-      const newPhotoList = photoList.concat({image: response});
+    ImageMultiplePicker.openPicker({
+      multiple: true,
+      waitAnimationEnd: false,
+      maxFiles: 20,
+      mediaType: 'photo'
+    }).then(images => {
+
+      const newPhotoList = images.map(i => {
+        return { uri: i.path, width: i.width, height: i.height, type: i.mime, fileName: i.mime };
+      })
+      console.log(newPhotoList);
+
       this.setState({
-        photoList: newPhotoList,
+        photoList: this.state.photoList.concat(newPhotoList),
       });
+
     });
+
+    // ImagePicker.launchImageLibrary(options, response => {
+    //   const {photoList} = this.state;
+    //   console.log(response);
+
+    //   const newPhotoList = photoList.concat({image: response});
+    //   console.log(newPhotoList);
+    //   this.setState({
+    //     photoList: newPhotoList,
+    //   });
+    // });
   };
 
   handlePressCamera = () => {
@@ -78,9 +100,9 @@ class CreateTour extends Component {
         console.log('User tapped custom button: ', response.customButton);
         alert(response.customButton);
       } else {
-        const {photoList} = this.state;
+        const { photoList } = this.state;
 
-        const newPhotoList = photoList.concat({image: response});
+        const newPhotoList = photoList.concat({ image: response });
         this.setState({
           photoList: newPhotoList,
         });
@@ -89,7 +111,7 @@ class CreateTour extends Component {
   };
 
   componentDidUpdate() {
-    const {error, loading, user} = this.props;
+    const { error, loading, user } = this.props;
     console.log(loading)
   }
   handlePressAddSong = async () => {
@@ -116,7 +138,7 @@ class CreateTour extends Component {
       });
     } else {
       this.setState({
-        playNow: {uri: uriIncome.uri, id: index},
+        playNow: { uri: uriIncome.uri, id: index },
       });
     }
   };
@@ -131,14 +153,14 @@ class CreateTour extends Component {
   };
 
   handlePressOrder = async () => {
-    const {photoList, songList, location} = this.state;
-    const {userid, onCreateTour} = this.props;
+    const { photoList, songList, location } = this.state;
+    const { userid, onCreateTour } = this.props;
 
     onCreateTour(userid, location, photoList, songList);
   };
 
   render() {
-    const {loading} = this.props;
+    const { loading } = this.props;
     return (
       <ScrollView
         contentContainerStyle={globalStyles.containerFull}
@@ -149,7 +171,7 @@ class CreateTour extends Component {
           backgroundColor="transparent"
           barStyle="light-content"
         />
-        <View style={styles.header}> 
+        <View style={styles.header}>
           <Icon
             name="menu"
             type="material-community"
@@ -213,7 +235,7 @@ class CreateTour extends Component {
             </View>
           </View>
           <View
-            style={{flex: 1, justifyContent: 'space-between', marginTop: 20}}>
+            style={{ flex: 1, justifyContent: 'space-between', marginTop: 20 }}>
             <View style={styles.photoBlock}>
               <Text style={styles.label}>Photos:</Text>
               <View>
@@ -222,10 +244,11 @@ class CreateTour extends Component {
                   alwaysBounceHorizontal
                   data={this.state.photoList}
                   numColumns={2}
-                  renderItem={({item}) => (
+                  renderItem={({ item }) => (
                     <View style={styles.imageContainer}>
                       <Image
-                        source={{uri: item.image.uri}}
+                        source={{ uri: item.uri }}
+                        // source={require(item.path)}
                         style={{
                           width: (Dimensions.get('window').width - 60) / 2,
                           height: 100,
@@ -242,7 +265,7 @@ class CreateTour extends Component {
 
               {this.state.playNow !== null ? (
                 <Video
-                  source={{uri: this.state.playNow.uri}} // Can be a URL or a local file.
+                  source={{ uri: this.state.playNow.uri }} // Can be a URL or a local file.
                   ref={ref => {
                     this.player = ref;
                   }} // Store reference
@@ -256,12 +279,12 @@ class CreateTour extends Component {
                 <FlatList
                   data={this.state.songList}
                   numColumns={3}
-                  renderItem={({item, index}) => (
+                  renderItem={({ item, index }) => (
                     <Icon
                       name={
                         this.state.playNow !== null &&
-                        this.state.playNow.id === index &&
-                        !this.state.pausePlay
+                          this.state.playNow.id === index &&
+                          !this.state.pausePlay
                           ? 'stop-circle'
                           : 'music'
                       }
@@ -281,7 +304,7 @@ class CreateTour extends Component {
               <Text style={styles.label}>Animation:</Text>
               <ScrollView
                 horizontal
-                style={{height: 100}}
+                style={{ height: 100 }}
                 showsHorizontalScrollIndicator={false}>
                 <View style={styles.animation} />
                 <View style={styles.animation} />
@@ -350,7 +373,7 @@ class CreateTour extends Component {
             </View>
           ) : null}
         </View>
-        {loading?(<LoadingView loadingText="Creating Tour..." hide={true} />): null}
+        {loading ? (<LoadingView loadingText="Creating Tour..." hide={true} />) : null}
       </ScrollView>
     );
   }

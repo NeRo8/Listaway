@@ -78,7 +78,7 @@ export const loginWithEmail = (e, p) => dispatch => {
           dispatch(setUser(responseJson.userinfo));
           dispatch(setLoading(false));
         } else {
-          dispatch(setError("Email or password is wrong"));
+          dispatch(setError("Email or password is incorrect"));
           dispatch(setLoading(false));
         }
       })
