@@ -58,24 +58,24 @@ export const loginWithEmail = (e, p) => dispatch => {
 
   if (e.length != 0 && p.length != 0) {
     dispatch(setLoading(true));
-
-    fetch(`${DEFAULT_URL}/user/user_login`, {
+ 
+    axios(`${DEFAULT_URL}/user/user_login`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
+      data: JSON.stringify({
         email: e,
         password: p,
         device_type: Platform.OS === 'ios' ? 0 : 1,
         action_time: Date().toLocaleString(),
       }),
     })
-      .then(response => response.json())
       .then(responseJson => {
-        if (responseJson.status === 200) {
-          dispatch(setUser(responseJson.userinfo));
+        console.log(responseJson)
+        if (responseJson.data.status === 200) {
+          dispatch(setUser(responseJson.data.userinfo));
           dispatch(setLoading(false));
         } else {
           dispatch(setError("Email or password is incorrect"));
@@ -98,19 +98,18 @@ export const createAccount = data => dispatch => {
   formData.append('device_type', Platform.OS === 'ios' ? 0 : 1);
   formData.append('action_time', Date().toLocaleString());
 
-  fetch(`${DEFAULT_URL}/user/user_signup`, {
+  axios(`${DEFAULT_URL}/user/user_signup`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'multipart/form-data',
     },
-    body: formData,
+    data: formData,
   })
-    .then(response => response.json())
     .then(responseJson => {
-      if (responseJson.status === 200) {
+      if (responseJson.data.status === 200) {
         //dispatch(setUser(responseJson.userinfo));
-        dispatch(setUserId(responseJson.userinfo.userid));
+        dispatch(setUserId(responseJson.data.userinfo.userid));
         dispatch(setLoading(false));
       } else {
         // dispatch(setError(responseJson));
