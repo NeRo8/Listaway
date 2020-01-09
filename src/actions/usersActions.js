@@ -1,6 +1,6 @@
-import {Platform} from 'react-native';
+import { Platform } from 'react-native';
 
-import {DEFAULT_URL} from '../config/server';
+import { DEFAULT_URL } from '../config/server';
 
 import moment from 'moment';
 import axios from 'react-native-axios';
@@ -55,32 +55,37 @@ export const onChangeUserInfo = (name, value) => ({
 });
 
 export const loginWithEmail = (e, p) => dispatch => {
-  dispatch(setLoading(true));
 
-  fetch(`${DEFAULT_URL}/user/user_login`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      email: e,
-      password: p,
-      device_type: Platform.OS === 'ios' ? 0 : 1,
-      action_time: Date().toLocaleString(),
-    }),
-  })
-    .then(response => response.json())
-    .then(responseJson => {
-      if (responseJson.status === 200) {
-        dispatch(setUser(responseJson.userinfo));
-        dispatch(setLoading(false));
-      } else {
-        dispatch(setError(responseJson));
-        dispatch(setLoading(false));
-      }
+  if (e.length != 0 && p.length != 0) {
+    dispatch(setLoading(true));
+
+    fetch(`${DEFAULT_URL}/user/user_login`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: e,
+        password: p,
+        device_type: Platform.OS === 'ios' ? 0 : 1,
+        action_time: Date().toLocaleString(),
+      }),
     })
-    .catch(error => dispatch(setError(error)));
+      .then(response => response.json())
+      .then(responseJson => {
+        if (responseJson.status === 200) {
+          dispatch(setUser(responseJson.userinfo));
+          dispatch(setLoading(false));
+        } else {
+          dispatch(setError("Email or password is wrong"));
+          dispatch(setLoading(false));
+        }
+      })
+      .catch(error => dispatch(setError(error)));
+  } else {
+    dispatch(setError("Email or password must not be empty"));
+  }
 };
 
 export const createAccount = data => dispatch => {
@@ -176,7 +181,7 @@ export const updateUser = (newProfile, photo = null) => dispatch => {
     url:
       'http://3.136.62.106/Listeasy/backend/index.php/user/user_update_profile',
     data: profile,
-    headers: {'Content-Type': 'multipart/form-data'},
+    headers: { 'Content-Type': 'multipart/form-data' },
   })
     .then(responseJson => {
       console.log(responseJson);
