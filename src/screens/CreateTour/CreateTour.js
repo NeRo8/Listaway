@@ -24,9 +24,7 @@ import styles from './styles';
 import PhotoModal from './PhotoModal';
 import { DragDropGrid } from "react-native-drag-drop-grid-library"
 
-class CreateTour extends Component<any, any>  {
-  alphabets: Array<any>
-  sortGrid: any;
+class CreateTour extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -36,11 +34,9 @@ class CreateTour extends Component<any, any>  {
       playNow: null,
       pausePlay: false,
       location: null,
+      isScroll: true
     };
-    this.alphabets = ['1', '2', '3', '4', '5', '6',
-      '7', '8', '9', '10', '11', '12',
-      '13', '14', '15', '16', '17', '18',
-      '19', '20', '21', '22', '23', '24'];
+
     this.onRemove = this.onRemove.bind(this);
   }
   onRemove(letter) {
@@ -53,14 +49,13 @@ class CreateTour extends Component<any, any>  {
     return 'rgb(' + r + ', ' + g + ', ' + b + ')'
   };
 
-
   randomRGB = () => 160 + Math.random() * 85
 
-
-  handlePressAdd = () =>
+  handlePressAdd = () => {
     this.setState({
       showRightMenu: !this.state.showRightMenu,
     });
+  }
 
   handlePressPickImage = () => {
     const options = {
@@ -184,9 +179,8 @@ class CreateTour extends Component<any, any>  {
     const { loading } = this.props;
     return (
       <ScrollView
-        scrollEnabled={false}
+        scrollEnabled={this.state.isScroll}
         contentContainerStyle={globalStyles.containerFull}
-        nestedScrollEnabled
         keyboardShouldPersistTaps="always">
         <StatusBar
           translucent={true}
@@ -261,24 +255,38 @@ class CreateTour extends Component<any, any>  {
             <View style={styles.photoBlock}>
               <Text style={styles.label}>Photos:</Text>
               <View>
-                <View style={{ flex: 1 }}>
+                <View >
                   <DragDropGrid
                     ref={sortGrid => {
                       this.sortGrid = sortGrid;
                     }}
                     blockTransitionDuration={400}
                     activeBlockCenteringDuration={200}
-                    itemsPerRow={4}
+                    itemsPerRow={3}
                     dragActivationTreshold={200}
-                    onDragRelease={(itemOrder) => console.log("Drag was released, the blocks are in the following order: ", itemOrder)}
-                    onDragStart={(key) => console.log("Some block is being dragged now!", key)}>
+                    onDragRelease={(itemOrder) => { 
+                      this.setState({
+                        isScroll: true,
+                      });
+                  }}
+                    onDragStart={(key) => { 
+                      this.setState({
+                        isScroll: false,
+                      });
+                  }}> 
                     {
-                      this.alphabets.map((letter, index) =>
-                        <View key={letter} style={[styles.block, { backgroundColor: this.getColor() }]}
-                        >
-                          <Text
-                            style={{ color: 'white', fontSize: 50 }}>{letter}</Text>
+                      this.state.photoList.map((item, index) =>
+                        <View key={index} style={[styles.block]}>
+                          <Image
+                            source={{ uri: item.uri }}
+                            // source={require(item.path)}
+                            style={{
+                              width: 100,
+                              height: 100,
+                            }}
+                          />
                         </View>
+
                       )
                     }
                   </DragDropGrid>
@@ -396,7 +404,7 @@ class CreateTour extends Component<any, any>  {
                 onPress={this.handlePressAddSong} //this.handlePressSong}
               />
             </View>
-          ) : null}
+          ) : <View />}
         </View>
         {loading ? (<LoadingView loadingText="Creating Tour..." hide={true} />) : null}
       </ScrollView>

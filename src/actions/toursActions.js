@@ -62,7 +62,7 @@ export const createTour = (userId, location, photoL, audioL) => dispatch => {
 };
 
 const addPhotoToTour = (tourID, photoList) => dispatch => {
-  console.log(tourID)
+  console.log(photoList)
   const photoL = photoList.map(photo => {
     return {
       name: photo.fileName,
