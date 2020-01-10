@@ -22,8 +22,11 @@ import GradientText from '../../components/GradientText';
 import { globalStyles, colors } from '../../constants';
 import styles from './styles';
 import PhotoModal from './PhotoModal';
+import { DragDropGrid } from "react-native-drag-drop-grid-library"
 
-class CreateTour extends Component {
+class CreateTour extends Component<any, any>  {
+  alphabets: Array<any>
+  sortGrid: any;
   constructor(props) {
     super(props);
     this.state = {
@@ -34,7 +37,25 @@ class CreateTour extends Component {
       pausePlay: false,
       location: null,
     };
+    this.alphabets = ['1', '2', '3', '4', '5', '6',
+      '7', '8', '9', '10', '11', '12',
+      '13', '14', '15', '16', '17', '18',
+      '19', '20', '21', '22', '23', '24'];
+    this.onRemove = this.onRemove.bind(this);
   }
+  onRemove(letter) {
+    this.sortGrid.deleteBlockList(letter);
+  }
+  getColor() {
+    let r = this.randomRGB()
+    let g = this.randomRGB()
+    let b = this.randomRGB()
+    return 'rgb(' + r + ', ' + g + ', ' + b + ')'
+  };
+
+
+  randomRGB = () => 160 + Math.random() * 85
+
 
   handlePressAdd = () =>
     this.setState({
@@ -163,6 +184,7 @@ class CreateTour extends Component {
     const { loading } = this.props;
     return (
       <ScrollView
+        scrollEnabled={false}
         contentContainerStyle={globalStyles.containerFull}
         nestedScrollEnabled
         keyboardShouldPersistTaps="always">
@@ -239,25 +261,28 @@ class CreateTour extends Component {
             <View style={styles.photoBlock}>
               <Text style={styles.label}>Photos:</Text>
               <View>
-                <FlatList
-                  nestedScrollEnabled
-                  alwaysBounceHorizontal
-                  data={this.state.photoList}
-                  numColumns={2}
-                  renderItem={({ item }) => (
-                    <View style={styles.imageContainer}>
-                      <Image
-                        source={{ uri: item.uri }}
-                        // source={require(item.path)}
-                        style={{
-                          width: (Dimensions.get('window').width - 60) / 2,
-                          height: 100,
-                        }}
-                        resizeMode="contain"
-                      />
-                    </View>
-                  )}
-                />
+                <View style={{ flex: 1 }}>
+                  <DragDropGrid
+                    ref={sortGrid => {
+                      this.sortGrid = sortGrid;
+                    }}
+                    blockTransitionDuration={400}
+                    activeBlockCenteringDuration={200}
+                    itemsPerRow={4}
+                    dragActivationTreshold={200}
+                    onDragRelease={(itemOrder) => console.log("Drag was released, the blocks are in the following order: ", itemOrder)}
+                    onDragStart={(key) => console.log("Some block is being dragged now!", key)}>
+                    {
+                      this.alphabets.map((letter, index) =>
+                        <View key={letter} style={[styles.block, { backgroundColor: this.getColor() }]}
+                        >
+                          <Text
+                            style={{ color: 'white', fontSize: 50 }}>{letter}</Text>
+                        </View>
+                      )
+                    }
+                  </DragDropGrid>
+                </View>
               </View>
             </View>
             <View style={styles.musicBlock}>
