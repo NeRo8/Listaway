@@ -343,7 +343,9 @@ PODS:
     - React
   - RNCMaskedView (0.1.5):
     - React
-  - RNGestureHandler (1.5.0):
+  - RNColorMatrixImageFilters (5.2.2):
+    - React
+  - RNGestureHandler (1.5.3):
     - React
   - RNGoogleSignin (3.0.3):
     - GoogleSignIn (~> 5.0.0)
@@ -400,6 +402,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
+  - RNColorMatrixImageFilters (from `../node_modules/react-native-color-matrix-image-filters`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-community/google-signin`)"
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
@@ -495,6 +498,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/async-storage"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
+  RNColorMatrixImageFilters:
+    :path: "../node_modules/react-native-color-matrix-image-filters"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNGoogleSignin:
@@ -562,7 +567,8 @@ SPEC CHECKSUMS:
   ReactCommon: a6a294e7028ed67b926d29551aa9394fd989c24c
   RNCAsyncStorage: 8539fc80a0075fcc9c8e2dff84cd22dc5bf1dacf
   RNCMaskedView: c8b53164b85ecf94c9a44d67082df0f03c1f74cc
-  RNGestureHandler: a4ddde1ffc6e590c8127b8b7eabfdade45475c74
+  RNColorMatrixImageFilters: 7f2c37699e013998fa65b3e968a4c89f01a93c8a
+  RNGestureHandler: 02905abe54e1f6e59c081a10b4bd689721e17aa6
   RNGoogleSignin: a10b849c165088c737d4465de6c2062f24d06002
   RNImageCropPicker: 9d1a7eea4f8368fc479cbd2bf26459bd3c74d9aa
   RNReanimated: b2ab0b693dddd2339bd2f300e770f6302d2e960c

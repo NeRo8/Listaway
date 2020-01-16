@@ -18,6 +18,7 @@
     "react": "16.9.0",
     "react-native": "0.61.4",
     "react-native-axios": "^0.17.1",
+    "react-native-color-matrix-image-filters": "^5.2.2",
     "react-native-document-picker": "^3.2.4",
     "react-native-drag-drop-grid-library": "^1.0.7",
     "react-native-dropdownalert": "^4.2.0",
