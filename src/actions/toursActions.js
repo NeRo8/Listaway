@@ -83,7 +83,7 @@ const addPhotoToTour = (tourID, photoList) => dispatch => {
     axios({
       method: 'post',
       url:
-        'http://3.136.62.106/Listeasy/backend/index.php/user/add_photo_for_tour',
+        'https://3.136.62.106/Listeasy/backend/index.php/user/add_photo_for_tour',
       data: dataIncome,
       headers: {'Content-Type': 'multipart/form-data'},
     }).then(response => console.log(response.data))    
@@ -115,7 +115,7 @@ const addSoundToTour = (tourID, soundList) => dispatch => {
     axios({
       method: 'post',
       url:
-        'http://3.136.62.106/Listeasy/backend/index.php/user/add_audio_for_tour',
+        'https://3.136.62.106/Listeasy/backend/index.php/user/add_audio_for_tour',
       data: dataIncome,
       headers: {'Content-Type': 'multipart/form-data'},
     }).then(response => console.log(response.data))    

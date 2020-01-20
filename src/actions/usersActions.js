@@ -182,7 +182,7 @@ export const updateUser = (newProfile, photo = null) => dispatch => {
   axios({
     method: 'post',
     url:
-      'http://3.136.62.106/Listeasy/backend/index.php/user/user_update_profile',
+      'https://3.136.62.106/Listeasy/backend/index.php/user/user_update_profile',
     data: profile,
     headers: { 'Content-Type': 'multipart/form-data' },
   })
@@ -239,7 +239,7 @@ export const loginWithFacebook = token => dispatch => {
   //formData.append('action_time', '2019:12:19 04:13:50');
 
   fetch(
-    `http://3.136.62.106/Listeasy/backend/index.php/user/user_facebook_login`,
+    `https://3.136.62.106/Listeasy/backend/index.php/user/user_facebook_login`,
     {
       method: 'POST',
       headers: {
@@ -268,7 +268,7 @@ export const loginWithGoogle = token => dispatch => {
   dispatch(setLoading(true));
 
   fetch(
-    `http://3.136.62.106/Listeasy/backend/index.php/user/user_google_login`,
+    `https://3.136.62.106/Listeasy/backend/index.php/user/user_google_login`,
     {
       method: 'POST',
       headers: {
