@@ -16,6 +16,8 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import Video from 'react-native-video';
 import LoadingView from '../../components/Loading';
 import ImageMultiplePicker from 'react-native-image-crop-picker';
+import { Dialog } from 'react-native-simple-dialogs';
+import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 
 import GradientText from '../../components/GradientText';
 
@@ -23,6 +25,8 @@ import { globalStyles, colors } from '../../constants';
 import styles from './styles';
 import PhotoModal from './PhotoModal';
 import { DragDropGrid } from "react-native-drag-drop-grid-library"
+
+import song from "../../assets/songs/song1.mp3"
 
 class CreateTour extends Component {
   constructor(props) {
@@ -34,7 +38,15 @@ class CreateTour extends Component {
       playNow: null,
       pausePlay: false,
       location: null,
-      isScroll: true
+      isScroll: true,
+      isShowDialog: false,
+      radio_props: [
+        { label: 'bensound-sunny', value: require("../../assets/songs/song1.mp3") },
+        { label: 'bensound-memories', value: require("../../assets/songs/song2.mp3") },
+        { label: 'bensound-allthat', value: require("../../assets/songs/song3.mp3") },
+        { label: 'bensound-creativeminds', value: require("../../assets/songs/song4.mp3") },
+        { label: 'bensound-dreams', value: require("../../assets/songs/song5.mp3") },
+      ]
     };
 
     this.onRemove = this.onRemove.bind(this);
@@ -131,20 +143,22 @@ class CreateTour extends Component {
     console.log(loading)
   }
   handlePressAddSong = async () => {
-    try {
-      const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.audio],
-      });
 
-      this.setState(prevState => ({
-        songList: [...prevState.songList, res],
-      }));
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-      } else {
-        throw err;
-      }
-    }
+    this.setState({ isShowDialog: true })
+    // try {
+    //   const res = await DocumentPicker.pick({
+    //     type: [DocumentPicker.types.audio],
+    //   });
+
+    //   this.setState(prevState => ({
+    //     songList: [...prevState.songList, res],
+    //   }));
+    // } catch (err) {
+    //   if (DocumentPicker.isCancel(err)) {
+    //   } else {
+    //     throw err;
+    //   }
+    // }
   };
 
   handlePressSong = (uriIncome, index) => {
@@ -264,16 +278,16 @@ class CreateTour extends Component {
                     activeBlockCenteringDuration={200}
                     itemsPerRow={3}
                     dragActivationTreshold={200}
-                    onDragRelease={(itemOrder) => { 
+                    onDragRelease={(itemOrder) => {
                       this.setState({
                         isScroll: true,
                       });
-                  }}
-                    onDragStart={(key) => { 
+                    }}
+                    onDragStart={(key) => {
                       this.setState({
                         isScroll: false,
                       });
-                  }}> 
+                    }}>
                     {
                       this.state.photoList.map((item, index) =>
                         <View key={index} style={[styles.block]}>
@@ -294,11 +308,11 @@ class CreateTour extends Component {
               </View>
             </View>
             <View style={styles.musicBlock}>
-              <Text style={styles.label}>Songs:</Text>
+              <Text style={styles.label}>Song:</Text>
 
               {this.state.playNow !== null ? (
                 <Video
-                  source={{ uri: this.state.playNow.uri }} // Can be a URL or a local file.
+                  source={this.state.playNow.uri} // Can be a URL or a local file.
                   ref={ref => {
                     this.player = ref;
                   }} // Store reference
@@ -399,6 +413,38 @@ class CreateTour extends Component {
           ) : <View />}
         </View>
         {loading ? (<LoadingView loadingText="Creating Tour..." hide={true} />) : null}
+
+        <Dialog
+          visible={this.state.isShowDialog}
+          title="Please choose song "
+          onTouchOutside={() => this.setState({ dialogVisible: false })} >
+          <View>
+            <RadioForm
+              radio_props={this.state.radio_props}
+              initial={-1}
+              formHorizontal={false}
+              labelHorizontal={true}
+              buttonColor={'#2196f3'}
+              animation={true}
+              onPress={(value) => {
+                this.setState({
+                  playNow: { uri: value, id: value },
+                });
+              }
+              }
+            />
+            <Button
+              title="Save as tour musc"
+              color="#f194ff"
+              onPress={() => {
+                this.setState({ isShowDialog: false, playNow: null })
+                this.state.songList.length = 0
+                this.state.songList.push(this.state.playNow)
+              }
+              }
+            />
+          </View>
+        </Dialog>
       </ScrollView>
     );
   }
