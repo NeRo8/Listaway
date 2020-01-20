@@ -13,6 +13,7 @@ import ChangePasswordScreen from '../screens/Auth/ChangePasswordScreen';
 import SignUpScreen from '../screens/Auth/SignUpScreen';
 import CreateAccountScreen from '../screens/Auth/CreateAccountScreen';
 import CreateTour from '../screens/CreateTour';
+import PreviewTour from '../screens/CreateTour/PreviewTour'
 import ProfileScreen from '../screens/ProfileScreen';
 
 import DefaultDrawer from './DefaultDrawer';
@@ -29,6 +30,12 @@ const AppDrawerNavigation = createDrawerNavigator(
       screen: CreateTour,
       navigationOptions: {
         title: 'Create Tour',
+      },
+    },
+    PreviewTour: {
+      screen: PreviewTour,
+      navigationOptions: {
+        title: 'PreviewTour Tour',
       },
     },
     OrderTour: {

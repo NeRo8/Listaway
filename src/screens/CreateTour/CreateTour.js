@@ -174,6 +174,8 @@ class CreateTour extends Component {
   };
 
   handlePressPreview = async () => {
+
+    this.props.navigation.navigate('PreviewTour')
     /**
     const {photoList, songList, location} = this.state;
     const {userid, onCreateTour} = this.props;
