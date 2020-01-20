@@ -87,7 +87,14 @@ class CreateTour extends Component {
     }).then(images => {
 
       const newPhotoList = images.map(i => {
-        return { uri: i.path, width: i.width, height: i.height, type: i.mime, fileName: i.mime };
+        return { 
+          uri: i.path, 
+          width: i.width, 
+          height: i.height, 
+          type: i.mime, 
+          fileName: i.mime, 
+          fullWidth: true,
+          title: "Slide show" };
       })
       console.log(newPhotoList);
 
@@ -174,8 +181,10 @@ class CreateTour extends Component {
   };
 
   handlePressPreview = async () => {
+    // alert(this.state.photoList)
+    // this.props.navigation.navigate('PreviewTour', {passedData: this.state.photoList})
+    this.props.navigation.navigate('PreviewTour', { photoList: this.state.photoList, songList: this.state.songList })
 
-    this.props.navigation.navigate('PreviewTour')
     /**
     const {photoList, songList, location} = this.state;
     const {userid, onCreateTour} = this.props;
@@ -270,8 +279,6 @@ class CreateTour extends Component {
             style={{ flex: 1, justifyContent: 'space-between', marginTop: 20 }}>
             <View style={styles.photoBlock}>
               <Text style={styles.label}>Photos:</Text>
-              <View>
-                <View >
                   <DragDropGrid
                     ref={sortGrid => {
                       this.sortGrid = sortGrid;
@@ -306,10 +313,9 @@ class CreateTour extends Component {
                       )
                     }
                   </DragDropGrid>
-                </View>
-              </View>
             </View>
-            <View style={styles.musicBlock}>
+            
+            {/* <View style={{flex}}>
               <Text style={styles.label}>Song:</Text>
 
               {this.state.playNow !== null ? (
@@ -348,18 +354,45 @@ class CreateTour extends Component {
                   )}
                 />
               </View>
-            </View>
+            </View> */}
             <View style={styles.animationBlock}>
-              <Text style={styles.label}>Animation:</Text>
-              <ScrollView
-                horizontal
-                style={{ height: 100 }}
-                showsHorizontalScrollIndicator={false}>
-                <View style={styles.animation} />
-                <View style={styles.animation} />
-                <View style={styles.animation} />
-                <View style={styles.animation} />
-              </ScrollView>
+              <Text style={styles.label}>Song:</Text>
+              {this.state.playNow !== null ? (
+                <Video
+                  source={this.state.playNow.uri} // Can be a URL or a local file.
+                  ref={ref => {
+                    this.player = ref;
+                  }} // Store reference
+                  audioOnly={true}
+                  playInBackground={false}
+                  onBuffer={this.onBuffer} // Callback when remote video is buffering
+                  onError={this.videoError} // Callback when video cannot be loaded
+                />
+              ) : null}
+              <View>
+                <FlatList
+                  data={this.state.songList}
+                  numColumns={3}
+                  renderItem={({ item, index }) => (
+                    <Icon
+                      name={
+                        this.state.playNow !== null &&
+                          this.state.playNow.id === index &&
+                          !this.state.pausePlay
+                          ? 'stop-circle'
+                          : 'music'
+                      }
+                      type="font-awesome"
+                      color={colors.LIGHT_BLUE}
+                      size={40}
+                      containerStyle={styles.iconContainer}
+                      onPress={() => {
+                        this.handlePressSong(item, index);
+                      }}
+                    />
+                  )}
+                />
+              </View>
             </View>
           </View>
           <View>
