@@ -239,7 +239,7 @@ class CreateTour extends Component {
                   // available options: https://developers.google.com/places/web-service/autocomplete
                   key: 'AIzaSyAn0yEoTrNbj6uOmPSTvmZIVdwe2k6WFRk',
                   language: 'en', // language of the results
-                  types: '(cities)', // default: 'geocode'
+                  types: 'geocode', // default: 'geocode'
                 }}
                 listViewDisplayed={this.state.listViewDisplayed}
                 renderDescription={row => row.description}
@@ -355,45 +355,6 @@ class CreateTour extends Component {
                 />
               </View>
             </View> */}
-            <View style={styles.animationBlock}>
-              <Text style={styles.label}>Song:</Text>
-              {this.state.playNow !== null ? (
-                <Video
-                  source={this.state.playNow.uri} // Can be a URL or a local file.
-                  ref={ref => {
-                    this.player = ref;
-                  }} // Store reference
-                  audioOnly={true}
-                  playInBackground={false}
-                  onBuffer={this.onBuffer} // Callback when remote video is buffering
-                  onError={this.videoError} // Callback when video cannot be loaded
-                />
-              ) : null}
-              <View>
-                <FlatList
-                  data={this.state.songList}
-                  numColumns={3}
-                  renderItem={({ item, index }) => (
-                    <Icon
-                      name={
-                        this.state.playNow !== null &&
-                          this.state.playNow.id === index &&
-                          !this.state.pausePlay
-                          ? 'stop-circle'
-                          : 'music'
-                      }
-                      type="font-awesome"
-                      color={colors.LIGHT_BLUE}
-                      size={40}
-                      containerStyle={styles.iconContainer}
-                      onPress={() => {
-                        this.handlePressSong(item, index);
-                      }}
-                    />
-                  )}
-                />
-              </View>
-            </View>
           </View>
           <View>
             <Button
