@@ -8,7 +8,8 @@ import {
   AsyncStorage,
   FlatList,
   Image,
-  Switch
+  Switch,
+  Animated
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { SwipeListView } from 'react-native-swipe-list-view';
@@ -16,16 +17,94 @@ import { SwipeListView } from 'react-native-swipe-list-view';
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
+    this.delayValue = 50;
+
     this.state = {
       allToursArrraysBlat: [
         { media_url: "Pankaj", tour_location: "Yerevan, Armenia", post_time: "2019:12:28 06:18", mediaID: "", tourID: "1" },
         { media_url: "Pankaj", tour_location: "Yerevan, Armenia", post_time: "2019:12:28 06:18", mediaID: "", tourID: "1" },
         { media_url: "Pankaj", tour_location: "Yerevan, Armenia", post_time: "2019:12:28 06:18", mediaID: "", tourID: "1" },
         { media_url: "Pankaj", tour_location: "Yerevan, Armenia", post_time: "2019:12:28 06:18", mediaID: "", tourID: "1" },
-
-      ]
-
+      ],
+      animatedValue: new Animated.Value(0),
+      isVisibleBackgroundOfFlatSwipe: false
     };
+
+  }
+
+  _renderItem = ({ item }) => {
+    this.delayValue = this.delayValue + 500;
+    const translateX = this.state.animatedValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: [this.delayValue, 1]
+    });
+    return (
+      <Animated.View
+        style={[{ transform: [{ translateX }] }]}
+      >
+        <View>
+          <Image
+            style={{ width: "100%" }}
+            source={require('../../../download.jpeg')}
+          />
+        </View>
+      </Animated.View>
+    )
+  }
+
+  _renderHiddenItem = () => {
+
+    this.delayValue = this.delayValue + 500;
+    const translateX = this.state.animatedValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: [this.delayValue, 1]
+    });
+    return (
+      <Animated.View
+      style={[{ transform: [{ translateX }] }]}
+    >
+      <View
+        style={{
+          height: '100%',
+          alignItems: 'flex-end'
+        }}>
+        <View style={{
+          width: "100%",
+          height: '50%',
+          backgroundColor: "black",
+          alignItems: 'flex-end',
+          justifyContent: 'center',
+        }}>
+          <Icon
+            name="md-trash"
+            type="ionicon"
+            color="white"
+            size={32}
+            onPress={() => onPress()}
+            underlayColor="transparent"
+          />
+        </View>
+        <View style={{
+          width: "100%",
+          height: '50%',
+          backgroundColor: "grey",
+          alignItems: 'flex-end',
+          justifyContent: 'center',
+        }}>
+          <Switch></Switch>
+        </View>
+      </View>
+      </Animated.View>
+      );
+  }
+
+
+  componentDidMount = () => {
+    Animated.spring(this.state.animatedValue, {
+      toValue: 1,
+      tension: -10,
+      useNativeDriver: true,
+    }).start();
   }
 
   async componentDidMount() {
@@ -59,47 +138,9 @@ class HomeScreen extends Component {
           useFlatList
           data={this.state.allToursArrraysBlat}
           disableRightSwipe={true}
-
-          renderItem={(data, rowMap) => (
-            <View>
-              <Image
-                style={{ width: "100%" }}
-                source={require('../../../download.jpeg')}
-              />
-
-            </View>)}
-          renderHiddenItem={(data, rowMap) => (
-            <View style={{
-              height: '100%',
-              alignItems: 'flex-end'
-            }}>
-              <View style={{
-                width: "100%",
-                height: '50%',
-                backgroundColor: "black",
-                alignItems: 'flex-end',
-                justifyContent: 'center',
-              }}>
-                <Icon
-                  name="md-trash"
-                  type="ionicon"
-                  color="white"
-                  size={32}
-                  onPress={() => onPress()}
-                  underlayColor="transparent"
-                />
-              </View>
-              <View style={{
-                width: "100%",
-                height: '50%',
-                backgroundColor: "grey",
-                alignItems: 'flex-end',
-                justifyContent: 'center',
-              }}>
-                <Switch></Switch>
-              </View>
-            </View>
-          )}
+          renderItem={this._renderItem}
+          renderHiddenItem={
+            this._renderHiddenItem}
           rightOpenValue={-70}
         />
         <Text>Home</Text>
