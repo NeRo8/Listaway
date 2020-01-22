@@ -21,7 +21,7 @@ class PreviewTour extends Component {
         super(props);
         this.state = {
             playNow: this.props.navigation.state.params.songList[0],
-            duration: 3000
+            duration: 7000
         }
     }
 
@@ -50,8 +50,7 @@ class PreviewTour extends Component {
         return (
             <View style={{ flex: 1 }}>
                 <TimedSlideshow
-                    slideDirection=""
-                    duration={this.state.duration}
+                    showProgressBar= {false}
                     items={this.props.navigation.state.params.photoList}
                     index={0}
                     onClose={() => {
