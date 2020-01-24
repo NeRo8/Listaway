@@ -95,7 +95,7 @@ class CreateTour extends Component {
           fileName: i.mime, 
           fullWidth: true,
           duration: 15000,
-          title: "Slide show" }; 
+          title: "" }; 
       })
       console.log(newPhotoList);
 

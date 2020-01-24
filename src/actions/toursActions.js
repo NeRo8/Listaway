@@ -29,9 +29,11 @@ export const clearError = () => dispatch => {
 export const createTour = (userId, location, photoL, audioL) => dispatch => {
   dispatch(setLoading(true));
   const newTour = new FormData();
+  console.log("USIC", audioL)
 
   newTour.append('posterid', userId);
   newTour.append('tourlocation', location);
+
   newTour.append('posttime', moment().format('YYYY:MM:DD HH:mm:ss'));
 
   API.post('/user/create_tour', newTour, {

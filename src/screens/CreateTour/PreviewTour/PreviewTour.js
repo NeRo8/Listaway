@@ -21,12 +21,12 @@ class PreviewTour extends Component {
         super(props);
         this.state = {
             playNow: this.props.navigation.state.params.songList[0],
-            duration: 7000
+            duration: 5500
         }
     }
 
     render() {
-     
+
         const items = [
             {
                 uri: "http://www.lovethemountains.co.uk/wp-content/uploads/2017/05/New-Outdoor-Sports-and-Music-Festival-For-Wales-4.jpg",
@@ -50,7 +50,7 @@ class PreviewTour extends Component {
         return (
             <View style={{ flex: 1 }}>
                 <TimedSlideshow
-                    showProgressBar= {false}
+                    showProgressBar={false}
                     items={this.props.navigation.state.params.photoList}
                     index={0}
                     onClose={() => {
@@ -73,7 +73,7 @@ class PreviewTour extends Component {
                             type="material-community"
                             size={32}
                             onPress={() => {
-                                this.setState({ playNow: this.props.navigation.state.params.songList[0]})
+                                this.setState({ playNow: this.props.navigation.state.params.songList[0] })
                             }}
                         />}
                     {this.state.playNow !== null ? (
