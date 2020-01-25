@@ -65,11 +65,12 @@ export default StyleSheet.create({
     borderColor: colors.LIGHT_BLUE,
     margin: 5,
   },
+  photoBlock: {},
   block: {
-    flex: 1,
-    margin: 8,
+    // flex: 1,
+    margin: 5,
     borderRadius: 20,
     justifyContent: 'center',
-    alignItems: 'center'
-  }
+    alignItems: 'center',
+  },
 });

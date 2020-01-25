@@ -1,4 +1,4 @@
-import { Platform } from 'react-native';
+import {Platform} from 'react-native';
 import moment from 'moment';
 import API from '../api';
 import axios from 'react-native-axios';
@@ -26,18 +26,21 @@ export const clearError = () => dispatch => {
   dispatch(setError(null));
 };
 
-export const createTour = (userId, location, photoL, audioL) => dispatch => {
+export const createTour = (
+  userId,
+  location,
+  photoL,
+  selectedSong,
+) => dispatch => {
   dispatch(setLoading(true));
   const newTour = new FormData();
-  console.log("USIC", audioL)
-
   newTour.append('posterid', userId);
   newTour.append('tourlocation', location);
-
+  newTour.append('music_name', selectedSong);
   newTour.append('posttime', moment().format('YYYY:MM:DD HH:mm:ss'));
 
   API.post('/user/create_tour', newTour, {
-    headers: { 'Content-Type': 'multipart/form-data' },
+    headers: {'Content-Type': 'multipart/form-data'},
   })
     .then(response => {
       if (response.data.status === 200) {
@@ -51,20 +54,17 @@ export const createTour = (userId, location, photoL, audioL) => dispatch => {
       dispatch(addPhotoToTour(toure.tourID, photoL));
       return toure;
     })
-    .then(toure => {
-      dispatch(addSoundToTour(toure.tourID, audioL));
-    })
     .then(() => {
-      dispatch(setLoading(false))
+      dispatch(setLoading(false));
     })
     .catch(error => {
-      dispatch(setLoading(false))
+      dispatch(setLoading(false));
       dispatch(setError(error));
     });
 };
 
 const addPhotoToTour = (tourID, photoList) => dispatch => {
-  console.log(photoList)
+  console.log(photoList);
   const photoL = photoList.map(photo => {
     return {
       name: photo.fileName,
@@ -78,51 +78,21 @@ const addPhotoToTour = (tourID, photoList) => dispatch => {
 
   //Вот тут я реалізував через проход масива а має бути що ти посиалєш масив в запросі
   photoL.forEach(photo => {
+    console.log('PHOTOACTION: ', photo);
+
     const dataIncome = new FormData();
     dataIncome.append('tourID', tourID);
     dataIncome.append('photo', photo);
 
-    axios({
-      method: 'post',
-      url:
-        'https://3.136.62.106/Listeasy/backend/index.php/user/add_photo_for_tour',
-      data: dataIncome,
+    console.log('DATAAINCOMEACTION: ', dataIncome);
+
+    API.post('/user/add_photo_for_tour', dataIncome, {
       headers: {'Content-Type': 'multipart/form-data'},
-    }).then(response => console.log(response.data))    
+    })
+      .then(response => console.log(response.data))
       .catch(error => {
-        console.log("Error " + error)
-    });
+        console.log('Error ' + error);
+      });
   });
-  dispatch(setLoading(false))
-
-};
-
-const addSoundToTour = (tourID, soundList) => dispatch => {
-  const soundL = soundList.map(sound => {
-    return {
-      name: 'audio',
-      type: sound.type,
-      uri:
-        Platform.OS === 'android'
-          ? sound.uri
-          : sound.uri.replace('file://', ''),
-    };
-  });
-
-  soundL.forEach(sound => {
-    const dataIncome = new FormData();
-    dataIncome.append('tourID', tourID);
-    dataIncome.append('audio', sound);
-
-    axios({
-      method: 'post',
-      url:
-        'https://3.136.62.106/Listeasy/backend/index.php/user/add_audio_for_tour',
-      data: dataIncome,
-      headers: {'Content-Type': 'multipart/form-data'},
-    }).then(response => console.log(response.data))    
-      .catch(error => {
-        console.log("Error " + error)
-    });
-  });
+  dispatch(setLoading(false));
 };

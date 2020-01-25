@@ -15,8 +15,8 @@ const mapStateToProps = state => {
 
 const mapDisptchToProps = dispatch => {
   return {
-    onCreateTour: (userId, location, photoL, songL) => {
-      dispatch(createTour(userId, location, photoL, songL));
+    onCreateTour: (userId, location, photoL, selectedSong) => {
+      dispatch(createTour(userId, location, photoL, selectedSong));
     },
     clearErrorProfile: () => {
       dispatch(clearError());
