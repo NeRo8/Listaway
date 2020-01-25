@@ -1,18 +1,18 @@
 import React, {Component} from 'react';
 import {View, StatusBar, Text, ScrollView, Image} from 'react-native';
-import {Icon, Button} from 'react-native-elements';
+
+import {Icon, Button, Overlay} from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
-import LoadingView from '../../components/Loading';
 import ImageMultiplePicker from 'react-native-image-crop-picker';
+import {DragDropGrid} from 'react-native-drag-drop-grid-library';
 
 import GradientText from '../../components/GradientText';
 import RadioGroup from '../../components/RadioGroup';
+import LoadingView from '../../components/Loading';
 
 import {globalStyles, colors} from '../../constants';
 import styles from './styles';
-
-import {DragDropGrid} from 'react-native-drag-drop-grid-library';
 
 import song from '../../assets/songs/song1.mp3';
 
@@ -35,7 +35,7 @@ class CreateTour extends Component {
           id: 0,
           label: 'bensound-sunny',
           value: require('../../assets/songs/song1.mp3'),
-          active: false,
+          active: true,
         },
         {
           id: 1,
@@ -162,8 +162,8 @@ class CreateTour extends Component {
 
   componentDidUpdate() {
     const {error, loading, user} = this.props;
-    console.log('Song: ', this.state.selectedSong);
   }
+
   handlePressAddSong = async () => {
     this.setState({isShowDialog: true});
   };
@@ -200,7 +200,6 @@ class CreateTour extends Component {
     this.setState({
       playNow: {uri: value, id: value},
     });
-    console.log('Song:', value.label);
   };
 
   handlePressSaveMusic = () => {
@@ -218,8 +217,9 @@ class CreateTour extends Component {
   handlePressOrder = async () => {
     const {photoList, selectedSong, location} = this.state;
     const {userid, onCreateTour} = this.props;
-
-    onCreateTour(userid, location, photoList, selectedSong);
+    if (photoList.length === 0 || location === null) {
+      return alert('Please, select a location, and at least 1 picture');
+    } else onCreateTour(userid, location, photoList, selectedSong);
   };
 
   render() {
@@ -430,6 +430,7 @@ class CreateTour extends Component {
             <View />
           )}
         </View>
+
         {loading ? (
           <LoadingView loadingText="Creating Tour..." hide={true} />
         ) : null}
@@ -440,31 +441,6 @@ class CreateTour extends Component {
           onPressItem={this.handlePressRadioButton}
           onClose={this.handlePressSaveMusic}
         />
-        {/* <Dialog
-          visible={this.state.isShowDialog}
-          title="Please choose song "
-          onTouchOutside={() => this.setState({dialogVisible: false})}>
-          <View>
-            <RadioForm
-              radio_props={radio_props}
-              initial={valueIndex}
-              formHorizontal={false}
-              labelHorizontal={true}
-              buttonColor={'#2196f3'}
-              animation={false}
-              onPress={(value, index) => {
-                this.soundSelect(value, index);
-              }}
-            />
-            <Button
-              title="Save as tour music"
-              color="#f194ff"
-              onPress={() => {
-                this.handlePressSaveMusic();
-              }}
-            />
-          </View>
-        </Dialog> */}
       </ScrollView>
     );
   }
