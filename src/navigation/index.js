@@ -13,7 +13,7 @@ import ChangePasswordScreen from '../screens/Auth/ChangePasswordScreen';
 import SignUpScreen from '../screens/Auth/SignUpScreen';
 import CreateAccountScreen from '../screens/Auth/CreateAccountScreen';
 import CreateTour from '../screens/CreateTour';
-import PreviewTour from '../screens/CreateTour/PreviewTour'
+import PreviewTour from '../screens/CreateTour/PreviewTour';
 import ProfileScreen from '../screens/ProfileScreen';
 
 import DefaultDrawer from './DefaultDrawer';
@@ -23,7 +23,7 @@ const AppDrawerNavigation = createDrawerNavigator(
     TourList: {
       screen: HomeScreen,
       navigationOptions: {
-        title: 'Tour List',
+        title: 'Tours',
       },
     },
     CreateTour: {
@@ -32,34 +32,17 @@ const AppDrawerNavigation = createDrawerNavigator(
         title: 'Create Tour',
       },
     },
-    PreviewTour: {
-      screen: PreviewTour,
-      navigationOptions: {
-        title: 'PreviewTour Tour',
-      },
-    },
-    OrderTour: {
-      screen: HomeScreen,
-      navigationOptions: {
-        title: 'Order Tour',
-      },
-    },
+
     Profile: {
       screen: ProfileScreen,
       navigationOptions: {
         title: 'Profile',
       },
     },
-    Settings: {
-      screen: HomeScreen,
+    PreviewTour: {
+      screen: PreviewTour,
       navigationOptions: {
-        title: 'Settins',
-      },
-    },
-    About: {
-      screen: HomeScreen,
-      navigationOptions: {
-        title: 'About',
+        title: 'Preview Tour',
       },
     },
   },

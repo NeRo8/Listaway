@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* ListawayTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* ListawayTests.m */; };
 		049F429576E430A490FA230D /* libPods-Listaway-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1CE4861D01EB7FC9499E05E /* libPods-Listaway-tvOSTests.a */; };
@@ -23,6 +22,7 @@
 		8670E7579CAA075143D213E4 /* libPods-ListawayTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CF00A5524F0CBCD32B595BA /* libPods-ListawayTests.a */; };
 		B680FB0B2A814269BF9DBD2D /* NotoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 49BF590FE89A4152B0E731FD /* NotoSans-Bold.ttf */; };
 		CECB21E3237EF2B200F3619D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CECB21E2237EF2B200F3619D /* GoogleService-Info.plist */; };
+		889D8DC49FDC4CE696BF6509 /* Permanent Marker Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E130F1118CD544F8A7E06265 /* Permanent Marker Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +89,7 @@
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F53D4DDAA066B4DE7D0BE33C /* Pods-ListawayTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ListawayTests.release.xcconfig"; path = "Target Support Files/Pods-ListawayTests/Pods-ListawayTests.release.xcconfig"; sourceTree = "<group>"; };
 		FBF73C40652E58E9A855BF26 /* libPods-Listaway.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Listaway.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E130F1118CD544F8A7E06265 /* Permanent Marker Regular.ttf */ = {isa = PBXFileReference; name = "Permanent Marker Regular.ttf"; path = "../src/assets/fonts/Permanent Marker Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +166,7 @@
 				3ECDBDB749F24B05A75B59D9 /* Zocial.ttf */,
 				49BF590FE89A4152B0E731FD /* NotoSans-Bold.ttf */,
 				578ECF86012F45109E2EE777 /* NotoSans.ttf */,
+				E130F1118CD544F8A7E06265 /* Permanent Marker Regular.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -395,6 +397,7 @@
 				CECB21E3237EF2B200F3619D /* GoogleService-Info.plist in Resources */,
 				B680FB0B2A814269BF9DBD2D /* NotoSans-Bold.ttf in Resources */,
 				223C18E43AA041D4843204DC /* NotoSans.ttf in Resources */,
+				889D8DC49FDC4CE696BF6509 /* Permanent Marker Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
