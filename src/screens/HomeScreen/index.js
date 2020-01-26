@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import HomeScreen from './HomeScreen';
-import {getTourList, deleteTour} from '../../actions/toursActions';
+import {getTourList, deleteTour, tourStatus} from '../../actions/toursActions';
 
 const mapStateToProps = state => {
   return {
@@ -16,6 +16,9 @@ const mapDispatchToProps = dispatch => {
     },
     onDeleteTour: deletingTourId => {
       dispatch(deleteTour(deletingTourId));
+    },
+    onUpdateStatus: (tourId, isActive, postTime) => {
+      dispatch(tourStatus(tourId, isActive, postTime));
     },
   };
 };

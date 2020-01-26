@@ -103,8 +103,32 @@ export const deleteTour = deletingTourId => dispatch => {
   })
     .then(response => {
       if (response.data.status === 200) {
-        dispatch(setTours(response.data.tourlist));
-        return response.data.tourlist;
+        dispatch(getTourList());
+      } else {
+        dispatch(setError(response.data));
+      }
+    })
+    .then(() => dispatch(setLoading(false)))
+    .catch(error => {
+      dispatch(setLoading(false));
+      dispatch(setError(error));
+    });
+};
+
+export const tourStatus = (tourId, isActive, postTime) => dispatch => {
+  dispatch(setLoading(true));
+
+  const statusUpdate = new FormData();
+  statusUpdate.append('tourid', tourId);
+  statusUpdate.append('is_active', isActive);
+  statusUpdate.append('posttime', postTime);
+
+  API.post('/user/update_tour', statusUpdate, {
+    headers: {'Content-Type': 'multipart/form-data'},
+  })
+    .then(response => {
+      if (response.data.status === 200) {
+        dispatch(getTourList());
       } else {
         dispatch(setError(response.data));
       }

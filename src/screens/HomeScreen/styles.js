@@ -1,6 +1,15 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
+import colors from '../../constants/colors';
 
 export default StyleSheet.create({
+  header: {
+    alignItems: 'flex-start',
+    paddingLeft: 15,
+    paddingTop: Platform.OS === 'ios' ? 40 : 20,
+    paddingBottom: 10,
+
+    justifyContent: 'center',
+  },
   trashCan: {
     width: '100%',
     height: '50%',

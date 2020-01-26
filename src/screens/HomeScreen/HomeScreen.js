@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   StatusBar,
   Image,
-  Switch,
+  Alert,
   Animated,
   TouchableOpacity,
 } from 'react-native';
@@ -38,10 +38,11 @@ class HomeScreen extends Component {
     });
     return (
       <Animated.View style={[{transform: [{translateX}]}]}>
-        <View style={{paddingHorizontal: 10, paddingVertical: 5}}>
+        <View style={{paddingHorizontal: 10, paddingBottom: 10}}>
           <TouchableOpacity
             style={{backgroundColor: 'white'}}
-            activeOpacity={0.8}>
+            activeOpacity={0.8}
+            onPress={() => console.log('puff')}>
             <Grayscale amount={item.is_active === 'YES' ? false : true}>
               <Image
                 style={{width: '100%', height: 250}}
@@ -83,7 +84,12 @@ class HomeScreen extends Component {
   };
 
   onPress1 = item => {
-    item.is_active = !item.is_active;
+    const {onUpdateStatus} = this.props;
+    const isActive =
+      item.is_active === 'YES'
+        ? (item.is_active = 'NO')
+        : (item.is_active = 'YES');
+    onUpdateStatus(item.tourID, isActive, item.post_time);
     this.forceUpdate();
   };
 
@@ -98,7 +104,7 @@ class HomeScreen extends Component {
         <View
           style={{
             paddingHorizontal: 10,
-            paddingVertical: 5,
+            paddingBottom: 10,
             height: '100%',
             alignItems: 'flex-end',
           }}>
@@ -116,7 +122,7 @@ class HomeScreen extends Component {
             <SwitchToggle
               containerStyle={styles.switchContainer}
               circleStyle={styles.switchSircle}
-              switchOn={item.isActive}
+              switchOn={item.is_active === 'YES' ? true : false}
               onPress={() => this.onPress1(item)}
             />
           </View>
@@ -125,7 +131,7 @@ class HomeScreen extends Component {
     );
   };
 
-  componentDidMount = () => {
+  componentDidMount = async () => {
     const {userid, getToursList} = this.props;
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
 
@@ -140,10 +146,7 @@ class HomeScreen extends Component {
     }).start();
   };
 
-  componentDidUpdate = () => {
-    const {userid, getToursList} = this.props;
-    getToursList(userid);
-  };
+  componentDidUpdate = () => {};
 
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
@@ -151,9 +154,21 @@ class HomeScreen extends Component {
 
   handlePressDelete = async deletingTourId => {
     const {onDeleteTour} = this.props;
-    onDeleteTour(deletingTourId);
+    Alert.alert(
+      'Delete tour',
+      'Are you sure about that?',
+      [
+        {
+          text: 'NO',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: 'YES', onPress: () => onDeleteTour(deletingTourId)},
+      ],
+      {cancelable: false},
+    );
   };
-
+  // {text: 'OK', onPress: },
   handleBackButton() {
     return true;
   }
@@ -161,13 +176,13 @@ class HomeScreen extends Component {
   render() {
     const {tourlist} = this.props;
     return (
-      <SafeAreaView style={{flex: 1}}>
-        <StatusBar translucent={false} barStyle={'dark-content'} />
-        <View style={{alignItems: 'flex-start', marginLeft: 12}}>
+      <View style={{flex: 1}}>
+        <StatusBar barStyle={'dark-content'} />
+        <View style={styles.header}>
           <Icon
             name="menu"
             type="material-community"
-            color="silver"
+            color="black"
             size={32}
             onPress={() => {
               this.props.navigation.openDrawer();
@@ -176,15 +191,18 @@ class HomeScreen extends Component {
         </View>
         <View>
           <SwipeListView
-            useFlatList
+            keyExtractor={item => item.tourID}
             data={tourlist}
             disableRightSwipe={true}
             renderItem={this._renderItem}
             renderHiddenItem={this._renderHiddenItem}
             rightOpenValue={-70}
+            closeOnRowPress={true}
+            closeOnRowOpen={true}
+            closeOnRowBeginSwipe={true}
           />
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 }

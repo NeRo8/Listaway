@@ -239,7 +239,8 @@ class CreateTour extends Component {
           <Icon
             name="menu"
             type="material-community"
-            color="white"
+            color="black"
+            underlayColor="transparent"
             size={32}
             onPress={() => {
               this.props.navigation.openDrawer();

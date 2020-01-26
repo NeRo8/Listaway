@@ -7,7 +7,7 @@ export default StyleSheet.create({
   header: {
     alignItems: 'flex-start',
     paddingLeft: 15,
-    paddingTop: Platform.OS === 'ios' ? 40 : 30,
+    paddingTop: Platform.OS === 'ios' ? 40 : 20,
     paddingBottom: 10,
     backgroundColor: colors.LIGHT_BLUE,
   },
