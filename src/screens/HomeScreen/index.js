@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import HomeScreen from './HomeScreen';
-import {getTourList} from '../../actions/toursActions';
+import {getTourList, deleteTour} from '../../actions/toursActions';
 
 const mapStateToProps = state => {
   return {
@@ -13,6 +13,9 @@ const mapDispatchToProps = dispatch => {
   return {
     getToursList: userid => {
       dispatch(getTourList(userid));
+    },
+    onDeleteTour: deletingTourId => {
+      dispatch(deleteTour(deletingTourId));
     },
   };
 };

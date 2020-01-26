@@ -22,7 +22,7 @@ class CreateTour extends Component {
     this.state = {
       photoList: [],
       songList: [],
-      selectedSong: null,
+      selectedSong: 'bensound-sunny',
       valueIndex: 0,
       showRightMenu: false,
       playNow: null,

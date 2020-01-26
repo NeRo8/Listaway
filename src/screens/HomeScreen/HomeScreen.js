@@ -8,6 +8,7 @@ import {
   Image,
   Switch,
   Animated,
+  TouchableOpacity,
 } from 'react-native';
 
 import SwitchToggle from 'react-native-switch-toggle';
@@ -30,7 +31,6 @@ class HomeScreen extends Component {
   }
 
   _renderItem = ({item}) => {
-    const {tourlist} = this.props;
     this.delayValue = this.delayValue + 500;
     const translateX = this.state.animatedValue.interpolate({
       inputRange: [0, 1],
@@ -39,40 +39,44 @@ class HomeScreen extends Component {
     return (
       <Animated.View style={[{transform: [{translateX}]}]}>
         <View style={{paddingHorizontal: 10, paddingVertical: 5}}>
-          <Grayscale amount={item.is_active === 'YES' ? false : true}>
-            <Image
-              style={{width: '100%', height: 250}}
-              source={require('../../../download.jpeg')}
-            />
-          </Grayscale>
-          <View
-            style={{
-              backgroundColor: 'rgba(0,0,0,0.1)',
-              width: '100%',
-              height: 250,
-              marginTop: -250,
-              paddingHorizontal: 10,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <Text
+          <TouchableOpacity
+            style={{backgroundColor: 'white'}}
+            activeOpacity={0.8}>
+            <Grayscale amount={item.is_active === 'YES' ? false : true}>
+              <Image
+                style={{width: '100%', height: 250}}
+                source={require('../../../download.jpeg')}
+              />
+            </Grayscale>
+            <View
               style={{
-                textAlign: 'center',
-                color: 'white',
-                fontSize: 25,
-                fontFamily: 'Permanent Marker Regular',
+                backgroundColor: 'rgba(0,0,0,0.1)',
+                width: '100%',
+                height: 250,
+                marginTop: -250,
+                paddingHorizontal: 10,
+                alignItems: 'center',
+                justifyContent: 'center',
               }}>
-              {item.tour_location}
-            </Text>
-            <Text
-              style={{
-                color: 'white',
-                fontSize: 18,
-                fontFamily: 'NotoSans-Bold',
-              }}>
-              {item.post_time}
-            </Text>
-          </View>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  color: 'white',
+                  fontSize: 25,
+                  fontFamily: 'Permanent Marker Regular',
+                }}>
+                {item.tour_location}
+              </Text>
+              <Text
+                style={{
+                  color: 'white',
+                  fontSize: 18,
+                  fontFamily: 'Permanent Marker Regular',
+                }}>
+                {item.post_time}
+              </Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </Animated.View>
     );
@@ -104,7 +108,7 @@ class HomeScreen extends Component {
               type="ionicon"
               color="white"
               size={32}
-              onPress={() => onPress()}
+              onPress={() => this.handlePressDelete(item.tourID)}
               underlayColor="transparent"
             />
           </View>
@@ -123,7 +127,12 @@ class HomeScreen extends Component {
 
   componentDidMount = () => {
     const {userid, getToursList} = this.props;
-    getToursList(userid);
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+
+    this.props.navigation.addListener('didFocus', payload =>
+      getToursList(userid),
+    );
+
     Animated.spring(this.state.animatedValue, {
       toValue: 1,
       tension: -10,
@@ -131,13 +140,19 @@ class HomeScreen extends Component {
     }).start();
   };
 
-  async componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-  }
+  componentDidUpdate = () => {
+    const {userid, getToursList} = this.props;
+    getToursList(userid);
+  };
 
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
   }
+
+  handlePressDelete = async deletingTourId => {
+    const {onDeleteTour} = this.props;
+    onDeleteTour(deletingTourId);
+  };
 
   handleBackButton() {
     return true;

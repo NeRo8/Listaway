@@ -45,7 +45,7 @@ export const getTourList = userId => dispatch => {
         dispatch(setTours(response.data.tourlist));
         return response.data.tourlist;
       } else {
-        disptch(setError(response.data));
+        dispatch(setError(response.data));
       }
     })
     .then(() => dispatch(setLoading(false)))
@@ -79,13 +79,37 @@ export const createTour = (
         dispatch(setError(response.data));
       }
     })
-    .then(toure => {
-      dispatch(addPhotoToTour(toure.tourID, photoL));
-      return toure;
+    .then(tour => {
+      dispatch(addPhotoToTour(tour.tourID, photoL));
+      return tour;
     })
     .then(() => {
       dispatch(setLoading(false));
     })
+    .catch(error => {
+      dispatch(setLoading(false));
+      dispatch(setError(error));
+    });
+};
+
+export const deleteTour = deletingTourId => dispatch => {
+  dispatch(setLoading(true));
+
+  const deletingTour = new FormData();
+  deletingTour.append('tourid', deletingTourId);
+
+  API.post('/user/remove_tour', deletingTour, {
+    headers: {'Content-Type': 'multipart/form-data'},
+  })
+    .then(response => {
+      if (response.data.status === 200) {
+        dispatch(setTours(response.data.tourlist));
+        return response.data.tourlist;
+      } else {
+        dispatch(setError(response.data));
+      }
+    })
+    .then(() => dispatch(setLoading(false)))
     .catch(error => {
       dispatch(setLoading(false));
       dispatch(setError(error));
