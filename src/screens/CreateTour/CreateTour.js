@@ -181,10 +181,15 @@ class CreateTour extends Component {
   };
 
   handlePressPreview = async () => {
-    this.props.navigation.navigate('PreviewTour', {
-      photoList: this.state.photoList,
-      songList: this.state.songList,
-    });
+    const {photoList, selectedSong, location} = this.state;
+
+    if (photoList.length === 0 || location === null) {
+      return alert('Please, select a location, and at least 1 picture');
+    } else
+      this.props.navigation.navigate('PreviewTour', {
+        photoList: this.state.photoList,
+        songList: this.state.songList,
+      });
   };
 
   handlePressRadioButton = id => {

@@ -49,6 +49,7 @@ class HomeScreen extends Component {
                 source={require('../../../download.jpeg')}
               />
             </Grayscale>
+
             <View
               style={{
                 backgroundColor: 'rgba(0,0,0,0.1)',

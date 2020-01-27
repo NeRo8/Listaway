@@ -9,9 +9,8 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDisptchToProps = dispatch => {
-  return {
-  };
+const mapDispatchToProps = dispatch => {
+  return {};
 };
 
-export default connect(mapStateToProps, mapDisptchToProps)(PreviewTour);
+export default connect(mapStateToProps, mapDispatchToProps)(PreviewTour);

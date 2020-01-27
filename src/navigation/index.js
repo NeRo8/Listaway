@@ -39,12 +39,6 @@ const AppDrawerNavigation = createDrawerNavigator(
         title: 'Profile',
       },
     },
-    PreviewTour: {
-      screen: PreviewTour,
-      navigationOptions: {
-        title: 'Preview Tour',
-      },
-    },
   },
   {
     contentComponent: props => <DefaultDrawer {...props} />,
@@ -77,6 +71,9 @@ const AppNavigation = createStackNavigator(
     // New navigation
     Home: {
       screen: AppDrawerNavigation,
+    },
+    PreviewTour: {
+      screen: PreviewTour,
     },
   },
   {
