@@ -50,25 +50,8 @@ class HomeScreen extends Component {
               />
             </Grayscale>
 
-            <View
-              style={{
-                backgroundColor: 'rgba(0,0,0,0.1)',
-                width: '100%',
-                height: 250,
-                marginTop: -250,
-                paddingHorizontal: 10,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  color: 'white',
-                  fontSize: 25,
-                  fontFamily: 'Permanent Marker Regular',
-                }}>
-                {item.tour_location}
-              </Text>
+            <View style={styles.titleView}>
+              <Text style={styles.titleText}>{item.tour_location}</Text>
               <Text
                 style={{
                   color: 'white',

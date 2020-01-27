@@ -1,6 +1,11 @@
 import {connect} from 'react-redux';
 import HomeScreen from './HomeScreen';
-import {getTourList, deleteTour, tourStatus} from '../../actions/toursActions';
+import {
+  getTourList,
+  deleteTour,
+  tourStatus,
+  getToursPictures,
+} from '../../actions/toursActions';
 
 const mapStateToProps = state => {
   return {
@@ -14,6 +19,7 @@ const mapDispatchToProps = dispatch => {
     getToursList: userid => {
       dispatch(getTourList(userid));
     },
+
     onDeleteTour: deletingTourId => {
       dispatch(deleteTour(deletingTourId));
     },

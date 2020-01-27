@@ -7,8 +7,22 @@ export default StyleSheet.create({
     paddingLeft: 15,
     paddingTop: Platform.OS === 'ios' ? 40 : 20,
     paddingBottom: 10,
-
     justifyContent: 'center',
+  },
+  titleView: {
+    backgroundColor: 'rgba(0,0,0,0.1)',
+    width: '100%',
+    height: 250,
+    marginTop: -250,
+    paddingHorizontal: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  titleText: {
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 25,
+    fontFamily: 'Permanent Marker Regular',
   },
   trashCan: {
     width: '100%',

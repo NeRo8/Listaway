@@ -3,6 +3,7 @@ import {
   SET_ERROR,
   SET_LOADING,
   SET_TOURS,
+  SET_PICTURES,
 } from '../actions/toursActions';
 
 const initState = {
@@ -34,6 +35,12 @@ const toursReducer = (state = initState, action) => {
       return {
         ...state,
         tours: action.payload,
+      };
+    }
+    case SET_PICTURES: {
+      return {
+        ...state,
+        pictures: action.payload,
       };
     }
     case SET_LOADING: {

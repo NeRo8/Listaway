@@ -5,6 +5,7 @@ import axios from 'react-native-axios';
 
 export const SET_TOUR = 'SET_TOUR';
 export const SET_TOURS = 'SET_TOURS';
+export const SET_PICTURES = 'SET_PICTURES';
 export const SET_ERROR = 'SET_ERROR';
 export const SET_LOADING = 'SET_STATUS';
 
@@ -16,6 +17,11 @@ const setTour = tour => ({
 const setTours = tours => ({
   type: SET_TOURS,
   payload: tours,
+});
+
+const setPictures = pictures => ({
+  type: SET_PICTURES,
+  payload: pictures,
 });
 
 const setError = error => ({
@@ -53,6 +59,19 @@ export const getTourList = userId => dispatch => {
       dispatch(setLoading(false));
       dispatch(setError(error));
     });
+};
+
+export const getToursPictures = tourId => dispatch => {
+  dispatch(setLoading(true));
+
+  const getPictures = new FormData();
+  getPictures.append('tourID', tourId);
+
+  API.post('/user/get_media_list_for_tour', getPictures, {
+    headers: {'Content-Type': 'multipart/form-data'},
+  }).then(response => {
+    console.log('Photo Tours: ', response);
+  });
 };
 
 export const createTour = (
