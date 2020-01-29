@@ -20,8 +20,13 @@ export default StyleSheet.create({
   },
   titleText: {
     textAlign: 'center',
-    color: 'white',
+    color: 'rgba(255, 255, 255, 1)',
     fontSize: 25,
+    fontFamily: 'Permanent Marker Regular',
+  },
+  dataText: {
+    color: 'rgba(255, 255, 255, 1)',
+    fontSize: 18,
     fontFamily: 'Permanent Marker Regular',
   },
   trashCan: {

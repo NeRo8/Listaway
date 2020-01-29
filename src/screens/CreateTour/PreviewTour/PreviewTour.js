@@ -15,16 +15,47 @@ import Video from 'react-native-video';
 import {Icon} from 'react-native-elements';
 
 import styles from './styles';
+import colors from '../../../constants/colors';
 
 class PreviewTour extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      playNow: this.props.navigation.state.params.songList[0],
+      playNow: this.props.navigation.state.params.song,
+
       duration: 5500,
+      soundsList: [
+        {
+          id: 0,
+          label: 'bensound-sunny',
+          value: require('../../../assets/songs/song1.mp3'),
+        },
+        {
+          id: 1,
+          label: 'bensound-memories',
+          value: require('../../../assets/songs/song2.mp3'),
+        },
+        {
+          id: 2,
+          label: 'bensound-allthat',
+          value: require('../../../assets/songs/song3.mp3'),
+        },
+        {
+          id: 3,
+          label: 'bensound-creativeminds',
+          value: require('../../../assets/songs/song4.mp3'),
+        },
+        {
+          id: 4,
+          label: 'bensound-dreams',
+          value: require('../../../assets/songs/song5.mp3'),
+        },
+      ],
     };
   }
-
+  componentDidMount = () => {
+    console.log(this.state.playNow);
+  };
   render() {
     const items = [
       {
@@ -76,14 +107,20 @@ class PreviewTour extends Component {
               size={32}
               onPress={() => {
                 this.setState({
-                  playNow: this.props.navigation.state.params.songList[0],
+                  playNow: this.props.navigation.state.params.song,
+
+                  // playNow: this.props.navigation.state.params.songList[0],
                 });
               }}
             />
           )}
           {this.state.playNow !== null ? (
             <Video
-              source={this.state.playNow.uri} // Can be a URL or a local file.
+              //source={require(`../${this.state.playNow.value}`)} // Can be a URL or a local file.
+              source={
+                this.state.soundsList.find(i => i.id === this.state.playNow.id)
+                  .value
+              } // Can be a URL or a local file.
               ref={ref => {
                 this.player = ref;
               }} // Store reference

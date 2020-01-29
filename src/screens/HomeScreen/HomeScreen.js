@@ -14,7 +14,7 @@ import {
 import SwitchToggle from 'react-native-switch-toggle';
 import {Icon} from 'react-native-elements';
 import {SwipeListView} from 'react-native-swipe-list-view';
-import {Grayscale} from 'react-native-color-matrix-image-filters';
+import {Grayscale, rgba} from 'react-native-color-matrix-image-filters';
 
 import styles from './styles';
 
@@ -46,20 +46,13 @@ class HomeScreen extends Component {
             <Grayscale amount={item.is_active === 'YES' ? false : true}>
               <Image
                 style={{width: '100%', height: 250}}
-                source={require('../../../download.jpeg')}
+                source={require('../../assets/images/340599.jpg')}
               />
             </Grayscale>
 
             <View style={styles.titleView}>
               <Text style={styles.titleText}>{item.tour_location}</Text>
-              <Text
-                style={{
-                  color: 'white',
-                  fontSize: 18,
-                  fontFamily: 'Permanent Marker Regular',
-                }}>
-                {item.post_time}
-              </Text>
+              <Text style={styles.dataText}>{item.post_time}</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -161,7 +154,7 @@ class HomeScreen extends Component {
     const {tourlist} = this.props;
     return (
       <View style={{flex: 1}}>
-        <StatusBar barStyle={'dark-content'} />
+        <StatusBar barStyle="dark-content" />
         <View style={styles.header}>
           <Icon
             name="menu"

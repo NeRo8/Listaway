@@ -5,25 +5,30 @@ import {fonts} from '../../constants';
 
 export default StyleSheet.create({
   header: {
-    alignItems: 'flex-start',
-    paddingLeft: 15,
+    alignItems: 'center',
     paddingTop: Platform.OS === 'ios' ? 40 : 20,
     paddingBottom: 10,
     backgroundColor: colors.LIGHT_BLUE,
+    flexDirection: 'row',
   },
   containerBody: {
     flex: 1,
     paddingHorizontal: 15,
     justifyContent: 'space-between',
-    marginBottom: 30,
+    marginVertical: 10,
   },
   inputStyle: {
     fontFamily: fonts.notoRegular,
     paddingHorizontal: 10,
   },
+
   btnContainerStyle: {
     marginHorizontal: 15,
-    marginTop: 10,
+    flex: 1,
+  },
+  bottomBtnsView: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
   },
   btnTitleWhite: {
     fontSize: 16,
@@ -65,10 +70,17 @@ export default StyleSheet.create({
     borderColor: colors.LIGHT_BLUE,
     margin: 5,
   },
-  photoBlock: {},
+  photoBlock: {
+    height: '100%',
+    flex: 1,
+    justifyContent: 'space-between',
+    marginVertical: 10,
+  },
   block: {
+    height: 200,
+    width: '100%',
     // flex: 1,
-    margin: 5,
+    paddingVertical: 5,
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',

@@ -1,11 +1,21 @@
 import React, {Component} from 'react';
-import {View, StatusBar, Text, ScrollView, Image} from 'react-native';
+import {
+  View,
+  StatusBar,
+  Text,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  Platform,
+} from 'react-native';
 
-import {Icon, Button, Overlay} from 'react-native-elements';
+import {Icon, Button} from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import ImageMultiplePicker from 'react-native-image-crop-picker';
 import {DragDropGrid} from 'react-native-drag-drop-grid-library';
+import DraggableFlatList from 'react-native-draggable-flatlist';
+import {FlatList, TouchableNativeFeedback} from 'react-native-gesture-handler';
 
 import GradientText from '../../components/GradientText';
 import RadioGroup from '../../components/RadioGroup';
@@ -66,8 +76,11 @@ class CreateTour extends Component {
 
     this.onRemove = this.onRemove.bind(this);
   }
-  onRemove(letter) {
-    this.sortGrid.deleteBlockList(letter);
+  onRemove(item) {
+    let newPhotoList = [];
+    newPhotoList = this.state.photoList.filter(photo => photo.uri !== item.uri);
+    this.setState({photoList: newPhotoList});
+    this.forceUpdate();
   }
   getColor() {
     let r = this.randomRGB();
@@ -82,6 +95,7 @@ class CreateTour extends Component {
     this.setState({
       showRightMenu: !this.state.showRightMenu,
     });
+    console.log('Move', this.state.photoList);
   };
 
   handlePressPickImage = () => {
@@ -118,17 +132,6 @@ class CreateTour extends Component {
         photoList: this.state.photoList.concat(newPhotoList),
       });
     });
-
-    // ImagePicker.launchImageLibrary(options, response => {
-    //   const {photoList} = this.state;
-    //   console.log(response);
-
-    //   const newPhotoList = photoList.concat({image: response});
-    //   console.log(newPhotoList);
-    //   this.setState({
-    //     photoList: newPhotoList,
-    //   });
-    // });
   };
 
   handlePressCamera = () => {
@@ -188,7 +191,7 @@ class CreateTour extends Component {
     } else
       this.props.navigation.navigate('PreviewTour', {
         photoList: this.state.photoList,
-        songList: this.state.songList,
+        song: this.state.soundsList.find(sound => sound.active === true),
       });
   };
 
@@ -208,7 +211,7 @@ class CreateTour extends Component {
   };
 
   handlePressSaveMusic = () => {
-    const {selectedSong, soundsList} = this.state;
+    const {soundsList} = this.state;
     const sound = soundsList.find(i => i.active === true);
     this.setState({
       isShowDialog: false,
@@ -227,42 +230,86 @@ class CreateTour extends Component {
     } else onCreateTour(userid, location, photoList, selectedSong);
   };
 
+  renderItem = ({item, drag}) => {
+    return (
+      <View>
+        <View
+          style={{
+            zIndex: 4,
+            position: 'absolute',
+            right: 10,
+            top: 10,
+          }}>
+          <TouchableNativeFeedback onPress={() => this.onRemove(item)}>
+            <View>
+              <Icon
+                color="red"
+                size={45}
+                name="close-circle-outline"
+                type="material-community"
+                underlayColor="transparent"
+              />
+            </View>
+          </TouchableNativeFeedback>
+        </View>
+
+        <TouchableOpacity
+          style={styles.block}
+          onLongPress={drag}
+          delayLongPress={500}>
+          <Image
+            source={{uri: item.uri}}
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   render() {
     const {loading} = this.props;
     const {radio_props, selectedSong, valueIndex} = this.state;
     return (
-      <ScrollView
-        scrollEnabled={this.state.isScroll}
-        contentContainerStyle={globalStyles.containerFull}
-        keyboardShouldPersistTaps="always">
+      <View style={{minHeight: '100%', flexGrow: 1}}>
         <StatusBar
           translucent={true}
           backgroundColor="transparent"
           barStyle="light-content"
         />
         <View style={styles.header}>
-          <Icon
-            name="menu"
-            type="material-community"
-            color="black"
-            underlayColor="transparent"
-            size={32}
-            onPress={() => {
-              this.props.navigation.openDrawer();
-            }}
-          />
-        </View>
-        <View style={styles.containerBody}>
-          <View>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Icon
+              name="menu"
+              type="material-community"
+              color={colors.LIGHT_GREEN}
+              underlayColor="transparent"
+              size={32}
+              onPress={() => {
+                this.props.navigation.openDrawer();
+              }}
+            />
+          </View>
+
+          <View style={{flex: 6, paddingLeft: 40}}>
             <GradientText style={globalStyles.headerTitle}>
               Create Tour
             </GradientText>
-            <View
-              style={{
-                borderWidth: 1,
-                borderColor: colors.LIGHT_BLUE,
-                padding: 2,
-              }}>
+          </View>
+        </View>
+        <View style={styles.containerBody}>
+          <View style={{}}>
+            <ScrollView
+              scrollEnabled={this.state.isScroll}
+              contentContainerStyle={globalStyles.containerFull}
+              keyboardShouldPersistTaps="always">
               <GooglePlacesAutocomplete
                 query={{
                   // available options: https://developers.google.com/places/web-service/autocomplete
@@ -287,102 +334,42 @@ class CreateTour extends Component {
                 styles={{
                   textInputContainer: {
                     backgroundColor: 'rgba(0,0,0,0)',
-                    borderTopWidth: 0,
-                    borderBottomWidth: 0,
                     alignItems: 'center',
+                    marginTop: 0,
+                    height: 45,
                   },
                   textInput: {
                     marginTop: 0,
+                    marginBottom: 0,
                     marginLeft: 0,
                     marginRight: 0,
-                    height: 38,
+                    paddingTop: 0,
+                    paddingBottom: 0,
+                    paddingHorizontal: 5,
                     color: '#5d5d5d',
-                    fontSize: 16,
+                    fontSize: 18,
+                  },
+                  container: {
+                    borderWidth: 1,
+                    borderColor: colors.LIGHT_GREEN,
                   },
                 }}
                 currentLocation={false}
               />
+            </ScrollView>
+          </View>
+          <View style={styles.photoBlock}>
+            <Text style={styles.label}>Photos:</Text>
+            <View style={{flex: 1}}>
+              <DraggableFlatList
+                data={this.state.photoList}
+                renderItem={this.renderItem}
+                keyExtractor={item => `draggable-item-${item.uri}`}
+                onDragEnd={({data}) => this.setState({photoList: data})}
+              />
             </View>
           </View>
-          <View
-            style={{flex: 1, justifyContent: 'space-between', marginTop: 20}}>
-            <View style={styles.photoBlock}>
-              <Text style={styles.label}>Photos:</Text>
-              <DragDropGrid
-                ref={sortGrid => {
-                  this.sortGrid = sortGrid;
-                }}
-                blockTransitionDuration={200}
-                activeBlockCenteringDuration={200}
-                itemsPerRow={3}
-                dragActivationTreshold={200}
-                onDragRelease={itemOrder => {
-                  this.setState({
-                    isScroll: true,
-                  });
-                }}
-                onDragStart={key => {
-                  this.setState({
-                    isScroll: false,
-                  });
-                }}>
-                {this.state.photoList.map((item, index) => (
-                  <View key={index} style={styles.block}>
-                    <Image
-                      source={{uri: item.uri}}
-                      // source={require(item.path)}
-                      style={{
-                        width: '99%',
-                        height: '99%',
-                      }}
-                    />
-                  </View>
-                ))}
-              </DragDropGrid>
-            </View>
-
-            {/* <View style={{flex}}>
-              <Text style={styles.label}>Song:</Text>
-
-              {this.state.playNow !== null ? (
-                <Video
-                  source={this.state.playNow.uri} // Can be a URL or a local file.
-                  ref={ref => {
-                    this.player = ref;
-                  }} // Store reference
-                  audioOnly={true}
-                  playInBackground={false}
-                  onBuffer={this.onBuffer} // Callback when remote video is buffering
-                  onError={this.videoError} // Callback when video cannot be loaded
-                />
-              ) : null}
-              <View>
-                <FlatList
-                  data={this.state.songList}
-                  numColumns={3}
-                  renderItem={({ item, index }) => (
-                    <Icon
-                      name={
-                        this.state.playNow !== null &&
-                          this.state.playNow.id === index &&
-                          !this.state.pausePlay
-                          ? 'stop-circle'
-                          : 'music'
-                      }
-                      type="font-awesome"
-                      color={colors.LIGHT_BLUE}
-                      size={40}
-                      containerStyle={styles.iconContainer}
-                      onPress={() => {
-                        this.handlePressSong(item, index);
-                      }}
-                    />
-                  )}
-                />
-              </View>
-            </View> */}
-          </View>
-          <View>
+          <View style={styles.bottomBtnsView}>
             <Button
               title="Preview Tour"
               titleStyle={styles.btnTitleWhite}
@@ -402,7 +389,7 @@ class CreateTour extends Component {
         <View
           style={{
             position: 'absolute',
-            top: 40,
+            top: 30,
             right: 10,
           }}>
           <Icon
@@ -447,7 +434,7 @@ class CreateTour extends Component {
           onPressItem={this.handlePressRadioButton}
           onClose={this.handlePressSaveMusic}
         />
-      </ScrollView>
+      </View>
     );
   }
 }

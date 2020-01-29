@@ -21,6 +21,7 @@
     "react-native-color-matrix-image-filters": "^5.2.2",
     "react-native-document-picker": "^3.2.4",
     "react-native-drag-drop-grid-library": "^1.0.7",
+    "react-native-draggable-flatlist": "^2.1.2",
     "react-native-dropdownalert": "^4.2.0",
     "react-native-elements": "^1.2.7",
     "react-native-fbsdk": "^1.1.1",

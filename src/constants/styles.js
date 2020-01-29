@@ -4,7 +4,7 @@ import fonts from './fonts';
 const globalStyles = StyleSheet.create({
   headerTitle: {
     fontWeight: 'bold',
-    fontSize: 36,
+    fontSize: 30,
     fontFamily: fonts.notoBold,
   },
   underHeaderHint: {

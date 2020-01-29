@@ -18,7 +18,9 @@ class DefaultDrawer extends Component {
   render() {
     const {onPressLogout, navigation} = this.props;
     return (
-      <SafeAreaView forceInset={{top: 'always', horizontal: 'never'}}>
+      <SafeAreaView
+        style={{paddingVertical: 20}}
+        forceInset={{top: 'always', horizontal: 'never'}}>
         <DrawerItems {...this.props} />
         <TouchableOpacity
           style={{margin: 16}}
