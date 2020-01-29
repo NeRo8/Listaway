@@ -17,6 +17,7 @@ import {SwipeListView} from 'react-native-swipe-list-view';
 import {Grayscale, rgba} from 'react-native-color-matrix-image-filters';
 
 import styles from './styles';
+import navigation from '../../navigation';
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -36,13 +37,14 @@ class HomeScreen extends Component {
       inputRange: [0, 1],
       outputRange: [this.delayValue, 1],
     });
+
     return (
       <Animated.View style={[{transform: [{translateX}]}]}>
         <View style={{paddingHorizontal: 10, paddingBottom: 10}}>
           <TouchableOpacity
             style={{backgroundColor: 'white'}}
             activeOpacity={0.8}
-            onPress={() => console.log('puff')}>
+            onPress={() => this.onPressTour(item)}>
             <Grayscale amount={item.is_active === 'YES' ? false : true}>
               <Image
                 style={{width: '100%', height: 250}}
@@ -58,6 +60,12 @@ class HomeScreen extends Component {
         </View>
       </Animated.View>
     );
+  };
+
+  onPressTour = item => {
+    const {setEditTour, navigation} = this.props;
+    setEditTour(item);
+    navigation.navigate('EditTour');
   };
 
   onPress1 = item => {

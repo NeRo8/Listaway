@@ -61,7 +61,7 @@ export const getTourList = userId => dispatch => {
     });
 };
 
-export const getToursPictures = tourId => dispatch => {
+export const getTourPictures = tourId => dispatch => {
   dispatch(setLoading(true));
 
   const getPictures = new FormData();
@@ -69,9 +69,21 @@ export const getToursPictures = tourId => dispatch => {
 
   API.post('/user/get_media_list_for_tour', getPictures, {
     headers: {'Content-Type': 'multipart/form-data'},
-  }).then(response => {
-    console.log('Photo Tours: ', response);
-  });
+  })
+    .then(response => {
+      if (response.data.status === 200) {
+        dispatch(setPictures(response.data.medialist));
+        console.log('Response z serva: ', response.data);
+        return response.data.medialist;
+      } else {
+        dispatch(setError(response.data));
+      }
+    })
+    .then(() => dispatch(setLoading(false)))
+    .catch(error => {
+      dispatch(setLoading(false));
+      dispatch(setError(error));
+    });
 };
 
 export const createTour = (

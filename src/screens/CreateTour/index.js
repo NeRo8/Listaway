@@ -13,7 +13,7 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDisptchToProps = dispatch => {
+const mapDispatchToProps = dispatch => {
   return {
     onCreateTour: (userId, location, photoL, selectedSong) => {
       dispatch(createTour(userId, location, photoL, selectedSong));
@@ -24,4 +24,4 @@ const mapDisptchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDisptchToProps)(CreateTour);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateTour);

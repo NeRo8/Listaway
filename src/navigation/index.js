@@ -13,6 +13,7 @@ import ChangePasswordScreen from '../screens/Auth/ChangePasswordScreen';
 import SignUpScreen from '../screens/Auth/SignUpScreen';
 import CreateAccountScreen from '../screens/Auth/CreateAccountScreen';
 import CreateTour from '../screens/CreateTour';
+import EditTourScreen from '../screens/EditTourScreen';
 import PreviewTour from '../screens/CreateTour/PreviewTour';
 import ProfileScreen from '../screens/ProfileScreen';
 
@@ -32,7 +33,12 @@ const AppDrawerNavigation = createDrawerNavigator(
         title: 'Create Tour',
       },
     },
-
+    EditTour: {
+      screen: EditTourScreen,
+      navigationOptions: {
+        drawerLabel: () => null,
+      },
+    },
     Profile: {
       screen: ProfileScreen,
       navigationOptions: {

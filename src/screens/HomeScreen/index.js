@@ -4,8 +4,9 @@ import {
   getTourList,
   deleteTour,
   tourStatus,
-  getToursPictures,
+  getTourPictures,
 } from '../../actions/toursActions';
+import * as editTourAction from '../../actions/editTourAction';
 
 const mapStateToProps = state => {
   return {
@@ -19,12 +20,17 @@ const mapDispatchToProps = dispatch => {
     getToursList: userid => {
       dispatch(getTourList(userid));
     },
-
+    getPhotos: tourId => {
+      dispatch(getTourPictures(tourId));
+    },
     onDeleteTour: deletingTourId => {
       dispatch(deleteTour(deletingTourId));
     },
     onUpdateStatus: (tourId, isActive, postTime) => {
       dispatch(tourStatus(tourId, isActive, postTime));
+    },
+    setEditTour: tour => {
+      dispatch(editTourAction.setTour(tour));
     },
   };
 };

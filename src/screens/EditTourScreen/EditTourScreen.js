@@ -6,13 +6,14 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
+  FlatList,
 } from 'react-native';
 
 import {Icon, Button} from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import ImageMultiplePicker from 'react-native-image-crop-picker';
-
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import {TouchableNativeFeedback} from 'react-native-gesture-handler';
 
@@ -23,20 +24,17 @@ import LoadingView from '../../components/Loading';
 import {globalStyles, colors} from '../../constants';
 import styles from './styles';
 
-class CreateTour extends Component {
+class EditTourScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      photoList: [],
-      songList: [],
-      selectedSong: 'bensound-sunny',
       valueIndex: 0,
       showRightMenu: false,
       playNow: null,
       pausePlay: false,
-      location: null,
       isScroll: true,
       isShowDialog: false,
+      listViewDisplayed: false,
       soundsList: [
         {
           id: 0,
@@ -70,29 +68,21 @@ class CreateTour extends Component {
         },
       ],
     };
-
-    this.onRemove = this.onRemove.bind(this);
   }
+
   onRemove(item) {
     let newPhotoList = [];
-    newPhotoList = this.state.photoList.filter(photo => photo.uri !== item.uri);
+    newPhotoList = this.state.photoList.filter(
+      photo => photo.media_url !== item.media_url,
+    );
     this.setState({photoList: newPhotoList});
     this.forceUpdate();
   }
-  getColor() {
-    let r = this.randomRGB();
-    let g = this.randomRGB();
-    let b = this.randomRGB();
-    return 'rgb(' + r + ', ' + g + ', ' + b + ')';
-  }
-
-  randomRGB = () => 160 + Math.random() * 85;
 
   handlePressAdd = () => {
     this.setState({
       showRightMenu: !this.state.showRightMenu,
     });
-    console.log('Move', this.state.photoList);
   };
 
   handlePressPickImage = () => {
@@ -113,7 +103,7 @@ class CreateTour extends Component {
     }).then(images => {
       const newPhotoList = images.map(i => {
         return {
-          uri: i.path,
+          media_url: i.path,
           width: i.width,
           height: i.height,
           type: i.mime,
@@ -123,48 +113,14 @@ class CreateTour extends Component {
           title: '',
         };
       });
-      console.log(newPhotoList);
-
+      //Екшен на до додавання фоток в масив(редюсер)
       this.setState({
         photoList: this.state.photoList.concat(newPhotoList),
       });
     });
   };
 
-  handlePressCamera = () => {
-    const options = {
-      mediaType: 'photo',
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-
-    // Launch Camera:
-    ImagePicker.launchCamera(options, response => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-        alert(response.customButton);
-      } else {
-        const {photoList} = this.state;
-
-        const newPhotoList = photoList.concat({image: response});
-        this.setState({
-          photoList: newPhotoList,
-        });
-      }
-    });
-  };
-
-  componentDidUpdate() {
-    const {error, loading, user} = this.props;
-  }
-
-  handlePressAddSong = async () => {
+  handlePressAddSong = () => {
     this.setState({isShowDialog: true});
   };
 
@@ -178,18 +134,6 @@ class CreateTour extends Component {
         playNow: {uri: uriIncome.uri, id: index},
       });
     }
-  };
-
-  handlePressPreview = async () => {
-    const {photoList, selectedSong, location} = this.state;
-
-    if (photoList.length === 0 || location === null) {
-      return alert('Please, select a location, and at least 1 picture');
-    } else
-      this.props.navigation.navigate('PreviewTour', {
-        photoList: this.state.photoList,
-        song: this.state.soundsList.find(sound => sound.active === true),
-      });
   };
 
   handlePressRadioButton = id => {
@@ -255,7 +199,7 @@ class CreateTour extends Component {
           onLongPress={drag}
           delayLongPress={500}>
           <Image
-            source={{uri: item.uri}}
+            source={{uri: item.media_url}}
             style={{
               width: '100%',
               height: '100%',
@@ -267,8 +211,23 @@ class CreateTour extends Component {
   };
 
   render() {
-    const {loading} = this.props;
-    const {radio_props, selectedSong, valueIndex} = this.state;
+    const {loading, pictureList, tourData} = this.props;
+    const {
+      radio_props,
+      selectedSong,
+      valueIndex,
+      location,
+      tourInfo,
+    } = this.state;
+
+    if (loading) {
+      return <ActivityIndicator size="large" color="red" />;
+    }
+
+    // if (this.state.photoList === undefined)
+    //   setTimeout(() => {
+    //     return <ActivityIndicator size="large" color="red" />;
+    //   }, 1000);
     return (
       <View style={{minHeight: '100%', flexGrow: 1}}>
         <StatusBar
@@ -296,9 +255,7 @@ class CreateTour extends Component {
           </View>
 
           <View style={{flex: 6, paddingLeft: 40}}>
-            <GradientText style={globalStyles.headerTitle}>
-              Create Tour
-            </GradientText>
+            <GradientText style={globalStyles.headerTitle}>Tour</GradientText>
           </View>
         </View>
         <View style={styles.containerBody}>
@@ -323,7 +280,8 @@ class CreateTour extends Component {
                     listViewDisplayed: false,
                   });
                 }}
-                placeholder="Enter Location"
+                placeholder={'Enter location'}
+                getDefaultValue={() => `${tourData.tour_location}`}
                 minLength={2}
                 autoFocus={false}
                 returnKeyType={'search'}
@@ -359,23 +317,16 @@ class CreateTour extends Component {
             <Text style={styles.label}>Photos:</Text>
             <View style={{flex: 1}}>
               <DraggableFlatList
-                data={this.state.photoList}
+                data={pictureList}
                 renderItem={this.renderItem}
-                keyExtractor={item => `draggable-item-${item.uri}`}
+                keyExtractor={item => `draggable-item-${item.media_url}`}
                 onDragEnd={({data}) => this.setState({photoList: data})}
               />
             </View>
           </View>
           <View style={styles.bottomBtnsView}>
             <Button
-              title="Preview Tour"
-              titleStyle={styles.btnTitleWhite}
-              buttonStyle={styles.btnStyleWhite}
-              containerStyle={styles.btnContainerStyle}
-              onPress={this.handlePressPreview}
-            />
-            <Button
-              title="Create Tour"
+              title="Edit Tour"
               titleStyle={styles.btnTitleWhite}
               buttonStyle={styles.btnStyleWhite}
               containerStyle={styles.btnContainerStyle}
@@ -436,4 +387,4 @@ class CreateTour extends Component {
   }
 }
 
-export default CreateTour;
+export default EditTourScreen;

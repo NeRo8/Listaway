@@ -7,6 +7,8 @@ import {
 } from '../actions/toursActions';
 
 const initState = {
+  pictures: null,
+  testValue: 'www',
   tour: {
     posterid: null,
     tourlocation: '',
