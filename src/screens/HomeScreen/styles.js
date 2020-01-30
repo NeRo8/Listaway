@@ -1,5 +1,6 @@
 import {StyleSheet, Platform} from 'react-native';
-import colors from '../../constants/colors';
+
+import {colors, fonts} from '../../constants';
 
 export default StyleSheet.create({
   header: {
@@ -22,12 +23,12 @@ export default StyleSheet.create({
     textAlign: 'center',
     color: 'rgba(255, 255, 255, 1)',
     fontSize: 25,
-    fontFamily: 'Permanent Marker Regular',
+    fontFamily: fonts.permanentMarker,
   },
   dataText: {
     color: 'rgba(255, 255, 255, 1)',
     fontSize: 18,
-    fontFamily: 'Permanent Marker Regular',
+    fontFamily: fonts.permanentMarker,
   },
   trashCan: {
     width: '100%',

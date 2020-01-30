@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 
 import {Icon, Button} from 'react-native-elements';
-import ImagePicker from 'react-native-image-picker';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import ImageMultiplePicker from 'react-native-image-crop-picker';
 
@@ -18,7 +17,7 @@ import {TouchableNativeFeedback} from 'react-native-gesture-handler';
 
 import GradientText from '../../components/GradientText';
 import RadioGroup from '../../components/RadioGroup';
-import LoadingView from '../../components/Loading';
+import PreviewToure from '../PreviewToure';
 
 import {globalStyles, colors} from '../../constants';
 import styles from './styles';
@@ -37,6 +36,7 @@ class CreateTour extends Component {
       location: null,
       isScroll: true,
       isShowDialog: false,
+      previewActive: false,
       soundsList: [
         {
           id: 0,
@@ -96,15 +96,6 @@ class CreateTour extends Component {
   };
 
   handlePressPickImage = () => {
-    const options = {
-      title: 'Select Avatar',
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-    // Open Image Library:
-
     ImageMultiplePicker.openPicker({
       multiple: true,
       waitAnimationEnd: false,
@@ -123,46 +114,12 @@ class CreateTour extends Component {
           title: '',
         };
       });
-      console.log('add photos on create tour:', newPhotoList);
 
       this.setState({
         photoList: this.state.photoList.concat(newPhotoList),
       });
     });
   };
-
-  handlePressCamera = () => {
-    const options = {
-      mediaType: 'photo',
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-
-    // Launch Camera:
-    ImagePicker.launchCamera(options, response => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-        alert(response.customButton);
-      } else {
-        const {photoList} = this.state;
-
-        const newPhotoList = photoList.concat({image: response});
-        this.setState({
-          photoList: newPhotoList,
-        });
-      }
-    });
-  };
-
-  componentDidUpdate() {
-    const {error, loading, user} = this.props;
-  }
 
   handlePressAddSong = async () => {
     this.setState({isShowDialog: true});
@@ -180,16 +137,13 @@ class CreateTour extends Component {
     }
   };
 
-  handlePressPreview = async () => {
-    const {photoList, selectedSong, location} = this.state;
-
-    if (photoList.length === 0 || location === null) {
-      return alert('Please, select a location, and at least 1 picture');
-    } else
-      this.props.navigation.navigate('PreviewTour', {
-        photoList: this.state.photoList,
-        song: this.state.soundsList.find(sound => sound.active === true),
-      });
+  handlePressPreview = () => {
+    this.props.navigation.navigate('PreviewToure', {
+      photoList: this.state.photoList,
+      backgroundSong: this.state.soundsList.find(
+        sound => sound.active === true,
+      ),
+    });
   };
 
   handlePressRadioButton = id => {
@@ -270,7 +224,7 @@ class CreateTour extends Component {
     const {loading} = this.props;
     const {radio_props, selectedSong, valueIndex} = this.state;
     return (
-      <View style={{minHeight: '100%', flexGrow: 1}}>
+      <View style={{flex: 1, paddingBottom: 20}}>
         <StatusBar
           translucent={true}
           backgroundColor="transparent"
@@ -420,10 +374,6 @@ class CreateTour extends Component {
             <View />
           )}
         </View>
-
-        {loading ? (
-          <LoadingView loadingText="Creating Tour..." hide={true} />
-        ) : null}
 
         <RadioGroup
           visible={this.state.isShowDialog}

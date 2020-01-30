@@ -14,8 +14,8 @@ import SignUpScreen from '../screens/Auth/SignUpScreen';
 import CreateAccountScreen from '../screens/Auth/CreateAccountScreen';
 import CreateTour from '../screens/CreateTour';
 import EditTourScreen from '../screens/EditTourScreen';
-import PreviewTour from '../screens/CreateTour/PreviewTour';
 import ProfileScreen from '../screens/ProfileScreen';
+import PreviewToure from '../screens/PreviewToure';
 
 import DefaultDrawer from './DefaultDrawer';
 
@@ -78,8 +78,8 @@ const AppNavigation = createStackNavigator(
     Home: {
       screen: AppDrawerNavigation,
     },
-    PreviewTour: {
-      screen: PreviewTour,
+    PreviewToure: {
+      screen: PreviewToure,
     },
   },
   {
