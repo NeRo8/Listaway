@@ -32,12 +32,7 @@ class PreviewToure extends Component {
           size={40}
           color="white"
           underlayColor="transparent"
-          containerStyle={{
-            position: 'absolute',
-            top: 40,
-            right: 20,
-            zIndex: 2,
-          }}
+          containerStyle={styles.closeContainer}
           onPress={() => this.props.navigation.goBack()}
         />
         <Carousel

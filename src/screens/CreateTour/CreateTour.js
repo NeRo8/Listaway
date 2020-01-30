@@ -17,7 +17,6 @@ import {TouchableNativeFeedback} from 'react-native-gesture-handler';
 
 import GradientText from '../../components/GradientText';
 import RadioGroup from '../../components/RadioGroup';
-import PreviewToure from '../PreviewToure';
 
 import {globalStyles, colors} from '../../constants';
 import styles from './styles';
