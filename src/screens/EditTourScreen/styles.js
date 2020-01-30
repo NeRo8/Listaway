@@ -104,7 +104,7 @@ export default StyleSheet.create({
   },
   rightTopMenu: {
     position: 'absolute',
-    top: 30,
+    top: 20,
     right: 10,
   },
 });

@@ -7,8 +7,6 @@ export const TOUR_SET_PHOTO_LIST = 'TOUR_SET_PHOTO_LIST';
 export const SET_ERROR = 'SET_ERROR_TOUR';
 export const SET_LOADING = 'SET_LOADING_TOUR';
 
-import {Platform} from 'react-native';
-
 import {addPhotoToTour} from './toursActions';
 
 import moment from 'moment';

@@ -129,7 +129,7 @@ class EditTourScreen extends Component {
         return {
           uri: i.path,
           type: i.mime,
-          name: i.filename,
+          name: i.size,
         };
       });
       //Екшен на до додавання фоток в масив(редюсер)
