@@ -4,6 +4,16 @@ import {colors} from '../../constants';
 import {fonts} from '../../constants';
 
 export default StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingBottom: 20,
+  },
+  deleteIcon: {
+    position: 'absolute',
+    right: 10,
+    top: 10,
+    zIndex: 2,
+  },
   header: {
     alignItems: 'center',
     paddingTop: Platform.OS === 'ios' ? 40 : 20,
@@ -91,5 +101,10 @@ export default StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  rightTopMenu: {
+    position: 'absolute',
+    top: 30,
+    right: 10,
   },
 });

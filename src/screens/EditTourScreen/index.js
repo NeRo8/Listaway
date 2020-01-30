@@ -2,12 +2,6 @@ import EditTourScreen from './EditTourScreen';
 
 import {connect} from 'react-redux';
 
-import {
-  createTour,
-  clearError,
-  getTourPictures,
-} from '../../actions/toursActions';
-
 import * as editTourAction from '../../actions/editTourAction';
 
 const mapStateToProps = state => {

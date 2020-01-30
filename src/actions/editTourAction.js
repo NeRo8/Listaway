@@ -92,32 +92,16 @@ export const updateTour = tourData => dispatch => {
 
   API.post('/user/update_tour', updatingTour, {
     headers: {'Content-Type': 'multipart/form-data'},
-  }).then(responce => {
-    console.log('Update tour responce: ', responce);
-  });
-  //.then(addPhotoToTour(tourData.tourID, pictureList));
+  })
+    .then(response => {
+      console.log('Update tour responce: ', response.data);
+    })
+    .catch(error => console.log('Error with update toure', error));
 };
 
 export const updatePhoto = (tourData, pictureList) => dispatch => {
   const addingPhotos = pictureList.filter(
     photo => photo.posterID === undefined,
   );
-
   dispatch(addPhotoToTour(tourData.tourID, addingPhotos));
 };
-//   //Вот тут я реалізував через проход масива а має бути що ти посиалєш масив в запросі
-//   photoL.forEach(photo => {
-//     const dataIncome = new FormData();
-//     dataIncome.append('tourid', tourData.tourID);
-//     dataIncome.append('photo', photo);
-
-//     API.post('/user/add_photo_for_tour', dataIncome, {
-//       headers: {'Content-Type': 'multipart/form-data'},
-//     })
-//       .then(response => console.log('add photo response', response.data))
-//       .catch(error => {
-//         console.log('Error ' + error);
-//       });
-//   });
-//   dispatch(setLoading(false));
-// };

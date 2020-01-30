@@ -24,18 +24,50 @@ import LoadingView from '../../components/Loading';
 import {globalStyles, colors} from '../../constants';
 import styles from './styles';
 
+const ItemImage = ({item, drag, onRemove, editable}) => (
+  <View>
+    {editable ? (
+      <Icon
+        color="red"
+        size={30}
+        name="ios-trash"
+        type="ionicon"
+        underlayColor="transparent"
+        containerStyle={styles.deleteIcon}
+        onPress={() => onRemove(item.mediaID)}
+      />
+    ) : null}
+
+    <TouchableOpacity
+      style={styles.block}
+      onLongPress={drag}
+      delayLongPress={300}>
+      <Image
+        source={
+          item.media_url !== undefined ? {uri: item.media_url} : {uri: item.uri}
+        }
+        style={{
+          width: '100%',
+          height: '100%',
+        }}
+      />
+    </TouchableOpacity>
+  </View>
+);
+
 class EditTourScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       edit: false,
-      valueIndex: 0,
+      editActive: false,
       showRightMenu: false,
-      playNow: null,
-      pausePlay: false,
       isScroll: true,
       isShowDialog: false,
       listViewDisplayed: false,
+      //Check creator is active user
+
+      showRightMenu: false,
       soundsList: [
         {
           id: 0,
@@ -71,31 +103,21 @@ class EditTourScreen extends Component {
     };
   }
 
+  componentDidMount() {
+    const {tourData, userid} = this.props;
+
+    if (tourData.userid === userid) {
+      this.setState({editActive: true});
+    }
+  }
+
   onRemove = id => {
     const {onDeletePicture} = this.props;
     onDeletePicture(id);
   };
 
-  handlePressAdd = () => {
-    {
-      this.state.edit === false
-        ? null
-        : this.setState({
-            showRightMenu: !this.state.showRightMenu,
-          });
-    }
-  };
-
   handlePressPickImage = () => {
     const {onAddPicture} = this.props;
-    const options = {
-      title: 'Select Avatar',
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-    // Open Image Library:
 
     ImageMultiplePicker.openPicker({
       multiple: true,
@@ -105,18 +127,13 @@ class EditTourScreen extends Component {
     }).then(images => {
       const newPhotoList = images.map(i => {
         return {
-          mediaID: Math.random().toString(),
           uri: i.path,
           type: i.mime,
-          fileName: i.size.toString(),
+          name: i.filename,
         };
       });
       //Екшен на до додавання фоток в масив(редюсер)
       onAddPicture(newPhotoList);
-      console.log('images', newPhotoList);
-      this.setState({
-        photoList: this.state.photoList.concat(newPhotoList),
-      });
     });
   };
 
@@ -124,16 +141,20 @@ class EditTourScreen extends Component {
     this.setState({isShowDialog: true});
   };
 
-  handlePressSong = (uriIncome, index) => {
-    if (this.state.playNow !== null && index === this.state.playNow.id) {
-      this.setState({
-        playNow: null,
-      });
-    } else {
-      this.setState({
-        playNow: {uri: uriIncome.uri, id: index},
-      });
-    }
+  movePicture = pictureList => {
+    const {onMovePicture} = this.props;
+    onMovePicture(pictureList);
+  };
+
+  changeLocation = value => {
+    const {onChangeField} = this.props;
+    onChangeField('tour_location', value);
+  };
+
+  onPressEdit = () => {
+    this.setState({
+      showRightMenu: !this.state.showRightMenu,
+    });
   };
 
   handlePressRadioButton = id => {
@@ -144,102 +165,25 @@ class EditTourScreen extends Component {
     this.setState({soundsList: newSoundsList});
   };
 
-  soundSelect = (value, index) => {
-    const {valueIndex, radio_props, selectedSong} = this.state;
-    this.setState({
-      playNow: {uri: value, id: value},
-    });
-  };
-
   handlePressSaveMusic = () => {
     const {onChangeField} = this.props;
     const {soundsList} = this.state;
     const sound = soundsList.find(i => i.active === true);
     this.setState({
       isShowDialog: false,
-      playNow: null,
-      selectedSong: sound.label,
     });
     onChangeField('music_name', sound.label);
-
-    //this.state.songList.length = 0;
-    //this.state.songList.push(this.state.playNow);
   };
 
-  movePicture = pictureList => {
-    const {onMovePicture} = this.props;
-    onMovePicture(pictureList);
-  };
+  handlePressSave = () => {
+    const {onEditTour, tourData, pictureList} = this.props;
 
-  changeLocation = value => {
-    const {onChangeField} = this.props;
-    const name = 'tour_location';
-    onChangeField(name, value);
-  };
-
-  // order = async () => {
-  //   const {onEditTour} = this.props;
-  //   // if (photoList.length === 0 || location === null) {
-  //   //   return alert('Please, select a location, and at least 1 picture');
-  //   // } else onCreateTour(userid, location, photoList, selectedSong);
-  //   onEditTour();
-  // };
-
-  handlePressEdit = () => {
-    const {onEditTour} = this.props;
-    const {tourData, pictureList} = this.props;
-    this.setState({edit: !this.state.edit, showRightMenu: false});
-    {
-      this.state.edit === true ? onEditTour(tourData, pictureList) : null;
-    }
-  };
-
-  renderItem = ({item, drag}) => {
-    return (
-      <View>
-        <View
-          style={{
-            zIndex: 4,
-            position: 'absolute',
-            right: 10,
-            top: 10,
-          }}>
-          <TouchableNativeFeedback onPress={() => this.onRemove(item.mediaID)}>
-            <View>
-              <Icon
-                color="red"
-                size={45}
-                name="close-circle-outline"
-                type="material-community"
-                underlayColor="transparent"
-              />
-            </View>
-          </TouchableNativeFeedback>
-        </View>
-
-        <TouchableOpacity
-          style={styles.block}
-          onLongPress={drag}
-          delayLongPress={500}>
-          <Image
-            source={
-              item.media_url !== undefined
-                ? {uri: item.media_url}
-                : {uri: item.uri}
-            }
-            style={{
-              width: '100%',
-              height: '100%',
-            }}
-          />
-        </TouchableOpacity>
-      </View>
-    );
+    onEditTour(tourData, pictureList);
   };
 
   render() {
     const {loading, pictureList, tourData} = this.props;
-    const {tempImageList, edit} = this.state;
+    const {edit} = this.state;
 
     if (loading) {
       return (
@@ -250,7 +194,7 @@ class EditTourScreen extends Component {
     }
 
     return (
-      <View style={{minHeight: '100%', flexGrow: 1}}>
+      <View style={styles.container}>
         <StatusBar
           translucent={true}
           backgroundColor="transparent"
@@ -280,7 +224,7 @@ class EditTourScreen extends Component {
           </View>
         </View>
         <View style={styles.containerBody}>
-          <View style={{}}>
+          <View>
             <ScrollView
               scrollEnabled={this.state.isScroll}
               contentContainerStyle={globalStyles.containerFull}
@@ -302,7 +246,7 @@ class EditTourScreen extends Component {
                     listViewDisplayed: false,
                   });
                 }}
-                editable={edit === false ? false : true}
+                editable={edit}
                 placeholder={'Enter location'}
                 getDefaultValue={() => `${tourData.tour_location}`}
                 minLength={2}
@@ -338,69 +282,62 @@ class EditTourScreen extends Component {
           </View>
           <View style={styles.photoBlock}>
             <Text style={styles.label}>Photos:</Text>
-            <View style={{flex: 1}}>
-              <DraggableFlatList
-                data={pictureList}
-                renderItem={this.renderItem}
-                keyExtractor={item => `draggable-item-${item.mediaID}`}
-                onDragEnd={({data}) => this.movePicture(data)}
-              />
-            </View>
-          </View>
-          <View style={styles.bottomBtnsView}>
-            <Button
-              title={edit === false ? 'Edit Tour' : 'Save Changes'}
-              titleStyle={styles.btnTitleWhite}
-              buttonStyle={
-                edit === false ? styles.btnStyleWhite : styles.btnEditActive
-              }
-              containerStyle={styles.btnContainerStyle}
-              onPress={this.handlePressEdit}
+
+            <DraggableFlatList
+              data={pictureList}
+              renderItem={({item, drag}) => (
+                <ItemImage
+                  item={item}
+                  drag={drag}
+                  onRemove={this.onRemove}
+                  editable={this.state.editActive}
+                />
+              )}
+              keyExtractor={(item, index) => `draggable-item-${index}`}
+              onDragEnd={({data}) => this.movePicture(data)}
             />
           </View>
         </View>
-        <View
-          style={{
-            position: 'absolute',
-            top: 30,
-            right: 10,
-          }}>
-          <Icon
-            reverse
-            name="ios-add"
-            type="ionicon"
-            color={colors.LIGHT_GREEN}
-            size={24}
-            onPress={this.handlePressAdd}
-          />
-          {this.state.showRightMenu ? (
-            <View>
-              <Icon
-                reverse
-                name="ios-images"
-                type="ionicon"
-                color={colors.LIGHT_GREEN}
-                size={24}
-                onPress={this.handlePressPickImage}
-              />
-              <Icon
-                reverse
-                name="ios-musical-notes"
-                type="ionicon"
-                color={colors.LIGHT_GREEN}
-                size={24}
-                onPress={this.handlePressAddSong} //this.handlePressSong}
-              />
-            </View>
-          ) : (
-            <View />
-          )}
-        </View>
-
-        {loading ? (
-          <LoadingView loadingText="Creating Tour..." hide={true} />
+        {this.state.editActive ? (
+          <View style={styles.rightTopMenu}>
+            <Icon
+              reverse
+              name="create"
+              type="ion-icon"
+              color={colors.LIGHT_GREEN}
+              size={20}
+              onPress={this.onPressEdit}
+            />
+            {this.state.showRightMenu ? (
+              <View>
+                <Icon
+                  reverse
+                  name="ios-images"
+                  type="ionicon"
+                  color={colors.LIGHT_GREEN}
+                  size={20}
+                  onPress={this.handlePressPickImage}
+                />
+                <Icon
+                  reverse
+                  name="ios-musical-notes"
+                  type="ionicon"
+                  color={colors.LIGHT_GREEN}
+                  size={20}
+                  onPress={this.handlePressAddSong} //this.handlePressSong}
+                />
+                <Icon
+                  reverse
+                  name="ios-save"
+                  type="ionicon"
+                  color={colors.LIGHT_GREEN}
+                  size={20}
+                  onPress={this.handlePressSave} //this.handlePressSong}
+                />
+              </View>
+            ) : null}
+          </View>
         ) : null}
-
         <RadioGroup
           visible={this.state.isShowDialog}
           soundsList={this.state.soundsList}
