@@ -26,14 +26,8 @@ class CreateTour extends Component {
     super(props);
     this.state = {
       photoList: [],
-      songList: [],
-      selectedSong: 'bensound-sunny',
-      valueIndex: 0,
       showRightMenu: false,
-      playNow: null,
-      pausePlay: false,
       location: null,
-      isScroll: true,
       isShowDialog: false,
       previewActive: false,
       soundsList: [
@@ -69,29 +63,19 @@ class CreateTour extends Component {
         },
       ],
     };
-
-    this.onRemove = this.onRemove.bind(this);
   }
+
   onRemove(item) {
-    let newPhotoList = [];
-    newPhotoList = this.state.photoList.filter(photo => photo.uri !== item.uri);
+    const {photoList} = this.state;
+    let newPhotoList = photoList.filter(photo => photo.uri !== item.uri);
     this.setState({photoList: newPhotoList});
     this.forceUpdate();
   }
-  getColor() {
-    let r = this.randomRGB();
-    let g = this.randomRGB();
-    let b = this.randomRGB();
-    return 'rgb(' + r + ', ' + g + ', ' + b + ')';
-  }
-
-  randomRGB = () => 160 + Math.random() * 85;
 
   handlePressAdd = () => {
     this.setState({
       showRightMenu: !this.state.showRightMenu,
     });
-    console.log('Move', this.state.photoList);
   };
 
   handlePressPickImage = () => {
@@ -104,36 +88,14 @@ class CreateTour extends Component {
       const newPhotoList = images.map(i => {
         return {
           uri: i.path,
-          width: i.width,
-          height: i.height,
           type: i.mime,
-          fileName: i.mime,
-          fullWidth: true,
-          duration: 15000,
-          title: '',
+          name: i.filename,
         };
       });
-
       this.setState({
         photoList: this.state.photoList.concat(newPhotoList),
       });
     });
-  };
-
-  handlePressAddSong = async () => {
-    this.setState({isShowDialog: true});
-  };
-
-  handlePressSong = (uriIncome, index) => {
-    if (this.state.playNow !== null && index === this.state.playNow.id) {
-      this.setState({
-        playNow: null,
-      });
-    } else {
-      this.setState({
-        playNow: {uri: uriIncome.uri, id: index},
-      });
-    }
   };
 
   handlePressPreview = () => {
@@ -150,63 +112,54 @@ class CreateTour extends Component {
     const newSoundsList = soundsList.map(sound =>
       sound.id === id ? {...sound, active: true} : {...sound, active: false},
     );
+
     this.setState({soundsList: newSoundsList});
   };
 
-  soundSelect = (value, index) => {
-    const {valueIndex, radio_props, selectedSong} = this.state;
+  onShowMusicSelector = () => {
     this.setState({
-      playNow: {uri: value, id: value},
+      isShowDialog: true,
     });
   };
 
   handlePressSaveMusic = () => {
-    const {soundsList} = this.state;
-    const sound = soundsList.find(i => i.active === true);
     this.setState({
       isShowDialog: false,
-      playNow: null,
-      selectedSong: sound.label,
     });
-    this.state.songList.length = 0;
-    this.state.songList.push(this.state.playNow);
   };
 
-  handlePressOrder = async () => {
-    const {photoList, selectedSong, location} = this.state;
+  handlePressOrder = () => {
+    const {photoList, soundsList, location} = this.state;
     const {userid, onCreateTour} = this.props;
+
+    var selectedSong = soundsList.find(sound => sound.active === true);
     if (photoList.length === 0 || location === null) {
       return alert('Please, select a location, and at least 1 picture');
-    } else onCreateTour(userid, location, photoList, selectedSong);
+    } else onCreateTour(userid, location, photoList, selectedSong.label);
   };
 
   renderItem = ({item, drag}) => {
     return (
       <View>
-        <View
-          style={{
+        <Icon
+          color="red"
+          size={40}
+          name="ios-trash"
+          type="ionicon"
+          underlayColor="transparent"
+          containerStyle={{
             zIndex: 4,
             position: 'absolute',
             right: 10,
             top: 10,
-          }}>
-          <TouchableNativeFeedback onPress={() => this.onRemove(item)}>
-            <View>
-              <Icon
-                color="red"
-                size={45}
-                name="close-circle-outline"
-                type="material-community"
-                underlayColor="transparent"
-              />
-            </View>
-          </TouchableNativeFeedback>
-        </View>
+          }}
+          onPress={() => this.onRemove(item)}
+        />
 
         <TouchableOpacity
           style={styles.block}
           onLongPress={drag}
-          delayLongPress={500}>
+          delayLongPress={300}>
           <Image
             source={{uri: item.uri}}
             style={{
@@ -220,8 +173,6 @@ class CreateTour extends Component {
   };
 
   render() {
-    const {loading} = this.props;
-    const {radio_props, selectedSong, valueIndex} = this.state;
     return (
       <View style={{flex: 1, paddingBottom: 20}}>
         <StatusBar
@@ -257,7 +208,6 @@ class CreateTour extends Component {
         <View style={styles.containerBody}>
           <View style={{}}>
             <ScrollView
-              scrollEnabled={this.state.isScroll}
               contentContainerStyle={globalStyles.containerFull}
               keyboardShouldPersistTaps="always">
               <GooglePlacesAutocomplete
@@ -366,7 +316,7 @@ class CreateTour extends Component {
                 type="ionicon"
                 color={colors.LIGHT_GREEN}
                 size={24}
-                onPress={this.handlePressAddSong} //this.handlePressSong}
+                onPress={this.onShowMusicSelector} //this.handlePressSong}
               />
             </View>
           ) : (

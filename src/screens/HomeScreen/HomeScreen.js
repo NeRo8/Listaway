@@ -3,7 +3,6 @@ import {
   View,
   Text,
   BackHandler,
-  SafeAreaView,
   StatusBar,
   Image,
   Alert,
@@ -17,7 +16,6 @@ import {SwipeListView} from 'react-native-swipe-list-view';
 import {Grayscale, rgba} from 'react-native-color-matrix-image-filters';
 
 import styles from './styles';
-import navigation from '../../navigation';
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -29,6 +27,25 @@ class HomeScreen extends Component {
       isVisibleBackgroundOfFlatSwipe: false,
       grayscaleValue: 0,
     };
+  }
+
+  componentDidMount = async () => {
+    const {userid, getToursList} = this.props;
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+
+    this.props.navigation.addListener('didFocus', payload =>
+      getToursList(userid),
+    );
+
+    Animated.spring(this.state.animatedValue, {
+      toValue: 1,
+      tension: -10,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
   }
 
   _renderItem = ({item}) => {
@@ -115,27 +132,6 @@ class HomeScreen extends Component {
       </Animated.View>
     );
   };
-
-  componentDidMount = async () => {
-    const {userid, getToursList} = this.props;
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-
-    this.props.navigation.addListener('didFocus', payload =>
-      getToursList(userid),
-    );
-
-    Animated.spring(this.state.animatedValue, {
-      toValue: 1,
-      tension: -10,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  componentDidUpdate = () => {};
-
-  componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-  }
 
   handlePressDelete = async deletingTourId => {
     const {onDeleteTour} = this.props;

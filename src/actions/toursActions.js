@@ -112,10 +112,6 @@ export const createTour = (
     })
     .then(tour => {
       dispatch(addPhotoToTour(tour.tourID, photoL));
-      return tour;
-    })
-    .then(() => {
-      dispatch(setLoading(false));
     })
     .catch(error => {
       dispatch(setLoading(false));
@@ -172,29 +168,14 @@ export const tourStatus = (tourId, isActive, postTime) => dispatch => {
 };
 
 export const addPhotoToTour = (tourID, photoList) => dispatch => {
-  const photoL = photoList.map(photo => {
-    return {
-      name: photo.fileName,
-      type: photo.type === null ? 'image/jpeg' : photo.type,
-      uri:
-        Platform.OS === 'android'
-          ? photo.uri
-          : photo.uri.replace('file://', ''),
-    };
-  });
-
-  //Вот тут я реалізував через проход масива а має бути що ти посиалєш масив в запросі
-
-  photoL.forEach(photo => {
+  photoList.forEach(photo => {
     const dataIncome = new FormData();
     dataIncome.append('tourID', tourID);
     dataIncome.append('photo', photo);
-    console.log('qwe', dataIncome);
 
     API.post('/user/add_photo_for_tour', dataIncome, {
       headers: {'Content-Type': 'multipart/form-data'},
     })
-
       .then(response =>
         console.log('add picture in create action:', response.data),
       )
