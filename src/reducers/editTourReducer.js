@@ -39,12 +39,19 @@ const editTourReducer = (state = initState, action) => {
       return {
         ...state,
         pictureList: state.pictureList.filter(
-          picture => picture.id !== action.payload,
+          picture => picture.mediaID !== action.payload,
         ),
       };
     }
 
     case TOUR_SET_PHOTO_LIST: {
+      return {
+        ...state,
+        pictureList: action.payload,
+      };
+    }
+
+    case TOUR_MOVE_PICTURE: {
       return {
         ...state,
         pictureList: action.payload,

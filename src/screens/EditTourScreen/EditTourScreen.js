@@ -28,6 +28,7 @@ class EditTourScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      edit: false,
       valueIndex: 0,
       showRightMenu: false,
       playNow: null,
@@ -70,22 +71,23 @@ class EditTourScreen extends Component {
     };
   }
 
-  onRemove(item) {
-    let newPhotoList = [];
-    newPhotoList = this.state.photoList.filter(
-      photo => photo.media_url !== item.media_url,
-    );
-    this.setState({photoList: newPhotoList});
-    this.forceUpdate();
-  }
+  onRemove = id => {
+    const {onDeletePicture} = this.props;
+    onDeletePicture(id);
+  };
 
   handlePressAdd = () => {
-    this.setState({
-      showRightMenu: !this.state.showRightMenu,
-    });
+    {
+      this.state.edit === false
+        ? null
+        : this.setState({
+            showRightMenu: !this.state.showRightMenu,
+          });
+    }
   };
 
   handlePressPickImage = () => {
+    const {onAddPicture} = this.props;
     const options = {
       title: 'Select Avatar',
       storageOptions: {
@@ -103,17 +105,15 @@ class EditTourScreen extends Component {
     }).then(images => {
       const newPhotoList = images.map(i => {
         return {
-          media_url: i.path,
-          width: i.width,
-          height: i.height,
+          mediaID: Math.random().toString(),
+          uri: i.path,
           type: i.mime,
-          fileName: i.mime,
-          fullWidth: true,
-          duration: 15000,
-          title: '',
+          fileName: i.size.toString(),
         };
       });
       //Екшен на до додавання фоток в масив(редюсер)
+      onAddPicture(newPhotoList);
+      console.log('images', newPhotoList);
       this.setState({
         photoList: this.state.photoList.concat(newPhotoList),
       });
@@ -152,6 +152,7 @@ class EditTourScreen extends Component {
   };
 
   handlePressSaveMusic = () => {
+    const {onChangeField} = this.props;
     const {soundsList} = this.state;
     const sound = soundsList.find(i => i.active === true);
     this.setState({
@@ -159,16 +160,38 @@ class EditTourScreen extends Component {
       playNow: null,
       selectedSong: sound.label,
     });
-    this.state.songList.length = 0;
-    this.state.songList.push(this.state.playNow);
+    onChangeField('music_name', sound.label);
+
+    //this.state.songList.length = 0;
+    //this.state.songList.push(this.state.playNow);
   };
 
-  handlePressOrder = async () => {
-    const {photoList, selectedSong, location} = this.state;
-    const {userid, onCreateTour} = this.props;
-    if (photoList.length === 0 || location === null) {
-      return alert('Please, select a location, and at least 1 picture');
-    } else onCreateTour(userid, location, photoList, selectedSong);
+  movePicture = pictureList => {
+    const {onMovePicture} = this.props;
+    onMovePicture(pictureList);
+  };
+
+  changeLocation = value => {
+    const {onChangeField} = this.props;
+    const name = 'tour_location';
+    onChangeField(name, value);
+  };
+
+  // order = async () => {
+  //   const {onEditTour} = this.props;
+  //   // if (photoList.length === 0 || location === null) {
+  //   //   return alert('Please, select a location, and at least 1 picture');
+  //   // } else onCreateTour(userid, location, photoList, selectedSong);
+  //   onEditTour();
+  // };
+
+  handlePressEdit = () => {
+    const {onEditTour} = this.props;
+    const {tourData, pictureList} = this.props;
+    this.setState({edit: !this.state.edit, showRightMenu: false});
+    {
+      this.state.edit === true ? onEditTour(tourData, pictureList) : null;
+    }
   };
 
   renderItem = ({item, drag}) => {
@@ -181,7 +204,7 @@ class EditTourScreen extends Component {
             right: 10,
             top: 10,
           }}>
-          <TouchableNativeFeedback onPress={() => this.onRemove(item)}>
+          <TouchableNativeFeedback onPress={() => this.onRemove(item.mediaID)}>
             <View>
               <Icon
                 color="red"
@@ -199,7 +222,11 @@ class EditTourScreen extends Component {
           onLongPress={drag}
           delayLongPress={500}>
           <Image
-            source={{uri: item.media_url}}
+            source={
+              item.media_url !== undefined
+                ? {uri: item.media_url}
+                : {uri: item.uri}
+            }
             style={{
               width: '100%',
               height: '100%',
@@ -212,22 +239,16 @@ class EditTourScreen extends Component {
 
   render() {
     const {loading, pictureList, tourData} = this.props;
-    const {
-      radio_props,
-      selectedSong,
-      valueIndex,
-      location,
-      tourInfo,
-    } = this.state;
+    const {tempImageList, edit} = this.state;
 
     if (loading) {
-      return <ActivityIndicator size="large" color="red" />;
+      return (
+        <View style={{height: '100%', justifyContent: 'center'}}>
+          <ActivityIndicator size="large" color={colors.LIGHT_BLUE} />
+        </View>
+      );
     }
 
-    // if (this.state.photoList === undefined)
-    //   setTimeout(() => {
-    //     return <ActivityIndicator size="large" color="red" />;
-    //   }, 1000);
     return (
       <View style={{minHeight: '100%', flexGrow: 1}}>
         <StatusBar
@@ -275,11 +296,13 @@ class EditTourScreen extends Component {
                 renderDescription={row => row.description}
                 nearbyPlacesAPI="GooglePlacesSearch" // Which API to use:
                 onPress={(data, details = null) => {
+                  this.changeLocation(data.description);
                   this.setState({
-                    location: data.description,
+                    //location: data.description,
                     listViewDisplayed: false,
                   });
                 }}
+                editable={edit === false ? false : true}
                 placeholder={'Enter location'}
                 getDefaultValue={() => `${tourData.tour_location}`}
                 minLength={2}
@@ -319,18 +342,20 @@ class EditTourScreen extends Component {
               <DraggableFlatList
                 data={pictureList}
                 renderItem={this.renderItem}
-                keyExtractor={item => `draggable-item-${item.media_url}`}
-                onDragEnd={({data}) => this.setState({photoList: data})}
+                keyExtractor={item => `draggable-item-${item.mediaID}`}
+                onDragEnd={({data}) => this.movePicture(data)}
               />
             </View>
           </View>
           <View style={styles.bottomBtnsView}>
             <Button
-              title="Edit Tour"
+              title={edit === false ? 'Edit Tour' : 'Save Changes'}
               titleStyle={styles.btnTitleWhite}
-              buttonStyle={styles.btnStyleWhite}
+              buttonStyle={
+                edit === false ? styles.btnStyleWhite : styles.btnEditActive
+              }
               containerStyle={styles.btnContainerStyle}
-              onPress={this.handlePressOrder}
+              onPress={this.handlePressEdit}
             />
           </View>
         </View>

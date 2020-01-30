@@ -171,7 +171,7 @@ export const tourStatus = (tourId, isActive, postTime) => dispatch => {
     });
 };
 
-const addPhotoToTour = (tourID, photoList) => dispatch => {
+export const addPhotoToTour = (tourID, photoList) => dispatch => {
   const photoL = photoList.map(photo => {
     return {
       name: photo.fileName,
@@ -184,15 +184,20 @@ const addPhotoToTour = (tourID, photoList) => dispatch => {
   });
 
   //Вот тут я реалізував через проход масива а має бути що ти посиалєш масив в запросі
+
   photoL.forEach(photo => {
     const dataIncome = new FormData();
     dataIncome.append('tourID', tourID);
     dataIncome.append('photo', photo);
+    console.log('qwe', dataIncome);
 
     API.post('/user/add_photo_for_tour', dataIncome, {
       headers: {'Content-Type': 'multipart/form-data'},
     })
-      .then(response => console.log(response.data))
+
+      .then(response =>
+        console.log('add picture in create action:', response.data),
+      )
       .catch(error => {
         console.log('Error ' + error);
       });

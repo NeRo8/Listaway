@@ -42,6 +42,13 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.LIGHT_BLUE,
   },
+  btnEditActive: {
+    backgroundColor: colors.EDIT,
+    height: 40,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: colors.LIGHT_BLUE,
+  },
   label: {
     color: colors.LIGHT_BLUE,
     fontFamily: fonts.notoRegular,

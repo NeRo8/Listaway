@@ -123,7 +123,7 @@ class CreateTour extends Component {
           title: '',
         };
       });
-      console.log(newPhotoList);
+      console.log('add photos on create tour:', newPhotoList);
 
       this.setState({
         photoList: this.state.photoList.concat(newPhotoList),
