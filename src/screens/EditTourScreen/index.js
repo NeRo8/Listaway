@@ -28,7 +28,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(editTourAction.addPicture(picture));
     },
     onEditTour: (tourData, pictureList) => {
-      dispatch(editTourAction.updateTour(tourData));
+      dispatch(editTourAction.updateTour(tourData, pictureList));
       dispatch(editTourAction.updatePhoto(tourData, pictureList));
     },
   };

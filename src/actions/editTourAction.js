@@ -79,7 +79,13 @@ export const getTourPictures = tourId => dispatch => {
     });
 };
 
-export const updateTour = tourData => dispatch => {
+export const updateTour = (tourData, photoList) => dispatch => {
+  let orderList = '';
+
+  photoList.forEach(photo => {
+    orderList = orderList.concat(`${photo.mediaID.toString()},`);
+  });
+
   const updatingTour = new FormData();
   updatingTour.append('tourid', tourData.tourID);
   updatingTour.append('posttime', moment().format('YYYY:MM:DD HH:mm:ss'));
@@ -87,6 +93,7 @@ export const updateTour = tourData => dispatch => {
   updatingTour.append('tourlocation', tourData.tour_location);
   updatingTour.append('music_name', tourData.music_name);
   updatingTour.append('is_active', tourData.is_active);
+  updatingTour.append('photo_order', orderList);
 
   API.post('/user/update_tour', updatingTour, {
     headers: {'Content-Type': 'multipart/form-data'},

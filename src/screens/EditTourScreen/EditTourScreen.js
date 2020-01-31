@@ -104,10 +104,24 @@ class EditTourScreen extends Component {
   }
 
   componentDidMount() {
-    const {tourData, userid} = this.props;
+    const {tourData, pictureList, userid, onMovePicture} = this.props;
 
     if (tourData.userid === userid) {
       this.setState({editActive: true});
+    }
+
+    if (tourData.photo_order !== '') {
+      let newPictureList = [];
+
+      const imageArray = tourData.photo_order.split(',');
+      imageArray.forEach(photo => {
+        var image = pictureList.find(picture => picture.mediaID === photo);
+        if (image !== undefined) {
+          //console.warn(image);
+          newPictureList.push(image);
+        }
+      });
+      onMovePicture(newPictureList);
     }
   }
 
