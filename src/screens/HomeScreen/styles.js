@@ -7,6 +7,7 @@ export default StyleSheet.create({
     alignItems: 'flex-start',
     paddingLeft: 15,
     paddingBottom: 10,
+    paddingTop: 20,
     justifyContent: 'center',
   },
   titleView: {

@@ -7,19 +7,15 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
-  FlatList,
 } from 'react-native';
 
-import {Icon, Button} from 'react-native-elements';
-import ImagePicker from 'react-native-image-picker';
+import {Icon} from 'react-native-elements';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import ImageMultiplePicker from 'react-native-image-crop-picker';
 import DraggableFlatList from 'react-native-draggable-flatlist';
-import {TouchableNativeFeedback} from 'react-native-gesture-handler';
 
 import GradientText from '../../components/GradientText';
 import RadioGroup from '../../components/RadioGroup';
-import LoadingView from '../../components/Loading';
 
 import {globalStyles, colors} from '../../constants';
 import styles from './styles';
@@ -59,7 +55,6 @@ class EditTourScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      edit: false,
       editActive: false,
       showRightMenu: false,
       isScroll: true,
@@ -222,13 +217,13 @@ class EditTourScreen extends Component {
               justifyContent: 'center',
             }}>
             <Icon
-              name="menu"
+              name="chevron-left"
               type="material-community"
-              color={colors.LIGHT_GREEN}
+              color="white"
               underlayColor="transparent"
-              size={32}
+              size={38}
               onPress={() => {
-                this.props.navigation.openDrawer();
+                this.props.navigation.goBack();
               }}
             />
           </View>
@@ -260,7 +255,7 @@ class EditTourScreen extends Component {
                     listViewDisplayed: false,
                   });
                 }}
-                editable={edit}
+                editable={this.state.editActive}
                 placeholder={'Enter location'}
                 getDefaultValue={() => `${tourData.tour_location}`}
                 minLength={2}
