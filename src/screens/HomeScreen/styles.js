@@ -1,20 +1,19 @@
-import {StyleSheet, Platform} from 'react-native';
+import {StyleSheet} from 'react-native';
 
-import {colors, fonts} from '../../constants';
+import {fonts} from '../../constants';
 
 export default StyleSheet.create({
   header: {
     alignItems: 'flex-start',
     paddingLeft: 15,
-    paddingTop: Platform.OS === 'ios' ? 40 : 20,
     paddingBottom: 10,
     justifyContent: 'center',
   },
   titleView: {
     backgroundColor: 'rgba(0,0,0,0.1)',
     width: '100%',
-    height: 250,
-    marginTop: -250,
+    height: 125,
+
     paddingHorizontal: 10,
     alignItems: 'center',
     justifyContent: 'center',

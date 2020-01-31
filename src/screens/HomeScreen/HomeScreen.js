@@ -8,6 +8,8 @@ import {
   Alert,
   Animated,
   TouchableOpacity,
+  SafeAreaView,
+  ImageBackground,
 } from 'react-native';
 
 import SwitchToggle from 'react-native-switch-toggle';
@@ -63,16 +65,18 @@ class HomeScreen extends Component {
             activeOpacity={0.8}
             onPress={() => this.onPressTour(item)}>
             <Grayscale amount={item.is_active === 'YES' ? false : true}>
-              <Image
-                style={{width: '100%', height: 250}}
-                source={require('../../assets/images/340599.jpg')}
-              />
+              <ImageBackground
+                style={{
+                  width: '100%',
+                  height: 125,
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}
+                source={require('../../assets/images/340599.jpg')}>
+                <Text style={styles.titleText}>{item.tour_location}</Text>
+                <Text style={styles.dataText}>{item.post_time}</Text>
+              </ImageBackground>
             </Grayscale>
-
-            <View style={styles.titleView}>
-              <Text style={styles.titleText}>{item.tour_location}</Text>
-              <Text style={styles.dataText}>{item.post_time}</Text>
-            </View>
           </TouchableOpacity>
         </View>
       </Animated.View>
@@ -157,7 +161,7 @@ class HomeScreen extends Component {
   render() {
     const {tourlist} = this.props;
     return (
-      <View style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1}}>
         <StatusBar barStyle="dark-content" />
         <View style={styles.header}>
           <Icon
@@ -183,7 +187,7 @@ class HomeScreen extends Component {
             closeOnRowBeginSwipe={true}
           />
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 }

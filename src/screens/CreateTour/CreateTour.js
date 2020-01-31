@@ -130,12 +130,14 @@ class CreateTour extends Component {
 
   handlePressOrder = () => {
     const {photoList, soundsList, location} = this.state;
-    const {userid, onCreateTour} = this.props;
+    const {userid, onCreateTour, navigation} = this.props;
 
     var selectedSong = soundsList.find(sound => sound.active === true);
     if (photoList.length === 0 || location === null) {
       return alert('Please, select a location, and at least 1 picture');
     } else onCreateTour(userid, location, photoList, selectedSong.label);
+
+    navigation.goBack();
   };
 
   renderItem = ({item, drag}) => {
