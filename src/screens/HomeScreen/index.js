@@ -12,6 +12,7 @@ const mapStateToProps = state => {
   return {
     userid: state.users.user.userid,
     tourlist: state.tours.tours,
+    loading: state.tours.loading,
   };
 };
 

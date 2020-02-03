@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['users', 'editTour'],
+  whitelist: ['users'],
 };
 
 const rootReducer = combineReducers({

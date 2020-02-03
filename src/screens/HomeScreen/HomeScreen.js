@@ -17,6 +17,8 @@ import {Icon} from 'react-native-elements';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import {Grayscale, rgba} from 'react-native-color-matrix-image-filters';
 
+import Loading from '../../components/Loading';
+
 import styles from './styles';
 
 class HomeScreen extends Component {
@@ -96,7 +98,6 @@ class HomeScreen extends Component {
         ? (item.is_active = 'NO')
         : (item.is_active = 'YES');
     onUpdateStatus(item.tourID, isActive, item.post_time);
-    this.forceUpdate();
   };
 
   _renderHiddenItem = ({item}) => {
@@ -159,7 +160,11 @@ class HomeScreen extends Component {
   }
 
   render() {
-    const {tourlist} = this.props;
+    const {tourlist, loading} = this.props;
+
+    if (loading) {
+      <Loading />;
+    }
     return (
       <SafeAreaView style={{flex: 1}}>
         <StatusBar barStyle="dark-content" />
@@ -174,19 +179,18 @@ class HomeScreen extends Component {
             }}
           />
         </View>
-        <View>
-          <SwipeListView
-            keyExtractor={item => item.tourID}
-            data={tourlist}
-            disableRightSwipe={true}
-            renderItem={this._renderItem}
-            renderHiddenItem={this._renderHiddenItem}
-            rightOpenValue={-70}
-            closeOnRowPress={true}
-            closeOnRowOpen={true}
-            closeOnRowBeginSwipe={true}
-          />
-        </View>
+
+        <SwipeListView
+          keyExtractor={item => item.tourID}
+          data={tourlist}
+          disableRightSwipe={true}
+          renderItem={this._renderItem}
+          renderHiddenItem={this._renderHiddenItem}
+          rightOpenValue={-70}
+          closeOnRowPress={true}
+          closeOnRowOpen={true}
+          closeOnRowBeginSwipe={true}
+        />
       </SafeAreaView>
     );
   }
