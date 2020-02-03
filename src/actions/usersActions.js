@@ -3,7 +3,6 @@ import {Platform} from 'react-native';
 import {DEFAULT_URL} from '../config/server';
 
 import moment from 'moment';
-import axios from 'react-native-axios';
 
 export const SET_USER = 'SET_USER';
 export const SET_LOADING = 'SET_STATUS';
@@ -181,7 +180,7 @@ export const updateUser = (newProfile, photo = null) => dispatch => {
   axios({
     method: 'post',
     url:
-      'https://3.136.62.106/Listeasy/backend/index.php/user/user_update_profile',
+      'http://3.136.62.106/Listeasy/backend/index.php/user/user_update_profile',
     data: profile,
     headers: {'Content-Type': 'multipart/form-data'},
   })
@@ -199,30 +198,6 @@ export const updateUser = (newProfile, photo = null) => dispatch => {
       dispatch(setLoading(false));
       dispatch(setError(error));
     });
-
-  // fetch(`${DEFAULT_URL}/user/user_update_profile`, {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type':
-  //       'multipart/form-data;boundary=--------------------------777914024449089496744136',
-  //   },
-  //   body: profile,
-  // })
-  //   .then(response => response.json())
-  //   .then(responseJson => {
-  //     if (responseJson.status === 200) {
-  //       dispatch(setUser(responseJson.userinfo));
-  //       dispatch(setSuccess(true));
-  //       dispatch(setLoading(false));
-  //     } else {
-  //       dispatch(setError(responseJson));
-  //       dispatch(setLoading(false));
-  //     }
-  //   })
-  //   .catch(error => {
-  //     dispatch(setLoading(false));
-  //     dispatch(setError(error));
-  //   });
 };
 
 export const loginWithFacebook = token => dispatch => {
@@ -237,7 +212,7 @@ export const loginWithFacebook = token => dispatch => {
   //formData.append('action_time', '2019:12:19 04:13:50');
 
   fetch(
-    `https://3.136.62.106/Listeasy/backend/index.php/user/user_facebook_login`,
+    `http://3.136.62.106/Listeasy/backend/index.php/user/user_facebook_login`,
     {
       method: 'POST',
       headers: {
@@ -266,7 +241,7 @@ export const loginWithGoogle = token => dispatch => {
   dispatch(setLoading(true));
 
   fetch(
-    `https://3.136.62.106/Listeasy/backend/index.php/user/user_google_login`,
+    `http://3.136.62.106/Listeasy/backend/index.php/user/user_google_login`,
     {
       method: 'POST',
       headers: {
