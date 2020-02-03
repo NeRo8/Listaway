@@ -69,7 +69,6 @@ class CreateTour extends Component {
     const {photoList} = this.state;
     let newPhotoList = photoList.filter(photo => photo.uri !== item.uri);
     this.setState({photoList: newPhotoList});
-    this.forceUpdate();
   }
 
   handlePressAdd = () => {

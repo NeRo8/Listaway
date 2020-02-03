@@ -1,6 +1,7 @@
 import {Platform} from 'react-native';
 
 import {DEFAULT_URL} from '../config/server';
+import axios from 'react-native-axios';
 
 import moment from 'moment';
 
