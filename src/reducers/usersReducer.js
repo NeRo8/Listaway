@@ -19,7 +19,7 @@ const initState = {
     office_tel: '',
   },
   userAuth: false,
-  loading: true,
+  loading: false,
   error: null,
   success: false,
 };
