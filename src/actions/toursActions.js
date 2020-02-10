@@ -207,5 +207,4 @@ export const addPhotoToTour = (tourID, photoList) => dispatch => {
         console.log('Error ' + error);
       });
   });
-  dispatch(setLoading(false));
 };

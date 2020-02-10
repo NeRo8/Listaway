@@ -106,5 +106,6 @@ export default StyleSheet.create({
     position: 'absolute',
     top: Platform.OS === 'android' ? 20 : 30,
     right: 10,
+    flexDirection: 'row',
   },
 });

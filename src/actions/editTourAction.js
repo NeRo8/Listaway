@@ -5,7 +5,7 @@ export const TOUR_CHANGE_FIELD = 'TOUR_CHANGE_FIELD';
 export const TOUR_SET_TOUR = 'TOUR_SER_TOUR';
 export const TOUR_SET_PHOTO_LIST = 'TOUR_SET_PHOTO_LIST';
 export const SET_ERROR = 'SET_ERROR_TOUR';
-export const SET_LOADING = 'SET_LOADING_TOUR';
+export const SET_LOADING = 'SET_LOADING_EDIT_TOUR';
 
 import {addPhotoToTour} from './toursActions';
 
@@ -44,11 +44,12 @@ export const changeField = (name, value) => ({
 });
 
 export const setTour = tour => dispatch => {
+  dispatch(setLoading(true));
   dispatch({
     type: TOUR_SET_TOUR,
     payload: tour,
   });
-  dispatch(getTourPictures(tour.tourID));
+  dispatch(getTourPictures(tour));
 };
 
 export const setPhotos = photos => ({
@@ -56,18 +57,28 @@ export const setPhotos = photos => ({
   payload: photos,
 });
 
-export const getTourPictures = tourId => dispatch => {
-  dispatch(setLoading(true));
-
+export const getTourPictures = tourData => dispatch => {
   const getPictures = new FormData();
-  getPictures.append('tourID', tourId);
+  getPictures.append('tourID', tourData.tourID);
 
   API.post('/user/get_media_list_for_tour', getPictures, {
     headers: {'Content-Type': 'multipart/form-data'},
   })
     .then(response => {
       if (response.data.status === 200) {
-        dispatch(setPhotos(response.data.medialist));
+        const pictureList = response.data.medialist;
+        const newPictureList = [];
+
+        const imageArray = tourData.photo_order.split(',');
+        imageArray.forEach(photo => {
+          var image = pictureList.find(picture => picture.mediaID === photo);
+
+          if (image !== undefined) {
+            newPictureList.push(image);
+          }
+        });
+
+        dispatch(setPhotos(newPictureList));
       } else {
         dispatch(setError(response.data));
       }
@@ -80,6 +91,7 @@ export const getTourPictures = tourId => dispatch => {
 };
 
 export const updateTour = (tourData, photoList) => dispatch => {
+  dispatch(setLoading(true));
   let orderList = '';
 
   photoList.forEach(photo => {
@@ -109,4 +121,5 @@ export const updatePhoto = (tourData, pictureList) => dispatch => {
     photo => photo.posterID === undefined,
   );
   dispatch(addPhotoToTour(tourData.tourID, addingPhotos));
+  dispatch(setLoading(false));
 };
