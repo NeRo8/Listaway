@@ -6,9 +6,9 @@ import axios from 'react-native-axios';
 import moment from 'moment';
 
 export const SET_USER = 'SET_USER';
-export const SET_LOADING = 'SET_STATUS';
-export const SET_ERROR = 'SET_ERROR';
-export const SET_SUCCESS = 'SET_SUCCESS';
+export const SET_LOADING = 'SET_USER_LOADING';
+export const SET_ERROR = 'SET_USER_ERROR';
+export const SET_SUCCESS = 'SET_USER_SUCCESS';
 export const CHANGE_USER_FIELD = 'CHANGE_USER_FIELD';
 export const CLEAR_USER = 'CLEAR_USER';
 export const SET_USER_ID = 'SET_USER_ID';

@@ -13,6 +13,7 @@ import {Icon} from 'react-native-elements';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import ImageMultiplePicker from 'react-native-image-crop-picker';
 import DraggableFlatList from 'react-native-draggable-flatlist';
+import Loading from '../../components/Loading';
 
 import GradientText from '../../components/GradientText';
 import RadioGroup from '../../components/RadioGroup';
@@ -55,7 +56,7 @@ class EditTourScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editActive: false,
+      //editActive: false,
       showRightMenu: false,
       isScroll: true,
       isShowDialog: false,
@@ -96,30 +97,6 @@ class EditTourScreen extends Component {
         },
       ],
     };
-  }
-
-  componentDidMount() {
-    const {tourData, pictureList, userid, onMovePicture} = this.props;
-
-    if (tourData.userid === userid) {
-      this.setState({editActive: true});
-    }
-
-    if (tourData.photo_order !== '') {
-      let newPictureList = [];
-
-      const imageArray = tourData.photo_order.split(',');
-      imageArray.forEach(photo => {
-        if (pictureList !== null) {
-          var image = pictureList.find(picture => picture.mediaID === photo);
-          if (image !== undefined) {
-            //console.warn(image);
-            newPictureList.push(image);
-          }
-        }
-      });
-      onMovePicture(newPictureList);
-    }
   }
 
   onRemove = id => {
@@ -194,14 +171,10 @@ class EditTourScreen extends Component {
 
   render() {
     const {loading, pictureList, tourData} = this.props;
-    const {edit} = this.state;
+    const editActive = this.props.navigation.getParam('editActive', false);
 
     if (loading) {
-      return (
-        <View style={{height: '100%', justifyContent: 'center'}}>
-          <ActivityIndicator size="large" color={colors.LIGHT_BLUE} />
-        </View>
-      );
+      return <Loading loadingText="Loading" />;
     }
 
     return (
@@ -257,7 +230,7 @@ class EditTourScreen extends Component {
                     listViewDisplayed: false,
                   });
                 }}
-                editable={this.state.editActive}
+                editable={editActive}
                 placeholder={'Enter location'}
                 getDefaultValue={() => `${tourData.tour_location}`}
                 minLength={2}
@@ -293,7 +266,6 @@ class EditTourScreen extends Component {
           </View>
           <View style={styles.photoBlock}>
             <Text style={styles.label}>Photos:</Text>
-
             <DraggableFlatList
               data={pictureList}
               renderItem={({item, drag}) => (
@@ -301,7 +273,7 @@ class EditTourScreen extends Component {
                   item={item}
                   drag={drag}
                   onRemove={this.onRemove}
-                  editable={this.state.editActive}
+                  editable={editActive}
                 />
               )}
               keyExtractor={(item, index) => `draggable-item-${index}`}
@@ -309,44 +281,47 @@ class EditTourScreen extends Component {
             />
           </View>
         </View>
-        {this.state.editActive ? (
+        {editActive ? (
           <View style={styles.rightTopMenu}>
             <Icon
               reverse
-              name="create"
-              type="ion-icon"
+              name="ios-save"
+              type="ionicon"
               color={colors.LIGHT_GREEN}
               size={20}
-              onPress={this.onPressEdit}
+              onPress={this.handlePressSave} //this.handlePressSong}
             />
-            {this.state.showRightMenu ? (
-              <View>
-                <Icon
-                  reverse
-                  name="ios-images"
-                  type="ionicon"
-                  color={colors.LIGHT_GREEN}
-                  size={20}
-                  onPress={this.handlePressPickImage}
-                />
-                <Icon
-                  reverse
-                  name="ios-musical-notes"
-                  type="ionicon"
-                  color={colors.LIGHT_GREEN}
-                  size={20}
-                  onPress={this.handlePressAddSong} //this.handlePressSong}
-                />
-                <Icon
-                  reverse
-                  name="ios-save"
-                  type="ionicon"
-                  color={colors.LIGHT_GREEN}
-                  size={20}
-                  onPress={this.handlePressSave} //this.handlePressSong}
-                />
-              </View>
-            ) : null}
+
+            <View>
+              <Icon
+                reverse
+                name="create"
+                type="ion-icon"
+                color={colors.LIGHT_GREEN}
+                size={20}
+                onPress={this.onPressEdit}
+              />
+              {this.state.showRightMenu ? (
+                <View>
+                  <Icon
+                    reverse
+                    name="ios-images"
+                    type="ionicon"
+                    color={colors.LIGHT_GREEN}
+                    size={20}
+                    onPress={this.handlePressPickImage}
+                  />
+                  <Icon
+                    reverse
+                    name="ios-musical-notes"
+                    type="ionicon"
+                    color={colors.LIGHT_GREEN}
+                    size={20}
+                    onPress={this.handlePressAddSong} //this.handlePressSong}
+                  />
+                </View>
+              ) : null}
+            </View>
           </View>
         ) : null}
         <RadioGroup

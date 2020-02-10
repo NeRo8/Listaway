@@ -80,9 +80,13 @@ class HomeScreen extends Component {
   };
 
   onPressTour = item => {
-    const {setEditTour, navigation} = this.props;
+    const {setEditTour, navigation, userid} = this.props;
     setEditTour(item);
-    navigation.navigate('EditTour');
+    if (item.posterID === userid) {
+      navigation.navigate('EditTour', {editActive: true});
+    } else {
+      navigation.navigate('EditTour', {editActive: false});
+    }
   };
 
   onPress1 = item => {

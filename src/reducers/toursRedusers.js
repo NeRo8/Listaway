@@ -1,10 +1,11 @@
 import {
   SET_TOUR,
-  SET_ERROR,
   SET_LOADING,
   SET_TOURS,
   SET_PICTURES,
 } from '../actions/toursActions';
+
+import {CLEAR_USER} from '../actions/usersActions';
 
 const initState = {
   pictures: null,
@@ -49,6 +50,12 @@ const toursReducer = (state = initState, action) => {
       return {
         ...state,
         loading: action.payload,
+      };
+    }
+    case CLEAR_USER: {
+      return {
+        ...state,
+        loading: true,
       };
     }
     default:
