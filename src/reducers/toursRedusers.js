@@ -22,7 +22,7 @@ const initState = {
     photo_order: null,
   },
   error: null,
-  loading: false,
+  loading: true,
 };
 
 const toursReducer = (state = initState, action) => {

@@ -1,7 +1,5 @@
-import {Platform} from 'react-native';
 import moment from 'moment';
 import API from '../api';
-import axios from 'react-native-axios';
 
 export const SET_TOUR = 'SET_TOUR';
 export const SET_TOURS = 'SET_TOURS';
@@ -49,6 +47,32 @@ export const getTourList = userId => dispatch => {
     .then(response => {
       if (response.data.status === 200) {
         dispatch(setTours(response.data.tourlist));
+        return response.data.tourlist;
+      } else {
+        dispatch(setError(response.data));
+      }
+    })
+    .then(() => dispatch(setLoading(false)))
+    .catch(error => {
+      dispatch(setLoading(false));
+      dispatch(setError(error));
+    });
+};
+
+export const getMyTourList = userId => dispatch => {
+  dispatch(setLoading(true));
+  const getTours = new FormData();
+  getTours.append('userid', userId);
+
+  API.post('/user/get_tour_list', getTours, {
+    headers: {'Content-Type': 'multipart/form-data'},
+  })
+    .then(response => {
+      if (response.data.status === 200) {
+        const myTours = response.data.tourlist.filter(
+          tour => tour.posterID === userId,
+        );
+        dispatch(setTours(myTours));
         return response.data.tourlist;
       } else {
         dispatch(setError(response.data));

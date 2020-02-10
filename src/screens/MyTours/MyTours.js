@@ -21,7 +21,7 @@ import Loading from '../../components/Loading';
 
 import styles from './styles';
 
-class HomeScreen extends Component {
+class MyTours extends Component {
   constructor(props) {
     super(props);
     this.delayValue = 50;
@@ -159,6 +159,7 @@ class HomeScreen extends Component {
     if (loading) {
       return <Loading loadingText="Loading..." />;
     }
+
     return (
       <SafeAreaView style={{flex: 1}}>
         <StatusBar barStyle="dark-content" />
@@ -190,4 +191,4 @@ class HomeScreen extends Component {
   }
 }
 
-export default HomeScreen;
+export default MyTours;
