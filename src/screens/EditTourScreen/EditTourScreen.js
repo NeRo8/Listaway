@@ -110,10 +110,12 @@ class EditTourScreen extends Component {
 
       const imageArray = tourData.photo_order.split(',');
       imageArray.forEach(photo => {
-        var image = pictureList.find(picture => picture.mediaID === photo);
-        if (image !== undefined) {
-          //console.warn(image);
-          newPictureList.push(image);
+        if (pictureList !== null) {
+          var image = pictureList.find(picture => picture.mediaID === photo);
+          if (image !== undefined) {
+            //console.warn(image);
+            newPictureList.push(image);
+          }
         }
       });
       onMovePicture(newPictureList);

@@ -16,6 +16,7 @@ import CreateTour from '../screens/CreateTour';
 import EditTourScreen from '../screens/EditTourScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import PreviewToure from '../screens/PreviewToure';
+import MyTours from '../screens/MyTours';
 
 import DefaultDrawer from './DefaultDrawer';
 
@@ -25,6 +26,12 @@ const AppDrawerNavigation = createDrawerNavigator(
       screen: HomeScreen,
       navigationOptions: {
         title: 'Tours',
+      },
+    },
+    MyTours: {
+      screen: MyTours,
+      navigationOptions: {
+        title: 'MyTours',
       },
     },
     CreateTour: {
