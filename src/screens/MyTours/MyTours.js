@@ -20,6 +20,7 @@ import {Grayscale, rgba} from 'react-native-color-matrix-image-filters';
 import Loading from '../../components/Loading';
 
 import styles from './styles';
+import GradientText from '../../components/GradientText';
 
 class MyTours extends Component {
   constructor(props) {
@@ -82,7 +83,7 @@ class MyTours extends Component {
   onPressTour = item => {
     const {setEditTour, navigation} = this.props;
     setEditTour(item);
-    navigation.navigate('EditTour');
+    navigation.navigate('EditTour', {editActive: true});
   };
 
   onPress1 = item => {
@@ -95,13 +96,8 @@ class MyTours extends Component {
   };
 
   _renderHiddenItem = ({item}) => {
-    this.delayValue = this.delayValue + 500;
-    const translateX = this.state.animatedValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: [this.delayValue, 1],
-    });
     return (
-      <Animated.View style={[{transform: [{translateX}]}]}>
+      <View>
         <View
           style={{
             paddingHorizontal: 10,
@@ -128,7 +124,7 @@ class MyTours extends Component {
             />
           </View>
         </View>
-      </Animated.View>
+      </View>
     );
   };
 
@@ -162,17 +158,19 @@ class MyTours extends Component {
 
     return (
       <SafeAreaView style={{flex: 1}}>
-        <StatusBar barStyle="dark-content" />
+        <StatusBar barStyle="light-content" />
         <View style={styles.header}>
           <Icon
             name="menu"
             type="material-community"
-            color="black"
+            color="white"
             size={32}
+            underlayColor="transparent"
             onPress={() => {
               this.props.navigation.openDrawer();
             }}
           />
+          <Text style={styles.headerTitle}>My Tours</Text>
         </View>
 
         <SwipeListView
