@@ -98,9 +98,6 @@ export default StyleSheet.create({
     width: '100%',
     // flex: 1,
     paddingVertical: 5,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   rightTopMenu: {
     position: 'absolute',

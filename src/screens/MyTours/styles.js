@@ -1,14 +1,15 @@
 import {StyleSheet} from 'react-native';
 
-import {fonts} from '../../constants';
+import {fonts, colors} from '../../constants';
 
 export default StyleSheet.create({
   header: {
-    alignItems: 'flex-start',
     paddingLeft: 15,
     paddingBottom: 10,
     paddingTop: 20,
-    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    backgroundColor: colors.LIGHT_BLUE,
   },
   titleView: {
     backgroundColor: 'rgba(0,0,0,0.1)',
@@ -59,5 +60,12 @@ export default StyleSheet.create({
     height: 15,
     borderRadius: 19,
     backgroundColor: 'white', // rgb(102,134,205)
+  },
+  headerTitle: {
+    marginLeft: 20,
+    fontWeight: 'bold',
+    fontSize: 30,
+    fontFamily: fonts.notoBold,
+    color: 'white',
   },
 });

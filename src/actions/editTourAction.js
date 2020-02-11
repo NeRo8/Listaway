@@ -95,7 +95,9 @@ export const updateTour = (tourData, photoList) => dispatch => {
   let orderList = '';
 
   photoList.forEach(photo => {
-    orderList = orderList.concat(`${photo.mediaID.toString()},`);
+    if (photo.mediaID !== undefined) {
+      orderList = orderList.concat(`${photo.mediaID.toString()},`);
+    }
   });
 
   const updatingTour = new FormData();
@@ -112,7 +114,9 @@ export const updateTour = (tourData, photoList) => dispatch => {
   })
     .then(response => {
       console.log('Update tour responce: ', response.data);
+      return response.data;
     })
+    .then(() => dispatch(setLoading(false)))
     .catch(error => console.log('Error with update toure', error));
 };
 
@@ -121,5 +125,4 @@ export const updatePhoto = (tourData, pictureList) => dispatch => {
     photo => photo.posterID === undefined,
   );
   dispatch(addPhotoToTour(tourData.tourID, addingPhotos));
-  dispatch(setLoading(false));
 };

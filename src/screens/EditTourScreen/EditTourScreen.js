@@ -6,7 +6,7 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
-  ActivityIndicator,
+  ImageBackground,
 } from 'react-native';
 
 import {Icon} from 'react-native-elements';
@@ -18,23 +18,11 @@ import Loading from '../../components/Loading';
 import GradientText from '../../components/GradientText';
 import RadioGroup from '../../components/RadioGroup';
 
-import {globalStyles, colors} from '../../constants';
+import {globalStyles, colors, fonts} from '../../constants';
 import styles from './styles';
 
 const ItemImage = ({item, drag, onRemove, editable}) => (
   <View>
-    {editable ? (
-      <Icon
-        color="red"
-        size={30}
-        name="ios-trash"
-        type="ionicon"
-        underlayColor="transparent"
-        containerStyle={styles.deleteIcon}
-        onPress={() => onRemove(item.mediaID)}
-      />
-    ) : null}
-
     <TouchableOpacity
       style={styles.block}
       onLongPress={drag}
@@ -49,6 +37,24 @@ const ItemImage = ({item, drag, onRemove, editable}) => (
         }}
       />
     </TouchableOpacity>
+    {editable ? (
+      <TouchableOpacity
+        onPressOut={() => {
+          onRemove(item.mediaID);
+        }}
+        style={{
+          width: '100%',
+          backgroundColor: 'red',
+          height: 30,
+          borderRadius: 5,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <Text style={{color: 'white', fontFamily: fonts.notoRegular}}>
+          Delete
+        </Text>
+      </TouchableOpacity>
+    ) : null}
   </View>
 );
 
@@ -101,6 +107,7 @@ class EditTourScreen extends Component {
 
   onRemove = id => {
     const {onDeletePicture} = this.props;
+
     onDeletePicture(id);
   };
 
@@ -198,7 +205,7 @@ class EditTourScreen extends Component {
               underlayColor="transparent"
               size={38}
               onPress={() => {
-                this.props.navigation.goBack();
+                this.props.navigation.navigate('MyTours');
               }}
             />
           </View>
