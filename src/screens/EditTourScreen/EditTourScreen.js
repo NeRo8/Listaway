@@ -63,6 +63,7 @@ class EditTourScreen extends Component {
     super(props);
     this.state = {
       //editActive: false,
+      saving: false,
       showRightMenu: false,
       isScroll: true,
       isShowDialog: false,
@@ -172,16 +173,20 @@ class EditTourScreen extends Component {
 
   handlePressSave = () => {
     const {onEditTour, tourData, pictureList} = this.props;
-
+    this.setState({saving: true});
     onEditTour(tourData, pictureList);
   };
 
+  componentDidMount() {}
+
   render() {
     const {loading, pictureList, tourData} = this.props;
+    const {saving} = this.state;
     const editActive = this.props.navigation.getParam('editActive', false);
+    const screenType = this.props.navigation.getParam('screenType');
 
     if (loading) {
-      return <Loading loadingText="Loading" />;
+      return <Loading loadingText={saving ? 'Saving tour' : 'Loading'} />;
     }
 
     return (
@@ -205,7 +210,12 @@ class EditTourScreen extends Component {
               underlayColor="transparent"
               size={38}
               onPress={() => {
-                this.props.navigation.navigate('MyTours');
+                this.setState({saving: false});
+                {
+                  screenType === 'myTours'
+                    ? this.props.navigation.navigate('MyTours')
+                    : this.props.navigation.navigate('TourList');
+                }
               }}
             />
           </View>
