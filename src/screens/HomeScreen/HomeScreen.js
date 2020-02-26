@@ -83,15 +83,9 @@ class HomeScreen extends Component {
     const {setEditTour, navigation, userid} = this.props;
     setEditTour(item);
     if (item.posterID === userid) {
-      navigation.navigate('EditTour', {
-        editActive: true,
-        screenType: 'tourList',
-      });
+      navigation.navigate('EditTour', {editActive: true});
     } else {
-      navigation.navigate('EditTour', {
-        editActive: false,
-        screenType: 'tourList',
-      });
+      navigation.navigate('EditTour', {editActive: false});
     }
   };
 

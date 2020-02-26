@@ -20,6 +20,7 @@ import {Grayscale, rgba} from 'react-native-color-matrix-image-filters';
 import Loading from '../../components/Loading';
 
 import styles from './styles';
+import GradientText from '../../components/GradientText';
 
 class MyTours extends Component {
   constructor(props) {
@@ -82,7 +83,7 @@ class MyTours extends Component {
   onPressTour = item => {
     const {setEditTour, navigation} = this.props;
     setEditTour(item);
-    navigation.navigate('EditTour', {editActive: true, screenType: 'myTours'});
+    navigation.navigate('EditTour', {editActive: true});
   };
 
   onPress1 = item => {
@@ -156,7 +157,7 @@ class MyTours extends Component {
     }
 
     return (
-      <View style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1}}>
         <StatusBar barStyle="light-content" />
         <View style={styles.header}>
           <Icon
@@ -183,7 +184,7 @@ class MyTours extends Component {
           closeOnRowOpen={true}
           closeOnRowBeginSwipe={true}
         />
-      </View>
+      </SafeAreaView>
     );
   }
 }
